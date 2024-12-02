@@ -2,9 +2,15 @@
 
 import { useState } from "react";
 
-export default function SizeSelector({ sizes }: { sizes: string[] }) {
-  const [selectedSize, setSelectedSize] = useState<string | null>(null);
-
+export default function SizeSelector({
+  sizes,
+  value,
+  setValue,
+}: {
+  sizes: string[];
+  value: string | null;
+  setValue: (size: string) => void;
+}) {
   return (
     <div className="mb-6">
       <h3 className="text-lg font-semibold mb-2">Select Size</h3>
@@ -13,11 +19,11 @@ export default function SizeSelector({ sizes }: { sizes: string[] }) {
           <button
             key={size}
             className={`px-4 py-2 border rounded-md ${
-              selectedSize === size
+              value === size
                 ? "bg-black text-white"
                 : "bg-white text-black hover:bg-gray-100"
             }`}
-            onClick={() => setSelectedSize(size)}
+            onClick={() => setValue(size)}
           >
             {size}
           </button>

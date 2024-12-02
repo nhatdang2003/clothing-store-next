@@ -6,6 +6,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import ProductCard from "../shared/Product";
+import ProductNotFound from "../shared/ProductNotFound";
 
 // Define product type
 interface Product {
@@ -45,11 +46,15 @@ export default function ProductShowcase({
         </TabsList>
         {Object.entries(products).map(([key, items]) => (
           <TabsContent key={key} value={key}>
-            <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
-              {items.map((product: Product) => (
-                <ProductCard key={product.id} product={product} />
-              ))}
-            </div>
+            {items.length > 0 ? (
+              <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
+                {items.slice(0, 4).map((product: Product) => (
+                  <ProductCard key={product.id} product={product} />
+                ))}
+              </div>
+            ) : (
+              <ProductNotFound />
+            )}
           </TabsContent>
         ))}
       </Tabs>

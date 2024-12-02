@@ -2,13 +2,22 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { Menu, Search, ShoppingBag, Package, Home } from "lucide-react";
+import {
+  Menu,
+  Search,
+  ShoppingBag,
+  Package,
+  Home,
+  User,
+  LogOut,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { useRouter } from "next/navigation";
+import { NavbarUser } from "./navbarUser";
 
-export default function NavigationMobile() {
+export default function NavigationMobile({ userInfo }: { userInfo: any }) {
   const [isOpen, setIsOpen] = useState(false);
   const router = useRouter();
 
@@ -67,27 +76,66 @@ export default function NavigationMobile() {
             Theo dõi đơn hàng
           </Link>
 
-          {/* Login and Sign Up Buttons in drawer */}
-          <Button
-            variant="outline"
-            className="bg-black text-white hover:bg-gray-700 hover:text-white w-full"
-            onClick={() => {
-              setIsOpen(false);
-              router.push("/login");
-            }}
-          >
-            Đăng nhập
-          </Button>
-          <Button
-            variant="outline"
-            className="bg-white text-black border-black hover:bg-black hover:text-white w-full"
-            onClick={() => {
-              setIsOpen(false);
-              router.push("/register");
-            }}
-          >
-            Đăng ký
-          </Button>
+          {userInfo !== null ? (
+            <>
+              <Link
+                href="/account"
+                className="text-foreground hover:text-primary"
+                onClick={() => setIsOpen(false)}
+              >
+                <User className="h-5 w-5 inline-block mr-2" />
+                Account Settings
+              </Link>
+              <Link
+                href="/orders"
+                className="text-foreground hover:text-primary"
+                onClick={() => setIsOpen(false)}
+              >
+                <Package className="h-5 w-5 inline-block mr-2" />
+                Orders
+              </Link>
+              <Link
+                href="/shipping"
+                className="text-foreground hover:text-primary"
+                onClick={() => setIsOpen(false)}
+              >
+                <ShoppingBag className="h-5 w-5 inline-block mr-2" />
+                Shipping Profile
+              </Link>
+              <Link
+                href="/logout"
+                className="text-foreground hover:text-primary"
+                onClick={() => setIsOpen(false)}
+              >
+                <LogOut className="h-5 w-5 inline-block mr-2" />
+                Đăng xuất
+              </Link>
+            </>
+          ) : (
+            <>
+              {/* Login and Sign Up Buttons in drawer */}
+              <Button
+                variant="outline"
+                className="bg-black text-white hover:bg-gray-700 hover:text-white w-full"
+                onClick={() => {
+                  setIsOpen(false);
+                  router.push("/login");
+                }}
+              >
+                Đăng nhập
+              </Button>
+              <Button
+                variant="outline"
+                className="bg-white text-black border-black hover:bg-black hover:text-white w-full"
+                onClick={() => {
+                  setIsOpen(false);
+                  router.push("/register");
+                }}
+              >
+                Đăng ký
+              </Button>
+            </>
+          )}
         </div>
       </SheetContent>
     </Sheet>

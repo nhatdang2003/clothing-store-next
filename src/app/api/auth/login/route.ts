@@ -3,36 +3,33 @@ import { NextRequest, NextResponse } from "next/server";
 import * as jose from "jose";
 import http from "@/services/http";
 
-// Tạo instance riêng cho backend API
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-
-    // Gọi API backend
-    const response = await http.post({ url: "/api/v1/auth/login", body });
-    console.log(response);
-    const { access_token, refresh_token } = response.data;
-    const decodedAccessToken = jose.decodeJwt(access_token);
-    const decodedRefreshToken = jose.decodeJwt(refresh_token);
-
-    // Set cookie
-    cookies().set({
-      name: "access_token",
-      value: access_token,
-      //   secure: process.env.NODE_ENV === "production",
-      sameSite: "lax",
-      path: "/",
-      expires: (decodedAccessToken.exp ?? 0) * 1000,
+    const response = await http.post({
+      url: "/api/v1/auth/login",
+      body,
     });
 
-    cookies().set({
-      name: "refresh_token",
-      value: refresh_token,
-      httpOnly: true,
-      //   secure: process.env.NODE_ENV === "production",
+    const { access_token, refresh_token } = response.data;
+
+    // Decode JWT to get expiration
+    const { exp: accessExp } = jose.decodeJwt(access_token);
+    const { exp: refreshExp } = jose.decodeJwt(refresh_token);
+
+    const cookieStore = cookies();
+
+    cookieStore.set("access_token", access_token, {
+      secure: process.env.NODE_ENV === "production",
       sameSite: "lax",
-      path: "/",
-      expires: (decodedRefreshToken.exp ?? 0) * 1000,
+      expires: new Date(accessExp! * 1000), // Convert to milliseconds
+    });
+
+    cookieStore.set("refresh_token", refresh_token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax",
+      expires: new Date(refreshExp! * 1000), // Convert to milliseconds
     });
 
     return NextResponse.json({

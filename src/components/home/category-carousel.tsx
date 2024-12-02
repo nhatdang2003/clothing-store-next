@@ -13,6 +13,7 @@ import { Button } from "@/components/ui/button";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useCategoryListQuery } from "@/hooks/use-category-query";
 import Image from "next/image";
+import Link from "next/link";
 
 export default function CategoryCarousel() {
   const [api, setApi] = React.useState<any>();
@@ -37,51 +38,52 @@ export default function CategoryCarousel() {
   }, [api]);
 
   return (
-    <Carousel
-      opts={{
-        align: "start",
-        loop: true,
-      }}
-      setApi={setApi}
-      className="container max-w-6xl mx-auto px-4 py-8 relative"
-    >
-      <CarouselContent>
-        {categories?.map((category: any, index: number) => {
-          return (
-            <CarouselItem key={index} className="md:basis-1/2 lg:basis-1/4">
-              <Card className="aspect-[4/5]">
-                <CardContent className="flex flex-col items-center justify-center p-6">
-                  <h3 className="text-lg font-medium">{category.name}</h3>
-                  <Image
-                    src={category.imageUrl}
-                    alt={category.name}
-                    width={100}
-                    height={100}
-                  />
-                </CardContent>
-              </Card>
-            </CarouselItem>
-          );
-        })}
-      </CarouselContent>
-      <Button
-        variant="outline"
-        size="icon"
-        className="absolute left-10 top-1/2 -translate-y-1/2 -translate-x-1/2 rounded-full bg-white/70 hover:bg-white/90 z-10"
-        onClick={() => api?.scrollPrev()}
-        disabled={!api?.canScrollPrev()}
+    <div className="container max-w-6xl mx-auto px-4 py-8 relative">
+      <Carousel
+        opts={{
+          align: "start",
+          loop: true,
+        }}
+        setApi={setApi}
       >
-        <ChevronLeft className="h-4 w-4" />
-      </Button>
-      <Button
-        variant="outline"
-        size="icon"
-        className="absolute right-10 top-1/2 -translate-y-1/2 translate-x-1/2 rounded-full bg-white/70 hover:bg-white/90 z-10"
-        onClick={() => api?.scrollNext()}
-        disabled={!api?.canScrollNext()}
-      >
-        <ChevronRight className="h-4 w-4" />
-      </Button>
-    </Carousel>
+        <CarouselContent>
+          {categories?.map((category: any, index: number) => {
+            return (
+              <CarouselItem
+                key={index}
+                className="basis-1/2 md:basis-1/3 lg:basis-1/4 pl-4"
+              >
+                <Link href={`/category/${category.id}`} className="block group">
+                  <Card className="overflow-hidden border-2 transition-all duration-300 group-hover:border-primary">
+                    <CardContent className="p-0 relative">
+                      <div className="relative aspect-[4/5] overflow-hidden">
+                        <Image
+                          src={category.imageUrl}
+                          alt={category.name}
+                          fill
+                          className="object-cover transition-transform duration-500 group-hover:scale-110"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-100 md:opacity-0 transition-opacity duration-300 md:group-hover:opacity-100" />
+                      </div>
+                      <div className="absolute bottom-0 left-0 right-0 p-4 text-white transform translate-y-0 md:translate-y-full transition-transform duration-300 md:group-hover:translate-y-0">
+                        <h3 className="text-lg font-semibold leading-tight">
+                          {category.name}
+                        </h3>
+                        <p className="mt-2 text-sm text-white/80">
+                          Khám phá bộ sưu tập →
+                        </p>
+                      </div>
+                    </CardContent>
+                  </Card>
+                </Link>
+              </CarouselItem>
+            );
+          })}
+        </CarouselContent>
+
+        <CarouselPrevious className="absolute left-8 top-1/2 -translate-y-1/2 -translate-x-1/2 rounded-full bg-white/70 hover:bg-white/90 z-50" />
+        <CarouselNext className="absolute right-8 top-1/2 -translate-y-1/2 translate-x-1/2 rounded-full bg-white/70 hover:bg-white/90 z-50" />
+      </Carousel>
+    </div>
   );
 }

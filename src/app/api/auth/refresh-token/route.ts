@@ -1,13 +1,24 @@
-import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
 import * as jose from "jose";
 import http from "@/services/http";
+import { cookies } from "next/headers";
+
+// Đánh dấu route này là dynamic
+export const dynamic = "force-dynamic";
 
 // Tạo instance riêng cho backend API
 export async function GET() {
   try {
     const refreshToken = cookies().get("refresh_token")?.value;
-    // Gọi API backend
+
+    if (!refreshToken) {
+      return NextResponse.json(
+        { error: "Refresh token not found" },
+        { status: 401 }
+      );
+    }
+
+    // Call API backend to refresh token
     const response = await http.get({
       url: "/api/v1/auth/refresh",
       options: {
@@ -19,28 +30,25 @@ export async function GET() {
 
     const { access_token, refresh_token } = response.data;
 
-    const decodedAccessToken = jose.decodeJwt(access_token);
-    const decodedRefreshToken = jose.decodeJwt(refresh_token);
+    // Decode new tokens to get expiration
+    const { exp: accessExp } = jose.decodeJwt(access_token);
+    const { exp: refreshExp } = jose.decodeJwt(refresh_token);
 
-    // Set cookie
-    cookies().set({
-      name: "access_token",
-      value: access_token,
-      httpOnly: true,
-      //   secure: process.env.NODE_ENV === "production",
+    const cookieStore = cookies();
+
+    // Set new access token with JWT expiration
+    cookieStore.set("access_token", access_token, {
+      secure: process.env.NODE_ENV === "production",
       sameSite: "lax",
-      path: "/",
-      expires: (decodedAccessToken.exp ?? 0) * 1000,
+      expires: new Date(accessExp! * 1000),
     });
 
-    cookies().set({
-      name: "refresh_token",
-      value: refresh_token,
+    // Set new refresh token with JWT expiration
+    cookieStore.set("refresh_token", refresh_token, {
       httpOnly: true,
-      //   secure: process.env.NODE_ENV === "production",
+      secure: process.env.NODE_ENV === "production",
       sameSite: "lax",
-      path: "/",
-      expires: (decodedRefreshToken.exp ?? 0) * 1000,
+      expires: new Date(refreshExp! * 1000),
     });
 
     return NextResponse.json({
@@ -49,9 +57,10 @@ export async function GET() {
       message: "Refresh token thành công",
     });
   } catch (error: any) {
+    console.log(">>>>", error.message);
     if (error.message === "NEXT_REDIRECT") throw error;
     const status = error.response?.status || 500;
-    const message = error.response?.data?.message || "Đăng nhập thất bại";
+    const message = error.response?.data?.message || "Refresh token thất bại";
 
     return NextResponse.json({ error: message }, { status });
   }

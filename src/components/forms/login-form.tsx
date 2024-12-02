@@ -24,13 +24,14 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
-import { LoginFormData, loginSchema } from "@/schemas/auth.schema";
+import { loginSchema } from "@/schemas/auth.schema";
+import type { LoginCredentials } from "@/types/auth";
 import { useLogin } from "@/hooks/use-auth-query";
 
 export function LoginForm() {
   const { mutate: login, isPending } = useLogin();
 
-  const form = useForm<LoginFormData>({
+  const form = useForm<LoginCredentials>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
       email: "",
@@ -39,7 +40,7 @@ export function LoginForm() {
     },
   });
 
-  const onSubmit = (values: LoginFormData) => {
+  const onSubmit = (values: LoginCredentials) => {
     login(values);
   };
 
@@ -128,13 +129,8 @@ export function LoginForm() {
           </form>
         </Form>
         <div className="relative">
-          <div className="absolute inset-0 flex items-center">
-            <div className="w-full border-t border-gray-300"></div>
-          </div>
           <div className="relative flex justify-center text-sm">
-            <span className="px-2 text-gray-500 bg-[#f5f3ef]">
-              Hoặc đăng nhập với
-            </span>
+            <span className="px-2 text-gray-500 ">Hoặc đăng nhập với</span>
           </div>
         </div>
         <div className="grid grid-cols-4 gap-3">
@@ -154,7 +150,7 @@ export function LoginForm() {
         <p className="text-center text-sm text-gray-600">
           Chưa có tài khoản?{" "}
           <Link
-            href="/signup"
+            href="/register"
             className="font-medium text-primary hover:text-primary-dark"
           >
             Đăng ký ngay

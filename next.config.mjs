@@ -13,7 +13,7 @@ const nextConfig = {
                 pathname: "/db9vcatme/**",
             },
         ],
-    },
+    }
 };
 
 export default nextConfig;

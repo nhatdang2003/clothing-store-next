@@ -1,11 +1,8 @@
-import { LoginFormData } from "@/schemas/auth.schema";
+import type { LoginCredentials, RegisterCredentials } from "@/types/auth";
 import http from "./http";
-import Cookies from "js-cookie";
-import { url } from "inspector";
 
 export const authApi = {
-  // Sử dụng local API routes
-  login: async (data: LoginFormData) => {
+  login: async (data: LoginCredentials) => {
     const response = await http.post({
       url: "/api/auth/login",
       base_url: "",
@@ -13,16 +10,42 @@ export const authApi = {
     });
     return response;
   },
-  logout: async () => {
+
+  register: async (data: RegisterCredentials) => {
+    const response = await http.post({
+      url: "/api/v1/auth/register",
+      body: data,
+    });
+    return response;
+  },
+
+  refresh: async () => {
     const response = await http.get({
-      url: "/api/auth/logout",
+      url: "/api/auth/refresh-token",
       base_url: "",
     });
     return response;
   },
-  refresh: async () => {
+
+  sendVerificationEmail: async (email: string) => {
     const response = await http.get({
-      url: "/api/auth/refresh-token",
+      url: `/api/v1/auth/send-activation-email?email=${email}`,
+    });
+    return response;
+  },
+
+  activateAccount: async (key: string) => {
+    const response = await http.post({
+      url: "/api/auth/activate",
+      base_url: "",
+      body: { key },
+    });
+    return response;
+  },
+
+  logout: async () => {
+    const response = await http.get({
+      url: "/api/auth/logout",
       base_url: "",
     });
     return response;

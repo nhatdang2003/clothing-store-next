@@ -7,37 +7,29 @@ export async function GET() {
     const cookieStore = cookies();
     const refreshToken = cookieStore.get("refresh_token")?.value;
 
-    if (!refreshToken) {
-      return NextResponse.json(
-        { message: "No refresh token found" },
-        { status: 200 }
-      );
+    if (refreshToken) {
+      // Always attempt to logout on backend
+      await http.post({
+        url: "/api/v1/auth/logout",
+        body: { refresh_token: refreshToken },
+      });
     }
 
-    // Gọi API logout với refresh token
-    await http.post({
-      url: "/api/v1/auth/logout",
-      body: {
-        refresh_token: refreshToken,
-      },
-    });
-
-    // Clear cookies
+    // Always clear cookies
     cookieStore.delete("access_token");
     cookieStore.delete("refresh_token");
 
-    return NextResponse.json(
-      { message: "Logged out successfully" },
-      { status: 200 }
-    );
-  } catch (error: any) {
-    // Vẫn clear cookies ngay cả khi API fail
+    return NextResponse.json({
+      message: "Đăng xuất thành công",
+    });
+  } catch (error) {
+    // Always clear cookies even if API fails
     const cookieStore = cookies();
     cookieStore.delete("access_token");
     cookieStore.delete("refresh_token");
 
     return NextResponse.json(
-      { message: "Logout failed but cookies cleared" },
+      { message: "Đăng xuất thành công" },
       { status: 200 }
     );
   }

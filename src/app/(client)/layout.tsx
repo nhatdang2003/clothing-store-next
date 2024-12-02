@@ -1,13 +1,23 @@
 import Navigation from "@/components/navigation/navbar";
+import { accountApi } from "@/services/account.api";
 
-export default function LayoutShop({
+export default async function LayoutShop({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  let userInfo;
+  try {
+    const response = await accountApi.getInfo();
+    userInfo = response;
+  } catch (error) {
+    return <div>Đã có lỗi xảy ra</div>;
+  }
+  console.log(new Date().toISOString());
+
   return (
     <div>
-      <Navigation />
+      <Navigation userInfo={userInfo} />
       <div className="pt-[64px]">{children}</div>
     </div>
   );

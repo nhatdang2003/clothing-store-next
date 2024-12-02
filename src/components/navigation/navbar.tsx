@@ -2,12 +2,14 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { Search, ShoppingCart } from "lucide-react";
+import { Search, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import NavigationMobile from "./navbarMobile";
+import { NavbarUser } from "./navbarUser";
+import { CartIcon } from "@/components/cart/cart-icon";
 
-export default function Navigation() {
+export default function Navigation({ userInfo }: { userInfo: any }) {
   const [isVisible, setIsVisible] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
 
@@ -76,41 +78,25 @@ export default function Navigation() {
 
           {/* Cart, Login and Sign Up Buttons */}
           <div className="hidden lg:flex items-center space-x-2">
-            <Button variant="ghost" size="icon" className="relative">
-              <ShoppingCart className="h-5 w-5" />
-              <span className="sr-only">Giỏ hàng</span>
-              <span className="absolute top-0 right-0 h-4 w-4 text-xs bg-red-500 text-white rounded-full flex items-center justify-center">
-                0
-              </span>
-            </Button>
-            <Link href="/login" passHref>
-              <Button
-                variant="outline"
-                className="bg-black text-white hover:bg-gray-700 hover:text-white"
-              >
-                Đăng nhập
-              </Button>
-            </Link>
-            <Link href="/register" passHref>
-              <Button
-                variant="outline"
-                className="bg-white text-black border-black hover:bg-black hover:text-white"
-              >
-                Đăng ký
-              </Button>
-            </Link>
+            <CartIcon />
+            {userInfo !== null ? (
+              <NavbarUser userInfo={userInfo} />
+            ) : (
+              <>
+                <Link href="/login" passHref>
+                  <Button variant="outline">Đăng nhập</Button>
+                </Link>
+                <Link href="/register" passHref>
+                  <Button>Đăng ký</Button>
+                </Link>
+              </>
+            )}
           </div>
 
           {/* Mobile Menu Button */}
           <div className="lg:hidden flex items-center space-x-2">
-            <Button variant="ghost" size="icon" className="relative">
-              <ShoppingCart className="h-5 w-5" />
-              <span className="sr-only">Giỏ hàng</span>
-              <span className="absolute top-0 right-0 h-4 w-4 text-xs bg-red-500 text-white rounded-full flex items-center justify-center">
-                0
-              </span>
-            </Button>
-            <NavigationMobile />
+            <CartIcon />
+            <NavigationMobile userInfo={userInfo} />
           </div>
         </div>
       </div>

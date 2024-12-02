@@ -8,7 +8,13 @@ export function middleware(request: NextRequest) {
 
   // Chỉ kiểm tra cho routes cần auth và public routes
   const publicPaths = ["/login", "/register", "/forgot-password"];
-  const protectedPaths = ["/dashboard", "/profile", "/settings"];
+  const protectedPaths = [
+    "/dashboard",
+    "/profile",
+    "/settings",
+    "/cart",
+    "/checkout",
+  ];
 
   const isPublicPath = publicPaths.some((path) => pathname.startsWith(path));
   const isProtectedPath = protectedPaths.some((path) =>
@@ -29,6 +35,12 @@ export function middleware(request: NextRequest) {
     url.searchParams.set("redirect", pathname);
     return NextResponse.redirect(url);
   }
+  // 4. Đã đăng nhập nhưng refresh_token hết hạn
+  if (!refresh_token && !access_token && isProtectedPath) {
+    const url = new URL("/refresh-token", request.url);
+    url.searchParams.set("redirect", pathname);
+    return NextResponse.redirect(url);
+  }
 
   return NextResponse.next();
 }
@@ -38,6 +50,8 @@ export const config = {
   matcher: [
     "/login",
     "/register",
+    "/cart",
+    "/checkout",
     "/forgot-password",
     "/dashboard/:path*",
     "/profile/:path*",

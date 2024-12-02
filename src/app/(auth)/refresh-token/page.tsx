@@ -1,7 +1,6 @@
 "use client";
 
 import { authApi } from "@/services/auth.api";
-import http from "@/services/http";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Suspense, useEffect, useRef } from "react";
 

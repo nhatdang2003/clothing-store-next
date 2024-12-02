@@ -1,79 +1,144 @@
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { authApi } from "@/services/auth.api";
-import { LoginFormData } from "@/schemas/auth.schema";
 import { useRouter } from "next/navigation";
 import { useToast } from "./use-toast";
-import { useAuthStore } from "@/store/auth-store";
-import useStore from "./use-store";
-import type { User } from "@/types/store";
+import type { LoginCredentials, RegisterCredentials } from "@/types/auth";
 
 export const authKeys = {
   all: ["auth"] as const,
   profile: () => [...authKeys.all, "profile"] as const,
   login: () => [...authKeys.all, "login"] as const,
+  register: () => [...authKeys.all, "register"] as const,
 };
 
 export function useLogin() {
   const router = useRouter();
   const { toast } = useToast();
-  const login = useAuthStore((state) => state.login);
 
   return useMutation({
-    mutationFn: (data: LoginFormData) => authApi.login(data),
+    mutationKey: authKeys.login(),
+    mutationFn: (data: LoginCredentials) => authApi.login(data),
     onSuccess: () => {
       toast({
         title: "Đăng nhập thành công",
-        description: "Chào mừng bạn quay trở lại!",
+        variant: "success",
       });
-
-      router.push("/dashboard");
+      router.push("/");
+      router.refresh();
     },
     onError: (error: any) => {
       toast({
         variant: "destructive",
-        title: "Đăng nhập thất bại",
-        description:
-          error.message || "Vui lòng kiểm tra lại thông tin đăng nhập",
+        title: error?.response?.data?.message || "Đăng nhập thất bại",
       });
     },
   });
 }
 
-export function useProfile() {
-  const access_token = useStore(useAuthStore, (state) => state.access_token);
+export function useRegister() {
+  const { toast } = useToast();
 
-  return useQuery({
-    queryKey: authKeys.profile(),
-    queryFn: () => authApi.getProfile(),
-    enabled: !!token,
+  const sendVerification = useMutation({
+    mutationFn: (email: string) => authApi.sendVerificationEmail(email),
+  });
+
+  const registerMutation = useMutation({
+    mutationFn: (data: RegisterCredentials) => authApi.register(data),
+    onSuccess: (_, variables) => {
+      // After successful registration, send verification email
+      sendVerification.mutate(variables.email, {
+        onSuccess: () => {
+          toast({
+            title: "Đăng ký thành công",
+            description:
+              "Vui lòng kiểm tra email để xác thực tài khoản của bạn",
+            variant: "success",
+          });
+        },
+        onError: () => {
+          toast({
+            variant: "destructive",
+            title: "Lỗi",
+            description: "Không thể gửi email xác thực. Vui lòng thử lại sau.",
+          });
+        },
+      });
+    },
+    onError: (error) => {
+      toast({
+        variant: "destructive",
+        title: "Lỗi",
+        description: error?.message || "Đã có lỗi xảy ra khi đăng ký",
+      });
+    },
+  });
+
+  return {
+    ...registerMutation,
+    isPending: registerMutation.isPending || sendVerification.isPending,
+  };
+}
+
+export function useActivateAccount() {
+  const { toast } = useToast();
+  const router = useRouter();
+
+  return useMutation({
+    mutationFn: (key: string) => authApi.activateAccount(key),
+    onSuccess: () => {
+      toast({
+        title: "Xác thực thành công",
+        description:
+          "Tài khoản của bạn đã được kích hoạt. Chúc bạn mua hàng vui vẻ!",
+        variant: "success",
+      });
+      router.push("/");
+    },
+    onError: (error) => {
+      toast({
+        variant: "destructive",
+        title: "Lỗi",
+        description:
+          error?.message || "Không thể kích hoạt tài khoản. Vui lòng thử lại.",
+      });
+    },
   });
 }
 
 export function useLogout() {
   const router = useRouter();
+  const queryClient = useQueryClient();
   const { toast } = useToast();
-  const logout = useAuthStore((state) => state.logout);
 
   return useMutation({
-    mutationFn: () => authApi.logout(),
-    onSuccess: () => {
-      toast({
-        title: "Đăng xuất thành công",
-      });
-
-      router.push("/login");
+    mutationFn: async () => {
+      const data = await authApi.logout();
+      return data;
     },
-    onError: () => {
-      if (logout) {
-        // Kiểm tra null/undefined
-        logout();
-      }
+    onSuccess: () => {
+      // Clear all queries and cache
+      queryClient.clear();
+      // Remove user data from store if you're using it
+      // userStore.clearUser();
 
+      // Show success message
       toast({
         title: "Đăng xuất thành công",
+        description: "Hẹn gặp lại bạn!",
+        variant: "success",
       });
 
-      router.push("/login");
+      // Redirect to login page
+      router.push("/");
+      // Optional: force refresh to clear all state
+      router.refresh();
+    },
+    onError: (error: Error) => {
+      toast({
+        variant: "destructive",
+        title: "Lỗi",
+        description: error.message || "Không thể đăng xuất. Vui lòng thử lại.",
+      });
     },
   });
 }

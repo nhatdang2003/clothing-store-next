@@ -7,6 +7,7 @@ import { Label } from "@/components/ui/label";
 import { Star } from "lucide-react";
 import { Category } from "@/types/category";
 import { formatPrice } from "@/lib/utils";
+import { FilterCategories } from "../shop/FilterCategories";
 
 export function FilterSidebar({ categories }: { categories: Category[] }) {
   const [priceRange, setPriceRange] = useState([0, 1000]);
@@ -43,29 +44,7 @@ export function FilterSidebar({ categories }: { categories: Category[] }) {
           isMobileFilterOpen ? "max-h-screen opacity-100" : "max-h-0 opacity-0"
         } md:max-h-screen md:opacity-100 overflow-hidden transition-all duration-300 ease-in-out md:block space-y-6`}
       >
-        <div>
-          <h3 className="font-semibold mb-2">Categories</h3>
-          <ul className="space-y-2">
-            {categories.map((category) => (
-              <li key={category.id} className="flex items-center">
-                <Checkbox
-                  id={category.id}
-                  checked={selectedCategories.includes(category.id)}
-                  onCheckedChange={(checked) => {
-                    setSelectedCategories(
-                      checked
-                        ? [...selectedCategories, category.id]
-                        : selectedCategories.filter((c) => c !== category.id)
-                    );
-                  }}
-                />
-                <Label htmlFor={category.id.toString()} className="ml-2">
-                  {category.name}
-                </Label>
-              </li>
-            ))}
-          </ul>
-        </div>
+        <FilterCategories categories={categories} />
         <div>
           <h3 className="font-semibold mb-2">Price Range</h3>
           <Slider.Root
@@ -113,6 +92,7 @@ export function FilterSidebar({ categories }: { categories: Category[] }) {
                   htmlFor={`rating-${rating}`}
                   className="ml-2 flex items-center gap-1"
                 >
+                  {"Từ "}
                   {rating}{" "}
                   <Star
                     className="h-4 sm:h-5 w-4 sm:w-5 fill-yellow-400"

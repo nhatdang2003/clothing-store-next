@@ -2,6 +2,13 @@ import { STATUS_CODE } from "@/constants/response";
 import { redirect } from "next/navigation";
 import Cookies from "js-cookie";
 
+const publicApi = [
+  "/api/auth/login",
+  "/api/auth/register",
+  "/api/auth/activate",
+  "/api/v1/products",
+];
+
 const request = async (
   url: string,
   base_url?: string,
@@ -23,8 +30,16 @@ const request = async (
     Authorization?: string;
   } = {};
 
-  const token = Cookies.get("access_token");
-  if (token) {
+  let token;
+  if (typeof window !== "undefined") {
+    token = Cookies.get("access_token");
+  } else if (!publicApi.map((api) => url.includes(api)).includes(true)) {
+    // Server-side
+    const { cookies } = await import("next/headers");
+    const cookieStore = cookies();
+    token = cookieStore.get("access_token")?.value;
+  }
+  if (token && !publicApi.map((api) => url.includes(api)).includes(true)) {
     defaultHeaders.Authorization = `Bearer ${token}`;
   }
 
@@ -58,7 +73,7 @@ const request = async (
         const refreshResponse = await fetch(
           `${process.env.NEXT_PUBLIC_API_LOCAL}/api/auth/refresh-token`,
           {
-            method: "POST",
+            method: "GET",
             headers: {
               "Content-Type": "application/json",
             },
@@ -147,5 +162,4 @@ const http = {
       params.options
     ),
 };
-
 export default http;
