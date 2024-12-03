@@ -47,11 +47,23 @@ export default function ProductShowcase({
         {Object.entries(products).map(([key, items]) => (
           <TabsContent key={key} value={key}>
             {items.length > 0 ? (
-              <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
-                {items.slice(0, 4).map((product: Product) => (
-                  <ProductCard key={product.id} product={product} />
-                ))}
-              </div>
+              <>
+                <div className="grid grid-cols-2 gap-4 md:hidden">
+                  {items.slice(0, 4).map((product: Product) => (
+                    <ProductCard key={product.id} product={product} />
+                  ))}
+                </div>
+                <div className="hidden md:grid md:grid-cols-3 md:gap-4 lg:hidden">
+                  {items.slice(0, 6).map((product: Product) => (
+                    <ProductCard key={product.id} product={product} />
+                  ))}
+                </div>
+                <div className="hidden lg:grid lg:gap-4 lg:grid-cols-4">
+                  {items.slice(0, 8).map((product: Product) => (
+                    <ProductCard key={product.id} product={product} />
+                  ))}
+                </div>
+              </>
             ) : (
               <ProductNotFound />
             )}
@@ -59,7 +71,7 @@ export default function ProductShowcase({
         ))}
       </Tabs>
       <div className="mt-8 text-center">
-        <Link href="/store">
+        <Link href="/shop">
           <Button size="lg">Xem thêm</Button>
         </Link>
       </div>

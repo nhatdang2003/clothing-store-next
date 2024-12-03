@@ -20,10 +20,6 @@ export default function CategoryCarousel() {
   const { data: categories, isLoading, error } = useCategoryListQuery();
 
   React.useEffect(() => {
-    console.log(categories);
-  }, [categories]);
-
-  React.useEffect(() => {
     if (!api) return;
 
     const intervalId = setInterval(() => {

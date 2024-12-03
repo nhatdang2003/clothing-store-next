@@ -57,7 +57,6 @@ export async function GET() {
       message: "Refresh token thành công",
     });
   } catch (error: any) {
-    console.log(">>>>", error.message);
     if (error.message === "NEXT_REDIRECT") throw error;
     const status = error.response?.status || 500;
     const message = error.response?.data?.message || "Refresh token thất bại";

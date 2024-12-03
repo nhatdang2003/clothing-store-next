@@ -11,6 +11,8 @@ import { useToast } from "@/hooks/use-toast";
 import { useAddToCartMutation } from "@/hooks/use-cart-query";
 import { Alert, AlertDescription, AlertTitle } from "../ui/alert";
 import Link from "next/link";
+import Cookies from "js-cookie";
+import { useRouter } from "next/navigation";
 
 const InfoProduct = ({ product }: { product: any }) => {
   const [quantity, setQuantity] = useState<number>(1);
@@ -20,6 +22,7 @@ const InfoProduct = ({ product }: { product: any }) => {
   const [images, setImages] = useState(product.images);
   const [showSuccess, setShowSuccess] = useState(false);
 
+  const router = useRouter();
   const { toast } = useToast();
   const addToCartMutation = useAddToCartMutation();
 
@@ -79,6 +82,11 @@ const InfoProduct = ({ product }: { product: any }) => {
         title: "Số lượng không khả dụng",
         description: "Vui lòng chọn số lượng nhỏ hơn hoặc bằng số lượng có sẵn",
       });
+      return;
+    }
+
+    if (!Cookies.get("access_token")) {
+      router.push("/login?redirect=/shop/" + product.slug);
       return;
     }
 

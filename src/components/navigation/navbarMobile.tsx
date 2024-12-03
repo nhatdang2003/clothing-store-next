@@ -14,12 +14,19 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { useRouter } from "next/navigation";
-import { NavbarUser } from "./navbarUser";
+import { usePathname, useRouter } from "next/navigation";
+import { useLogout } from "@/hooks/use-auth-query";
 
 export default function NavigationMobile({ userInfo }: { userInfo: any }) {
   const [isOpen, setIsOpen] = useState(false);
   const router = useRouter();
+  const pathname = usePathname();
+  const { mutate: logout } = useLogout(pathname);
+
+  const handleLogout = () => {
+    setIsOpen(false);
+    logout();
+  };
 
   return (
     <Sheet open={isOpen} onOpenChange={setIsOpen}>
@@ -102,14 +109,14 @@ export default function NavigationMobile({ userInfo }: { userInfo: any }) {
                 <ShoppingBag className="h-5 w-5 inline-block mr-2" />
                 Shipping Profile
               </Link>
-              <Link
-                href="/logout"
-                className="text-foreground hover:text-primary"
-                onClick={() => setIsOpen(false)}
+              <Button
+                variant="outline"
+                className="text-foreground hover:text-primary border border-black"
+                onClick={() => handleLogout()}
               >
                 <LogOut className="h-5 w-5 inline-block mr-2" />
                 Đăng xuất
-              </Link>
+              </Button>
             </>
           ) : (
             <>

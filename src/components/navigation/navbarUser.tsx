@@ -10,9 +10,11 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { useLogout } from "@/hooks/use-auth-query";
+import { usePathname } from "next/navigation";
 
 export function NavbarUser({ userInfo }: { userInfo: any }) {
-  const { mutate: logout } = useLogout();
+  const pathname = usePathname();
+  const { mutate: logout } = useLogout(pathname);
 
   const handleLogout = () => {
     logout();

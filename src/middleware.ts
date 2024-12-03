@@ -1,23 +1,15 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
+import { PROTECTED_PATHS } from "./constants/routes";
+import { PUBLIC_PATHS } from "./constants/routes";
 
 export function middleware(request: NextRequest) {
   const access_token = request.cookies.get("access_token")?.value;
   const refresh_token = request.cookies.get("refresh_token")?.value;
   const { pathname } = request.nextUrl;
 
-  // Chỉ kiểm tra cho routes cần auth và public routes
-  const publicPaths = ["/login", "/register", "/forgot-password"];
-  const protectedPaths = [
-    "/dashboard",
-    "/profile",
-    "/settings",
-    "/cart",
-    "/checkout",
-  ];
-
-  const isPublicPath = publicPaths.some((path) => pathname.startsWith(path));
-  const isProtectedPath = protectedPaths.some((path) =>
+  const isPublicPath = PUBLIC_PATHS.some((path) => pathname.startsWith(path));
+  const isProtectedPath = PROTECTED_PATHS.some((path) =>
     pathname.startsWith(path)
   );
 

@@ -2,6 +2,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { cartApi } from "@/services/cart.api";
 import { CartItem } from "@/types/cart";
 import { useToast } from "./use-toast";
+import Cookies from "js-cookie";
 
 export function useUpdateCartItem() {
   const queryClient = useQueryClient();
@@ -38,7 +39,6 @@ export function useUpdateCartItem() {
     },
     onError: (err, newItem, context) => {
       queryClient.setQueryData(["cart"], context?.previousCart);
-      console.log(err);
       toast({
         variant: "destructive",
         title: "Lỗi",
@@ -61,6 +61,9 @@ export function useGetCart() {
         const response = await cartApi.getCart();
         return response;
       } catch (error: any) {
+        if (error.response.status === 401) {
+          return [];
+        }
         toast({
           variant: "destructive",
           title: "Lỗi",
@@ -141,14 +144,6 @@ export function useAddToCartMutation() {
         description: "Sản phẩm đã được thêm vào giỏ hàng của bạn",
       });
       queryClient.invalidateQueries({ queryKey: ["cart"] });
-    },
-    onError: () => {
-      toast({
-        variant: "destructive",
-        title: "Lỗi",
-        description:
-          "Không thể thêm sản phẩm vào giỏ hàng. Vui lòng thử lại sau.",
-      });
     },
   });
 }

@@ -20,7 +20,6 @@ export default async function DetailPage({
     relatedProducts = await productApi.getProductsByCategory(
       product.categoryId
     );
-    console.log(relatedProducts);
   } catch (error) {
     return <div>Product not found</div>;
   }

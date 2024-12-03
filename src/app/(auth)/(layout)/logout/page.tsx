@@ -5,11 +5,11 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { Suspense, useEffect, useRef } from "react";
 
 function Logout() {
-  const { mutateAsync: logout } = useLogout();
   const router = useRouter();
   const searchParams = useSearchParams();
-  const refreshTokenFromUrl = searchParams.get("refreshToken");
+  const redirect = searchParams.get("redirect");
   const logoutExecuted = useRef(false);
+  const { mutateAsync: logout } = useLogout(redirect ?? "/");
 
   useEffect(() => {
     const handleLogout = async () => {
@@ -21,16 +21,13 @@ function Logout() {
       } catch (error) {
         console.error("Logout error:", error);
       } finally {
-        if (refreshTokenFromUrl) {
-          router.push(`/refresh-token?redirect=${encodeURIComponent("/")}`);
-        } else {
-          router.push("/");
-        }
+        router.push(redirect ?? "/");
+        router.refresh();
       }
     };
 
     handleLogout();
-  }, [logout, router, refreshTokenFromUrl]);
+  }, [logout, router]);
 
   return <div>Đang đăng xuất...</div>;
 }

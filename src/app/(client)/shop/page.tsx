@@ -11,10 +11,12 @@ const ShopPage = async ({ searchParams }: { searchParams: any }) => {
     categories = await categoryApi.getCategories();
     productsData = await productApi.getProducts(
       searchParams.page - 1 || 0,
-      searchParams.size || 6
+      searchParams.size || 6,
+      searchParams.categories,
+      searchParams.minPrice,
+      searchParams.maxPrice,
+      searchParams.rating
     );
-
-    console.log(searchParams);
   } catch (error) {
     return <div>Đã có lỗi xảy ra, vui lòng thử lại sau</div>;
   }

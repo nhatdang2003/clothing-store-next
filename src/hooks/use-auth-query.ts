@@ -3,6 +3,7 @@ import { authApi } from "@/services/auth.api";
 import { useRouter } from "next/navigation";
 import { useToast } from "./use-toast";
 import type { LoginCredentials, RegisterCredentials } from "@/types/auth";
+import { PROTECTED_PATHS } from "@/constants/routes";
 
 export const authKeys = {
   all: ["auth"] as const,
@@ -11,7 +12,7 @@ export const authKeys = {
   register: () => [...authKeys.all, "register"] as const,
 };
 
-export function useLogin() {
+export function useLogin(redirect: string) {
   const router = useRouter();
   const { toast } = useToast();
 
@@ -19,11 +20,7 @@ export function useLogin() {
     mutationKey: authKeys.login(),
     mutationFn: (data: LoginCredentials) => authApi.login(data),
     onSuccess: () => {
-      toast({
-        title: "Đăng nhập thành công",
-        variant: "success",
-      });
-      router.push("/");
+      router.push(redirect ?? "/");
       router.refresh();
     },
     onError: (error: any) => {
@@ -105,10 +102,9 @@ export function useActivateAccount() {
   });
 }
 
-export function useLogout() {
+export function useLogout(redirect: string) {
   const router = useRouter();
   const queryClient = useQueryClient();
-  const { toast } = useToast();
 
   return useMutation({
     mutationFn: async () => {
@@ -118,27 +114,12 @@ export function useLogout() {
     onSuccess: () => {
       // Clear all queries and cache
       queryClient.clear();
-      // Remove user data from store if you're using it
-      // userStore.clearUser();
-
-      // Show success message
-      toast({
-        title: "Đăng xuất thành công",
-        description: "Hẹn gặp lại bạn!",
-        variant: "success",
-      });
-
-      // Redirect to login page
-      router.push("/");
-      // Optional: force refresh to clear all state
+      if (PROTECTED_PATHS.includes(redirect)) {
+        router.push("/login");
+      } else {
+        router.push(redirect ?? "/");
+      }
       router.refresh();
-    },
-    onError: (error: Error) => {
-      toast({
-        variant: "destructive",
-        title: "Lỗi",
-        description: error.message || "Không thể đăng xuất. Vui lòng thử lại.",
-      });
     },
   });
 }

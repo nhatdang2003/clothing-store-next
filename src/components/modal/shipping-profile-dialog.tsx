@@ -172,10 +172,6 @@ export function ShippingProfileDialog({
     }
   });
 
-  useEffect(() => {
-    console.log(errors);
-  }, [errors]);
-
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-2xl">

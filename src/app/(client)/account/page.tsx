@@ -236,7 +236,6 @@ export default function AccountPage() {
                     control={control}
                     defaultValue={userProfile?.gender ?? ""}
                     render={({ field }) => {
-                      console.log("field", field);
                       return (
                         <div>
                           <Select

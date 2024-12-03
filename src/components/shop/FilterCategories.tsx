@@ -12,6 +12,7 @@ export function FilterCategories({ categories, className = "" }: any) {
   useEffect(() => {
     // Lấy categories từ URL khi component mount
     const categoriesFromUrl = searchParams.get("categories")?.split(",") || [];
+    console.log(categoriesFromUrl);
     setSelectedCategories(categoriesFromUrl);
   }, [searchParams]);
 
@@ -44,9 +45,9 @@ export function FilterCategories({ categories, className = "" }: any) {
           <li key={category.id} className="flex items-center">
             <Checkbox
               id={category.id}
-              checked={selectedCategories.includes(category.id)}
+              checked={selectedCategories.includes(category.id.toString())}
               onCheckedChange={(checked) =>
-                handleCategoryChange(category.id, checked as boolean)
+                handleCategoryChange(category.id.toString(), checked as boolean)
               }
             />
             <Label htmlFor={category.id} className="ml-2">

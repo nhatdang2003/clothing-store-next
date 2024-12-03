@@ -4,7 +4,6 @@ import http from "./http";
 export const cartApi = {
   getCart: async () => {
     const response = await http.get({ url: "/api/v1/carts/items" });
-    console.log(response);
     return response.data;
   },
   addToCart: async (variantId: number, quantity: number) => {

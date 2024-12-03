@@ -33,7 +33,6 @@ export default function HomeCarousel({
   useEffect(() => {
     const fetchProduct = async () => {
       const response = await http.get({ url: "/api/v1/products" });
-      console.log(response);
     };
     fetchProduct();
   }, []);

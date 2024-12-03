@@ -13,7 +13,6 @@ export default async function LayoutShop({
   } catch (error) {
     return <div>Đã có lỗi xảy ra</div>;
   }
-  console.log(new Date().toISOString());
 
   return (
     <div>

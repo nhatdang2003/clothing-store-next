@@ -4,11 +4,16 @@ import { ShoppingCart } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { useGetCart } from "@/hooks/use-cart-query";
+import Cookies from "js-cookie";
 
 export function CartIcon() {
-  const { data: cartItems = [] } = useGetCart();
+  let cartItems = [];
+  if (Cookies.get("access_token")) {
+    const { data } = useGetCart();
+    cartItems = data ?? [];
+  }
 
-  const itemCount = cartItems.length;
+  const itemCount = cartItems.length ?? 0;
 
   return (
     <Link href="/cart" passHref>

@@ -1,9 +1,26 @@
 import http from "./http";
 
 export const productApi = {
-  getProducts: async (page: number, size: number) => {
+  getProducts: async (
+    page: number,
+    size: number,
+    categories?: string[],
+    minPrice?: number,
+    maxPrice?: number,
+    rating?: number
+  ) => {
+    let url = `/api/v1/products?page=${page}&size=${size}`;
+    if (rating) {
+      url += `&averageRating=${rating}`;
+    }
+    if (categories && categories.length > 0) {
+      url += `&filter=category.id in [${categories}]`;
+    }
+    if (minPrice && maxPrice) {
+      url += `&filter=price>:${minPrice} and price<:${maxPrice}`;
+    }
     const response = await http.get({
-      url: `/api/v1/products?page=${page}&size=${size}`,
+      url,
     });
     return response.data;
   },

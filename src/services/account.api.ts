@@ -7,7 +7,6 @@ export const accountApi = {
   },
   getProfile: async () => {
     const response = await http.get({ url: "/api/v1/users/profiles" });
-    console.log(response.data);
     return response.data;
   },
   updateProfile: async (data: any) => {

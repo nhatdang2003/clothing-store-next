@@ -8,7 +8,6 @@ import {
   Lock,
   Mail,
 } from "lucide-react";
-import Image from "next/image";
 import Link from "next/link";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
@@ -27,9 +26,12 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { loginSchema } from "@/schemas/auth.schema";
 import type { LoginCredentials } from "@/types/auth";
 import { useLogin } from "@/hooks/use-auth-query";
+import { useSearchParams } from "next/navigation";
 
 export function LoginForm() {
-  const { mutate: login, isPending } = useLogin();
+  const searchParams = useSearchParams();
+  const redirect = searchParams.get("redirect");
+  const { mutate: login, isPending } = useLogin(redirect ?? "/");
 
   const form = useForm<LoginCredentials>({
     resolver: zodResolver(loginSchema),
