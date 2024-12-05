@@ -90,6 +90,7 @@ const request = async (
         }
       }
       const errorData = await response.json();
+      console.log(errorData);
       throw new Error(errorData.message || "Something went wrong!");
     }
     return await response.json();

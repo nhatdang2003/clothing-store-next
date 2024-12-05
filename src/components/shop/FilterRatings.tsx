@@ -11,31 +11,31 @@ interface FilterRatingsProps {
 }
 
 export function FilterRatings({ className = "" }: FilterRatingsProps) {
-  const [selectedRatings, setSelectedRatings] = useState<string[]>([]);
+  const [selectedRating, setSelectedRating] = useState<string | null>(null);
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const ratings = [5, 4, 3, 2, 1];
 
   useEffect(() => {
-    // Lấy ratings từ URL khi component mount
-    const ratingsFromUrl =
-      searchParams.get("rating")?.split(",").filter(Boolean) || [];
-    setSelectedRatings(ratingsFromUrl);
+    // Lấy rating từ URL khi component mount
+    const ratingFromUrl = searchParams.get("rating") || null;
+    setSelectedRating(ratingFromUrl);
   }, [searchParams]);
 
   const handleRatingChange = (rating: number, checked: boolean) => {
     const ratingString = rating.toString();
-    const newSelectedRatings = checked
-      ? [...selectedRatings, ratingString]
-      : selectedRatings.filter((r) => r !== ratingString);
+    // Nếu đang check và khác với rating hiện tại, set rating mới
+    // Nếu đang uncheck rating hiện tại, set về null
+    const newRating =
+      checked && ratingString !== selectedRating ? ratingString : null;
 
-    setSelectedRatings(newSelectedRatings);
+    setSelectedRating(newRating);
 
     // Cập nhật URL
     const params = new URLSearchParams(searchParams);
-    if (newSelectedRatings.length > 0) {
-      params.set("rating", newSelectedRatings.join(","));
+    if (newRating) {
+      params.set("rating", newRating);
     } else {
       params.delete("rating");
     }
@@ -54,7 +54,7 @@ export function FilterRatings({ className = "" }: FilterRatingsProps) {
           <li key={rating} className="flex items-center">
             <Checkbox
               id={`rating-${rating}`}
-              checked={selectedRatings.includes(rating.toString())}
+              checked={selectedRating === rating.toString()}
               onCheckedChange={(checked) =>
                 handleRatingChange(rating, checked as boolean)
               }

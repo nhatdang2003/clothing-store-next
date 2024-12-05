@@ -44,7 +44,7 @@ export default function Navigation({ userInfo }: { userInfo: any }) {
           {/* Logo */}
           <div className="flex-shrink-0 flex items-center">
             <Link href="/" className="text-2xl font-bold text-primary">
-              Logo
+              EzStore
             </Link>
           </div>
 

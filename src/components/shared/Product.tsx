@@ -1,25 +1,15 @@
 "use client";
 
-import { useState } from "react";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import Link from "next/link";
-import { ShoppingCart, Star } from "lucide-react";
+import { Star } from "lucide-react";
 import Image from "next/image";
 import { formatPrice } from "@/lib/utils";
 
-let isSale = false;
 export default function ProductCard({ product }: { product: any }) {
-  const [inCart, setInCart] = useState(false);
-  const [quantity, setQuantity] = useState(1);
-
-  const handleAddToCart = () => {
-    setInCart(true);
-  };
-
-  const handleQuantityChange = (value: number) => {
-    setQuantity(value);
+  const calculateDiscountPercentage = (price: number, discountRate: number) => {
+    return Math.round(discountRate * 100);
   };
 
   return (
@@ -33,6 +23,13 @@ export default function ProductCard({ product }: { product: any }) {
             height={400}
             className="w-full rounded-t-lg object-cover aspect-[2/3]"
           />
+          {product.discountRate > 0 && (
+            <Badge variant="destructive" className="absolute top-2 right-2">
+              -
+              {calculateDiscountPercentage(product.price, product.discountRate)}
+              %
+            </Badge>
+          )}
           <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent rounded-t-lg">
             <div className="absolute bottom-4 left-4 right-4">
               <h3 className="text-lg font-semibold text-white line-clamp-2">
@@ -41,22 +38,33 @@ export default function ProductCard({ product }: { product: any }) {
               <span className="text-gray-200">{product.categoryName}</span>
             </div>
           </div>
-          {/* <div className="absolute top-4 right-4">
-            <HeartIcon className="h-6 w-6 text-primary" />
-          </div> */}
         </div>
         <CardContent className="py-4 px-3">
-          <div className="flex items-start sm:items-end flex-col sm:flex-row gap-2">
+          <div className="flex items-start sm:items-start flex-col  gap-2">
             <div
-              className={`text-xl font-bold leading-none ${
-                isSale ? "text-red-500" : ""
+              className={`text-md xl:text-lg font-bold leading-none ${
+                product.discountRate > 0 ? "text-red-500" : ""
               }`}
             >
-              {formatPrice(product.price)}
+              {product.minPriceWithDiscount === product.maxPriceWithDiscount ? (
+                formatPrice(product.minPriceWithDiscount)
+              ) : (
+                <>
+                  {formatPrice(product.minPriceWithDiscount)} -{" "}
+                  {formatPrice(product.maxPriceWithDiscount)}
+                </>
+              )}
             </div>
-            {isSale && (
+            {product.discountRate > 0 && (
               <div className="text-sm font-bold leading-none line-through text-gray-500">
-                {formatPrice(product.price)}
+                {product.minPrice === product.maxPrice ? (
+                  formatPrice(product.minPrice)
+                ) : (
+                  <>
+                    {formatPrice(product.minPrice)} -{" "}
+                    {formatPrice(product.maxPrice)}
+                  </>
+                )}
               </div>
             )}
           </div>
@@ -68,11 +76,6 @@ export default function ProductCard({ product }: { product: any }) {
                   color="yellow-400"
                 />
                 <span className="text-sm"> {product.averageRating}</span>
-                {/* {product.reviewCount && (
-                <span className="text-sm text-muted-foreground">
-                  ({reviewCount})
-                </span>
-              )} */}
               </>
             ) : (
               <span className="text-sm text-muted-foreground">

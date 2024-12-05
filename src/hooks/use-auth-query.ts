@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { authApi } from "@/services/auth.api";
 import { useRouter } from "next/navigation";
-import { useToast } from "./use-toast";
+import { toast, useToast } from "./use-toast";
 import type { LoginCredentials, RegisterCredentials } from "@/types/auth";
 import { PROTECTED_PATHS } from "@/constants/routes";
 
@@ -24,9 +24,10 @@ export function useLogin(redirect: string) {
       router.refresh();
     },
     onError: (error: any) => {
+      console.log(error.message);
       toast({
         variant: "destructive",
-        title: error?.response?.data?.message || "Đăng nhập thất bại",
+        title: error?.message || "Đăng nhập thất bại",
       });
     },
   });
@@ -114,7 +115,7 @@ export function useLogout(redirect: string) {
     onSuccess: () => {
       // Clear all queries and cache
       queryClient.clear();
-      if (PROTECTED_PATHS.includes(redirect)) {
+      if (PROTECTED_PATHS.some((path) => redirect.startsWith(path))) {
         router.push("/login");
       } else {
         router.push(redirect ?? "/");
@@ -123,3 +124,51 @@ export function useLogout(redirect: string) {
     },
   });
 }
+
+export const useForgotPassword = () => {
+  const { toast } = useToast();
+  return useMutation({
+    mutationFn: (data: { email: string }) => authApi.forgotPassword(data),
+    onSuccess: () => {
+      toast({
+        title: "Yêu cầu đặt lại mật khẩu đã được gửi",
+        description: "Vui lòng kiểm tra email của bạn.",
+        variant: "success",
+      });
+    },
+    onError: (error: any) => {
+      toast({
+        variant: "destructive",
+        title: "Lỗi",
+        description: error.message || "Đã có lỗi xảy ra",
+      });
+    },
+  });
+};
+
+export const useResetPassword = () => {
+  const { toast } = useToast();
+  return useMutation({
+    mutationFn: ({
+      data,
+      key,
+    }: {
+      data: { newPassword: string; confirmPassword: string };
+      key: string;
+    }) => authApi.resetPassword(data, key),
+    onSuccess: () => {
+      toast({
+        title: "Mật khẩu đã được đặt lại thành công",
+        description: "Vui lòng đăng nhập.",
+        variant: "success",
+      });
+    },
+    onError: (error: any) => {
+      toast({
+        variant: "destructive",
+        title: "Lỗi",
+        description: error.message || "Đã có lỗi xảy ra",
+      });
+    },
+  });
+};

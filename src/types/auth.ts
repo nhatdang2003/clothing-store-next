@@ -1,9 +1,14 @@
-import { loginSchema, registerSchema } from "@/schemas/auth.schema";
+import {
+  loginSchema,
+  registerSchema,
+  resetPasswordSchema,
+} from "@/schemas/auth.schema";
 import { z } from "zod";
 
 // Derive types from schemas
 export type LoginCredentials = z.infer<typeof loginSchema>;
 export type RegisterCredentials = z.infer<typeof registerSchema>;
+export type ResetPasswordCredentials = z.infer<typeof resetPasswordSchema>;
 
 export interface User {
   id: number;

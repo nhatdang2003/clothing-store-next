@@ -13,12 +13,13 @@ export const productApi = {
     if (rating) {
       url += `&averageRating=${rating}`;
     }
-    if (categories && categories.length > 0) {
-      url += `&filter=category.id in [${categories}]`;
-    }
     if (minPrice && maxPrice) {
       url += `&filter=price>:${minPrice} and price<:${maxPrice}`;
     }
+    if (categories && categories.length > 0) {
+      url += `&filter=category.id in [${categories}]`;
+    }
+
     const response = await http.get({
       url,
     });

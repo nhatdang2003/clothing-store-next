@@ -36,10 +36,10 @@ export async function POST(request: NextRequest) {
       message: "Đăng nhập thành công",
     });
   } catch (error: any) {
-    console.error("Login error:", error);
+    console.error("Login error:", error.message);
     const status = error.response?.status || 500;
-    const message = error.response?.data?.message || "Đăng nhập thất bại";
+    const message = error.message || "Đăng nhập thất bại";
 
-    return NextResponse.json({ error: message }, { status });
+    return NextResponse.json({ message }, { status });
   }
 }

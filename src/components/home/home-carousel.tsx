@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/carousel";
 import { ChevronLeft, ChevronRight, Pause, Play } from "lucide-react";
 import http from "@/services/http";
+import { productApi } from "@/services/product.api";
 
 // Giả định rằng bạn có một mảng các sự kiện với URL hình ảnh
 const events = [
@@ -29,13 +30,6 @@ export default function HomeCarousel({
   const [api, setApi] = useState<CarouselApi>();
   const [current, setCurrent] = useState(0);
   const [autoScroll, setAutoScroll] = useState(true);
-
-  useEffect(() => {
-    const fetchProduct = async () => {
-      const response = await http.get({ url: "/api/v1/products" });
-    };
-    fetchProduct();
-  }, []);
 
   useEffect(() => {
     if (!api) {

@@ -91,23 +91,23 @@ export default function NavigationMobile({ userInfo }: { userInfo: any }) {
                 onClick={() => setIsOpen(false)}
               >
                 <User className="h-5 w-5 inline-block mr-2" />
-                Account Settings
+                Tài khoản
               </Link>
               <Link
-                href="/orders"
-                className="text-foreground hover:text-primary"
-                onClick={() => setIsOpen(false)}
-              >
-                <Package className="h-5 w-5 inline-block mr-2" />
-                Orders
-              </Link>
-              <Link
-                href="/shipping"
+                href="/account/shipping-info"
                 className="text-foreground hover:text-primary"
                 onClick={() => setIsOpen(false)}
               >
                 <ShoppingBag className="h-5 w-5 inline-block mr-2" />
-                Shipping Profile
+                Thông tin giao hàng
+              </Link>
+              <Link
+                href="/account/orders"
+                className="text-foreground hover:text-primary"
+                onClick={() => setIsOpen(false)}
+              >
+                <Package className="h-5 w-5 inline-block mr-2" />
+                Đơn hàng
               </Link>
               <Button
                 variant="outline"

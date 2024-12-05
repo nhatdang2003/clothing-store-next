@@ -50,4 +50,23 @@ export const authApi = {
     });
     return response;
   },
+
+  forgotPassword: async (data: { email: string }) => {
+    const response = await http.post({
+      url: "/api/v1/auth/recover-password",
+      body: data,
+    });
+    return response;
+  },
+
+  resetPassword: async (
+    data: { newPassword: string; confirmPassword: string },
+    key: string
+  ) => {
+    const response = await http.post({
+      url: `/api/v1/auth/reset-password?key=${key}`,
+      body: data,
+    });
+    return response;
+  },
 };

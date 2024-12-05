@@ -11,16 +11,16 @@ interface FilterPriceRangeProps {
 }
 
 export function FilterPriceRange({ className = "" }: FilterPriceRangeProps) {
-  const [minPrice, setMinPrice] = useState("0");
-  const [maxPrice, setMaxPrice] = useState("10000000");
+  const [minPrice, setMinPrice] = useState<string | null>(null);
+  const [maxPrice, setMaxPrice] = useState<string | null>(null);
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
   useEffect(() => {
     // Lấy giá trị price range từ URL khi component mount
-    const minPriceFromUrl = searchParams.get("minPrice") || "0";
-    const maxPriceFromUrl = searchParams.get("maxPrice") || "10000000";
+    const minPriceFromUrl = searchParams.get("minPrice");
+    const maxPriceFromUrl = searchParams.get("maxPrice");
     setMinPrice(minPriceFromUrl);
     setMaxPrice(maxPriceFromUrl);
   }, [searchParams]);
@@ -61,7 +61,7 @@ export function FilterPriceRange({ className = "" }: FilterPriceRangeProps) {
           <Input
             type="number"
             placeholder="Giá thấp nhất"
-            value={minPrice}
+            value={minPrice || ""}
             onChange={(e) => setMinPrice(e.target.value)}
             className="w-full"
           />
@@ -69,7 +69,7 @@ export function FilterPriceRange({ className = "" }: FilterPriceRangeProps) {
           <Input
             type="number"
             placeholder="Giá cao nhất"
-            value={maxPrice}
+            value={maxPrice || ""}
             onChange={(e) => setMaxPrice(e.target.value)}
             className="w-full"
           />
@@ -89,8 +89,21 @@ export function FilterPriceRange({ className = "" }: FilterPriceRangeProps) {
           Xóa
         </Button>
         <div className="text-sm text-gray-500">
-          Giá hiện tại: {formatPrice(Number(minPrice))} -{" "}
-          {formatPrice(Number(maxPrice))}
+          {minPrice && maxPrice && (
+            <>
+              Giá hiện tại: {formatPrice(Number(minPrice))} -{" "}
+              {formatPrice(Number(maxPrice))}
+            </>
+          )}
+          {!minPrice && !maxPrice && (
+            <>Giá hiện tại: 0 - {formatPrice(10000000)}</>
+          )}
+          {minPrice && !maxPrice && (
+            <>Giá hiện tại: {formatPrice(Number(minPrice))} - </>
+          )}
+          {!minPrice && maxPrice && (
+            <>Giá hiện tại: - {formatPrice(Number(maxPrice))}</>
+          )}
         </div>
       </div>
     </div>

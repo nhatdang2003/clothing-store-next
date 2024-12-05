@@ -5,4 +5,5 @@ export const PROTECTED_PATHS = [
   "/settings",
   "/cart",
   "/checkout",
+  "/account",
 ];

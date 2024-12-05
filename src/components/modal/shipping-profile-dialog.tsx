@@ -174,336 +174,339 @@ export function ShippingProfileDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-2xl">
-        <DialogHeader>
+      <DialogContent className="max-w-2xl h-[90vh] flex flex-col p-0">
+        <DialogHeader className="p-6 border-b">
           <DialogTitle>
             {profile ? "Chỉnh sửa địa chỉ" : "Thêm địa chỉ mới"}
           </DialogTitle>
         </DialogHeader>
-        <form onSubmit={onSubmit} className="space-y-6">
-          <div className="grid gap-6 md:grid-cols-2">
-            {/* First Name */}
-            <div className="space-y-2">
-              <Label htmlFor="firstName">
-                Họ <span className="text-red-500">*</span>
-              </Label>
-              <Controller
-                name="firstName"
-                control={control}
-                render={({ field }) => (
-                  <div>
-                    <Input
-                      {...field}
-                      placeholder="Nhập họ"
-                      className={cn(errors.firstName && "border-red-500")}
-                    />
-                    {errors.firstName && (
-                      <span className="text-sm text-red-500">
-                        {errors.firstName.message}
-                      </span>
-                    )}
-                  </div>
-                )}
-              />
-            </div>
 
-            {/* Last Name */}
-            <div className="space-y-2">
-              <Label htmlFor="lastName">
-                Tên <span className="text-red-500">*</span>
-              </Label>
-              <Controller
-                name="lastName"
-                control={control}
-                render={({ field }) => (
-                  <div>
-                    <Input
-                      {...field}
-                      placeholder="Nhập tên"
-                      className={cn(errors.lastName && "border-red-500")}
-                    />
-                    {errors.lastName && (
-                      <span className="text-sm text-red-500">
-                        {errors.lastName.message}
-                      </span>
-                    )}
-                  </div>
-                )}
-              />
-            </div>
-          </div>
-
-          {/* Phone Number */}
-          <div className="space-y-2">
-            <Label htmlFor="phoneNumber">
-              Số điện thoại <span className="text-red-500">*</span>
-            </Label>
-            <Controller
-              name="phoneNumber"
-              control={control}
-              render={({ field }) => (
-                <div>
-                  <Input
-                    {...field}
-                    placeholder="Nhập số điện thoại"
-                    className={cn(errors.phoneNumber && "border-red-500")}
-                  />
-                  {errors.phoneNumber && (
-                    <span className="text-sm text-red-500">
-                      {errors.phoneNumber.message}
-                    </span>
+        <div className="flex-1 overflow-y-auto p-6">
+          <form onSubmit={onSubmit} className="space-y-6">
+            <div className="grid gap-6 md:grid-cols-2">
+              {/* First Name */}
+              <div className="space-y-2">
+                <Label htmlFor="firstName">
+                  Họ <span className="text-red-500">*</span>
+                </Label>
+                <Controller
+                  name="firstName"
+                  control={control}
+                  render={({ field }) => (
+                    <div>
+                      <Input
+                        {...field}
+                        placeholder="Nhập họ"
+                        className={cn(errors.firstName && "border-red-500")}
+                      />
+                      {errors.firstName && (
+                        <span className="text-sm text-red-500">
+                          {errors.firstName.message}
+                        </span>
+                      )}
+                    </div>
                   )}
-                </div>
-              )}
-            />
-          </div>
-
-          {/* Address */}
-          <div className="space-y-2">
-            <Label htmlFor="address">
-              Địa chỉ <span className="text-red-500">*</span>
-            </Label>
-            <Controller
-              name="address"
-              control={control}
-              render={({ field }) => (
-                <div>
-                  <Input
-                    {...field}
-                    placeholder="Nhập địa chỉ chi tiết"
-                    className={cn(errors.address && "border-red-500")}
-                  />
-                  {errors.address && (
-                    <span className="text-sm text-red-500">
-                      {errors.address.message}
-                    </span>
-                  )}
-                </div>
-              )}
-            />
-          </div>
-
-          <div className="grid gap-6 md:grid-cols-3">
-            {/* Province Selection */}
-            <div className="space-y-2">
-              <Label>
-                Tỉnh/Thành phố <span className="text-red-500">*</span>
-              </Label>
-              <Popover open={openProvince} onOpenChange={setOpenProvince}>
-                <PopoverTrigger asChild>
-                  <Button
-                    variant="outline"
-                    role="combobox"
-                    aria-expanded={openProvince}
-                    className={cn(
-                      "w-full justify-between",
-                      errors.province && "border-red-500"
-                    )}
-                  >
-                    {watch("province") || "Chọn tỉnh/thành phố"}
-                    <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-                  </Button>
-                </PopoverTrigger>
-                <PopoverContent className="w-full p-0">
-                  <Command>
-                    <CommandInput placeholder="Tìm tỉnh/thành phố..." />
-                    <CommandEmpty>Không tìm thấy kết quả.</CommandEmpty>
-                    <CommandGroup className="max-h-[300px] overflow-auto">
-                      {provinces.map((province) => (
-                        <CommandItem
-                          key={province.ProvinceID}
-                          value={province.ProvinceName}
-                          onSelect={() => {
-                            setValue("provinceId", province.ProvinceID);
-                            setValue("province", province.ProvinceName);
-                            setValue("districtId", 0);
-                            setValue("district", "");
-                            setValue("wardId", 0);
-                            setValue("ward", "");
-                            setOpenProvince(false);
-                          }}
-                        >
-                          <Check
-                            className={cn(
-                              "mr-2 h-4 w-4",
-                              watch("provinceId") === province.ProvinceID
-                                ? "opacity-100"
-                                : "opacity-0"
-                            )}
-                          />
-                          {province.ProvinceName}
-                        </CommandItem>
-                      ))}
-                    </CommandGroup>
-                  </Command>
-                </PopoverContent>
-              </Popover>
-              {errors.province && (
-                <span className="text-sm text-red-500">
-                  {errors.province.message}
-                </span>
-              )}
-            </div>
-
-            {/* District Selection */}
-            <div className="space-y-2">
-              <Label>
-                Quận/Huyện <span className="text-red-500">*</span>
-              </Label>
-              <Popover open={openDistrict} onOpenChange={setOpenDistrict}>
-                <PopoverTrigger asChild>
-                  <Button
-                    variant="outline"
-                    role="combobox"
-                    aria-expanded={openDistrict}
-                    className={cn(
-                      "w-full justify-between",
-                      errors.district && "border-red-500"
-                    )}
-                    disabled={!watch("provinceId")}
-                  >
-                    {watch("district") || "Chọn quận/huyện"}
-                    <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-                  </Button>
-                </PopoverTrigger>
-                <PopoverContent className="w-full p-0">
-                  <Command>
-                    <CommandInput placeholder="Tìm quận/huyện..." />
-                    <CommandEmpty>Không tìm thấy kết quả.</CommandEmpty>
-                    <CommandGroup className="max-h-[300px] overflow-auto">
-                      {districts.map((district) => (
-                        <CommandItem
-                          key={district.DistrictID}
-                          value={district.DistrictName}
-                          onSelect={() => {
-                            setValue("districtId", district.DistrictID);
-                            setValue("district", district.DistrictName);
-                            setValue("wardId", 0);
-                            setValue("ward", "");
-                            setOpenDistrict(false);
-                          }}
-                        >
-                          <Check
-                            className={cn(
-                              "mr-2 h-4 w-4",
-                              watch("districtId") === district.DistrictID
-                                ? "opacity-100"
-                                : "opacity-0"
-                            )}
-                          />
-                          {district.DistrictName}
-                        </CommandItem>
-                      ))}
-                    </CommandGroup>
-                  </Command>
-                </PopoverContent>
-              </Popover>
-              {errors.district && (
-                <span className="text-sm text-red-500">
-                  {errors.district.message}
-                </span>
-              )}
-            </div>
-
-            {/* Ward Selection */}
-            <div className="space-y-2">
-              <Label>
-                Phường/Xã <span className="text-red-500">*</span>
-              </Label>
-              <Popover open={openWard} onOpenChange={setOpenWard}>
-                <PopoverTrigger asChild>
-                  <Button
-                    variant="outline"
-                    role="combobox"
-                    aria-expanded={openWard}
-                    className={cn(
-                      "w-full justify-between",
-                      errors.ward && "border-red-500"
-                    )}
-                    disabled={!watch("districtId")}
-                  >
-                    {watch("ward") || "Chọn phường/xã"}
-                    <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-                  </Button>
-                </PopoverTrigger>
-                <PopoverContent className="w-full p-0">
-                  <Command>
-                    <CommandInput placeholder="Tìm phường/xã..." />
-                    <CommandEmpty>Không tìm thấy kết quả.</CommandEmpty>
-                    <CommandGroup className="max-h-[300px] overflow-auto">
-                      {wards.map((ward) => (
-                        <CommandItem
-                          key={ward.WardCode}
-                          value={ward.WardName}
-                          onSelect={() => {
-                            setValue("wardId", parseInt(ward.WardCode));
-                            setValue("ward", ward.WardName);
-                            setOpenWard(false);
-                          }}
-                        >
-                          <Check
-                            className={cn(
-                              "mr-2 h-4 w-4",
-                              watch("wardId") === parseInt(ward.WardCode)
-                                ? "opacity-100"
-                                : "opacity-0"
-                            )}
-                          />
-                          {ward.WardName}
-                        </CommandItem>
-                      ))}
-                    </CommandGroup>
-                  </Command>
-                </PopoverContent>
-              </Popover>
-              {errors.ward && (
-                <span className="text-sm text-red-500">
-                  {errors.ward.message}
-                </span>
-              )}
-            </div>
-          </div>
-
-          {/* Is Default Checkbox */}
-          <div className="flex items-center space-x-2">
-            <Controller
-              name="default"
-              control={control}
-              render={({ field }) => (
-                <Checkbox
-                  id="isDefault"
-                  checked={field.value}
-                  onCheckedChange={field.onChange}
                 />
-              )}
-            />
-            <Label htmlFor="isDefault">Đặt làm địa chỉ mặc định</Label>
-          </div>
+              </div>
 
-          <div className="flex justify-end space-x-2">
-            <Button
-              type="button"
-              variant="outline"
-              onClick={() => onOpenChange(false)}
-            >
-              Hủy
-            </Button>
-            <Button
-              type="submit"
-              disabled={createProfile.isPending || updateProfile.isPending}
-              onClick={(e) => {
-                e.preventDefault();
-                onSubmit(e);
-              }}
-            >
-              {createProfile.isPending || updateProfile.isPending
-                ? "Đang lưu..."
-                : profile
-                ? "Cập nhật"
-                : "Thêm địa chỉ"}
-            </Button>
-          </div>
-        </form>
+              {/* Last Name */}
+              <div className="space-y-2">
+                <Label htmlFor="lastName">
+                  Tên <span className="text-red-500">*</span>
+                </Label>
+                <Controller
+                  name="lastName"
+                  control={control}
+                  render={({ field }) => (
+                    <div>
+                      <Input
+                        {...field}
+                        placeholder="Nhập tên"
+                        className={cn(errors.lastName && "border-red-500")}
+                      />
+                      {errors.lastName && (
+                        <span className="text-sm text-red-500">
+                          {errors.lastName.message}
+                        </span>
+                      )}
+                    </div>
+                  )}
+                />
+              </div>
+            </div>
+
+            {/* Phone Number */}
+            <div className="space-y-2">
+              <Label htmlFor="phoneNumber">
+                Số điện thoại <span className="text-red-500">*</span>
+              </Label>
+              <Controller
+                name="phoneNumber"
+                control={control}
+                render={({ field }) => (
+                  <div>
+                    <Input
+                      {...field}
+                      placeholder="Nhập số điện thoại"
+                      className={cn(errors.phoneNumber && "border-red-500")}
+                    />
+                    {errors.phoneNumber && (
+                      <span className="text-sm text-red-500">
+                        {errors.phoneNumber.message}
+                      </span>
+                    )}
+                  </div>
+                )}
+              />
+            </div>
+
+            {/* Address */}
+            <div className="space-y-2">
+              <Label htmlFor="address">
+                Địa chỉ <span className="text-red-500">*</span>
+              </Label>
+              <Controller
+                name="address"
+                control={control}
+                render={({ field }) => (
+                  <div>
+                    <Input
+                      {...field}
+                      placeholder="Nhập địa chỉ chi tiết"
+                      className={cn(errors.address && "border-red-500")}
+                    />
+                    {errors.address && (
+                      <span className="text-sm text-red-500">
+                        {errors.address.message}
+                      </span>
+                    )}
+                  </div>
+                )}
+              />
+            </div>
+
+            <div className="grid gap-6 md:grid-cols-3">
+              {/* Province Selection */}
+              <div className="space-y-2">
+                <Label>
+                  Tỉnh/Thành phố <span className="text-red-500">*</span>
+                </Label>
+                <Popover open={openProvince} onOpenChange={setOpenProvince}>
+                  <PopoverTrigger asChild>
+                    <Button
+                      variant="outline"
+                      role="combobox"
+                      aria-expanded={openProvince}
+                      className={cn(
+                        "w-full justify-between",
+                        errors.province && "border-red-500"
+                      )}
+                    >
+                      {watch("province") || "Chọn tỉnh/thành phố"}
+                      <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-full p-0">
+                    <Command>
+                      <CommandInput placeholder="Tìm tỉnh/thành phố..." />
+                      <CommandEmpty>Không tìm thấy kết quả.</CommandEmpty>
+                      <CommandGroup className="max-h-[300px] overflow-auto">
+                        {provinces.map((province) => (
+                          <CommandItem
+                            key={province.ProvinceID}
+                            value={province.ProvinceName}
+                            onSelect={() => {
+                              setValue("provinceId", province.ProvinceID);
+                              setValue("province", province.ProvinceName);
+                              setValue("districtId", 0);
+                              setValue("district", "");
+                              setValue("wardId", 0);
+                              setValue("ward", "");
+                              setOpenProvince(false);
+                            }}
+                          >
+                            <Check
+                              className={cn(
+                                "mr-2 h-4 w-4",
+                                watch("provinceId") === province.ProvinceID
+                                  ? "opacity-100"
+                                  : "opacity-0"
+                              )}
+                            />
+                            {province.ProvinceName}
+                          </CommandItem>
+                        ))}
+                      </CommandGroup>
+                    </Command>
+                  </PopoverContent>
+                </Popover>
+                {errors.province && (
+                  <span className="text-sm text-red-500">
+                    {errors.province.message}
+                  </span>
+                )}
+              </div>
+
+              {/* District Selection */}
+              <div className="space-y-2">
+                <Label>
+                  Quận/Huyện <span className="text-red-500">*</span>
+                </Label>
+                <Popover open={openDistrict} onOpenChange={setOpenDistrict}>
+                  <PopoverTrigger asChild>
+                    <Button
+                      variant="outline"
+                      role="combobox"
+                      aria-expanded={openDistrict}
+                      className={cn(
+                        "w-full justify-between",
+                        errors.district && "border-red-500"
+                      )}
+                      disabled={!watch("provinceId")}
+                    >
+                      {watch("district") || "Chọn quận/huyện"}
+                      <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-full p-0">
+                    <Command>
+                      <CommandInput placeholder="Tìm quận/huyện..." />
+                      <CommandEmpty>Không tìm thấy kết quả.</CommandEmpty>
+                      <CommandGroup className="max-h-[300px] overflow-auto">
+                        {districts.map((district) => (
+                          <CommandItem
+                            key={district.DistrictID}
+                            value={district.DistrictName}
+                            onSelect={() => {
+                              setValue("districtId", district.DistrictID);
+                              setValue("district", district.DistrictName);
+                              setValue("wardId", 0);
+                              setValue("ward", "");
+                              setOpenDistrict(false);
+                            }}
+                          >
+                            <Check
+                              className={cn(
+                                "mr-2 h-4 w-4",
+                                watch("districtId") === district.DistrictID
+                                  ? "opacity-100"
+                                  : "opacity-0"
+                              )}
+                            />
+                            {district.DistrictName}
+                          </CommandItem>
+                        ))}
+                      </CommandGroup>
+                    </Command>
+                  </PopoverContent>
+                </Popover>
+                {errors.district && (
+                  <span className="text-sm text-red-500">
+                    {errors.district.message}
+                  </span>
+                )}
+              </div>
+
+              {/* Ward Selection */}
+              <div className="space-y-2">
+                <Label>
+                  Phường/Xã <span className="text-red-500">*</span>
+                </Label>
+                <Popover open={openWard} onOpenChange={setOpenWard}>
+                  <PopoverTrigger asChild>
+                    <Button
+                      variant="outline"
+                      role="combobox"
+                      aria-expanded={openWard}
+                      className={cn(
+                        "w-full justify-between",
+                        errors.ward && "border-red-500"
+                      )}
+                      disabled={!watch("districtId")}
+                    >
+                      {watch("ward") || "Chọn phường/xã"}
+                      <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-full p-0">
+                    <Command>
+                      <CommandInput placeholder="Tìm phường/xã..." />
+                      <CommandEmpty>Không tìm thấy kết quả.</CommandEmpty>
+                      <CommandGroup className="max-h-[300px] overflow-auto">
+                        {wards.map((ward) => (
+                          <CommandItem
+                            key={ward.WardCode}
+                            value={ward.WardName}
+                            onSelect={() => {
+                              setValue("wardId", parseInt(ward.WardCode));
+                              setValue("ward", ward.WardName);
+                              setOpenWard(false);
+                            }}
+                          >
+                            <Check
+                              className={cn(
+                                "mr-2 h-4 w-4",
+                                watch("wardId") === parseInt(ward.WardCode)
+                                  ? "opacity-100"
+                                  : "opacity-0"
+                              )}
+                            />
+                            {ward.WardName}
+                          </CommandItem>
+                        ))}
+                      </CommandGroup>
+                    </Command>
+                  </PopoverContent>
+                </Popover>
+                {errors.ward && (
+                  <span className="text-sm text-red-500">
+                    {errors.ward.message}
+                  </span>
+                )}
+              </div>
+            </div>
+
+            {/* Is Default Checkbox */}
+            <div className="flex items-center space-x-2">
+              <Controller
+                name="default"
+                control={control}
+                render={({ field }) => (
+                  <Checkbox
+                    id="isDefault"
+                    checked={field.value}
+                    onCheckedChange={field.onChange}
+                  />
+                )}
+              />
+              <Label htmlFor="isDefault">Đặt làm địa chỉ mặc định</Label>
+            </div>
+
+            <div className="flex justify-end space-x-2">
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => onOpenChange(false)}
+              >
+                Hủy
+              </Button>
+              <Button
+                type="submit"
+                disabled={createProfile.isPending || updateProfile.isPending}
+                onClick={(e) => {
+                  e.preventDefault();
+                  onSubmit(e);
+                }}
+              >
+                {createProfile.isPending || updateProfile.isPending
+                  ? "Đang lưu..."
+                  : profile
+                  ? "Cập nhật"
+                  : "Thêm địa chỉ"}
+              </Button>
+            </div>
+          </form>
+        </div>
       </DialogContent>
     </Dialog>
   );

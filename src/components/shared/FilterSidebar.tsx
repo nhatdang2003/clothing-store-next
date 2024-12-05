@@ -10,6 +10,7 @@ import { formatPrice } from "@/lib/utils";
 import { FilterCategories } from "../shop/FilterCategories";
 import { FilterPriceRange } from "../shop/FilterPriceRange";
 import { FilterRatings } from "../shop/FilterRatings";
+import { FilterColors } from "../shop/FilterColors";
 
 export function FilterSidebar({ categories }: { categories: Category[] }) {
   const [priceRange, setPriceRange] = useState([0, 1000]);
@@ -19,7 +20,7 @@ export function FilterSidebar({ categories }: { categories: Category[] }) {
   const ratings = [5, 4, 3, 2, 1];
 
   return (
-    <div className="w-full md:w-64 space-y-6">
+    <div className="w-full md:w-72 space-y-6">
       <div className="md:hidden">
         <button
           className="w-full bg-gray-200 p-2 rounded-md text-left"
@@ -31,9 +32,10 @@ export function FilterSidebar({ categories }: { categories: Category[] }) {
       <div
         className={`${
           isMobileFilterOpen ? "max-h-screen opacity-100" : "max-h-0 opacity-0"
-        } md:max-h-screen md:opacity-100 overflow-hidden transition-all duration-300 ease-in-out md:block space-y-6`}
+        } md:min-h-screen md:opacity-100 transition-all duration-300 ease-in-out md:block space-y-6`}
       >
         <FilterCategories className="mx-1" categories={categories} />
+        <FilterColors className="mx-1" />
         <FilterPriceRange className="mx-1" />
         <FilterRatings className="mx-1" />
       </div>

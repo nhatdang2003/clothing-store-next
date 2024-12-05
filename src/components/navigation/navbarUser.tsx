@@ -29,7 +29,7 @@ export function NavbarUser({ userInfo }: { userInfo: any }) {
             className="text-base flex items-center gap-2"
           >
             <User className="h-4 w-4" />
-            Hi {userInfo.firstName}
+            Chào {userInfo.firstName}
             <ChevronDown className="h-4 w-4 opacity-50" />
           </Button>
         </PopoverTrigger>
@@ -41,21 +41,21 @@ export function NavbarUser({ userInfo }: { userInfo: any }) {
                 className="flex items-center gap-2 text-sm hover:bg-muted px-2 py-1 rounded-md"
               >
                 <User className="h-4 w-4" />
-                <span>Account Settings</span>
+                <span>Tài khoản</span>
               </Link>
               <Link
-                href="/orders"
+                href="/account/orders"
                 className="flex items-center gap-2 text-sm hover:bg-muted px-2 py-1 rounded-md"
               >
                 <Package className="h-4 w-4" />
-                <span>Orders</span>
+                <span>Đơn hàng</span>
               </Link>
               <Link
                 href="/shipping"
                 className="flex items-center gap-2 text-sm hover:bg-muted px-2 py-1 rounded-md"
               >
                 <ShoppingBag className="h-4 w-4" />
-                <span>Shipping Profile</span>
+                <span>Thông tin giao hàng</span>
               </Link>
               <Button
                 variant="outline"
@@ -63,7 +63,7 @@ export function NavbarUser({ userInfo }: { userInfo: any }) {
                 onClick={handleLogout}
               >
                 <LogOut className="h-4 w-4" />
-                <span>Logout</span>
+                <span>Đăng xuất</span>
               </Button>
             </div>
           </div>

@@ -15,6 +15,7 @@ import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
 
 const InfoProduct = ({ product }: { product: any }) => {
+  console.log(product);
   const [quantity, setQuantity] = useState<number>(1);
   const [selectedSize, setSelectedSize] = useState<string | null>(null);
   const [selectedColor, setSelectedColor] = useState<string | null>(null);

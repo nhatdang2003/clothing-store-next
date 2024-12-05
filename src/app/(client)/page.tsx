@@ -3,6 +3,7 @@ import CategoryCarousel from "@/components/home/category-carousel";
 import HomeCarousel from "@/components/home/home-carousel";
 import TabsProduct from "@/components/home/tabsProduct";
 import { productApi } from "@/services/product.api";
+import console from "console";
 
 export default function HomePage() {
   return (

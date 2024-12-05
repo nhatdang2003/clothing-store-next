@@ -15,17 +15,17 @@ export default function LayoutAccount({
   const navItems = [
     {
       href: "/account",
-      label: "Account Details",
+      label: "Tài khoản",
       icon: User,
     },
     {
       href: "/account/shipping-info",
-      label: "Shipping Information",
+      label: "Thông tin giao hàng",
       icon: Package,
     },
     {
       href: "/account/orders",
-      label: "Orders",
+      label: "Đơn hàng",
       icon: FileText,
     },
   ];

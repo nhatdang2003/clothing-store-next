@@ -1,7 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { accountApi } from "@/services/account.api";
-import { useToast } from "./use-toast";
-import { UserInfo } from "@/types/account";
+import { toast, useToast } from "./use-toast";
+import { ChangePasswordRequest, UserInfo } from "@/types/account";
 import { format } from "date-fns";
 import { useRouter } from "next/navigation";
 
@@ -55,3 +55,27 @@ export function useUpdateProfile() {
     },
   });
 }
+
+export const useChangePassword = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (data: ChangePasswordRequest) =>
+      accountApi.changePassword(data),
+    onSuccess: () => {
+      toast({
+        title: "Thành công",
+        description: "Đổi mật khẩu thành công",
+        variant: "success",
+      });
+      queryClient.invalidateQueries({ queryKey: ["account"] });
+    },
+    onError: (error: any) => {
+      toast({
+        title: "Lỗi",
+        description: error.message || "Đã có lỗi xảy ra",
+        variant: "destructive",
+      });
+    },
+  });
+};
