@@ -28,4 +28,8 @@ export const accountApi = {
     });
     return response.data;
   },
+  getRoles: async () => {
+    const response = await http.get({ url: "/api/v1/users/roles" });
+    return response.data;
+  },
 };

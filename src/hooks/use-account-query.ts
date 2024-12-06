@@ -79,3 +79,23 @@ export const useChangePassword = () => {
     },
   });
 };
+
+export function useAccountInfo() {
+  const { toast } = useToast();
+
+  return useQuery({
+    queryKey: ["account-profile"],
+    queryFn: async () => {
+      try {
+        return await accountApi.getInfo();
+      } catch (error) {
+        toast({
+          title: "Lỗi",
+          description: "Không thể tải thông tin người dùng",
+          variant: "destructive",
+        });
+        throw error;
+      }
+    },
+  });
+}

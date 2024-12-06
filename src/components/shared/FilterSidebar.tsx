@@ -11,6 +11,7 @@ import { FilterCategories } from "../shop/FilterCategories";
 import { FilterPriceRange } from "../shop/FilterPriceRange";
 import { FilterRatings } from "../shop/FilterRatings";
 import { FilterColors } from "../shop/FilterColors";
+import { FilterSizes } from "../shop/FilterSizes";
 
 export function FilterSidebar({ categories }: { categories: Category[] }) {
   const [priceRange, setPriceRange] = useState([0, 1000]);
@@ -36,6 +37,7 @@ export function FilterSidebar({ categories }: { categories: Category[] }) {
       >
         <FilterCategories className="mx-1" categories={categories} />
         <FilterColors className="mx-1" />
+        <FilterSizes className="mx-1" />
         <FilterPriceRange className="mx-1" />
         <FilterRatings className="mx-1" />
       </div>

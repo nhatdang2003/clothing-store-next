@@ -6,7 +6,6 @@ const publicApi = [
   "/api/auth/login",
   "/api/auth/register",
   "/api/auth/activate",
-  "/api/v1/products",
 ];
 
 const request = async (
@@ -36,7 +35,7 @@ const request = async (
   } else if (!publicApi.map((api) => url.includes(api)).includes(true)) {
     // Server-side
     const { cookies } = await import("next/headers");
-    const cookieStore = cookies();
+    const cookieStore = await cookies();
     token = cookieStore.get("access_token")?.value;
   }
   if (token && !publicApi.map((api) => url.includes(api)).includes(true)) {
@@ -66,7 +65,10 @@ const request = async (
   }
 
   try {
-    const response = await fetch(`${baseURL}${url}`, fetchOptions);
+    const response = await fetch(`${baseURL}${url}`, {
+      ...fetchOptions,
+      cache: "no-store",
+    });
     // Handle HTTP errors
     if (!response.ok) {
       if (response.status === STATUS_CODE.UNAUTHORIZED) {

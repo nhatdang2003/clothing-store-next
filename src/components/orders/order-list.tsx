@@ -7,7 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import Image from "next/image";
 import { Pagination } from "@/components/shared/pagination";
 import { Skeleton } from "@/components/ui/skeleton";
-import { formatPrice } from "@/lib/utils";
+import { formatPrice, getStatusColor, getStatusText } from "@/lib/utils";
 
 interface LineItem {
   id: number;
@@ -82,44 +82,6 @@ export default function OrderList({ orders }: OrderListProps) {
           hour: "2-digit",
           minute: "2-digit",
         });
-  };
-
-  const getStatusText = (status: string) => {
-    switch (status) {
-      case "PENDING":
-        return "Chờ xác nhận";
-      case "PROCESSING":
-        return "Đang xử lý";
-      case "SHIPPING":
-        return "Đang giao hàng";
-      case "DELIVERED":
-        return "Đã giao hàng";
-      case "CANCELLED":
-        return "Đã hủy";
-      case "RETURNED":
-        return "Đã hoàn trả";
-      default:
-        return "Không xác định";
-    }
-  };
-
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case "PENDING":
-        return "bg-yellow-100 text-yellow-800";
-      case "PROCESSING":
-        return "bg-blue-100 text-blue-800";
-      case "SHIPPING":
-        return "bg-purple-100 text-purple-800";
-      case "DELIVERED":
-        return "bg-green-100 text-green-800";
-      case "CANCELLED":
-        return "bg-red-100 text-red-800";
-      case "RETURNED":
-        return "bg-orange-100 text-orange-800";
-      default:
-        return "bg-gray-100 text-gray-800";
-    }
   };
 
   if (loading) {

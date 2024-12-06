@@ -7,18 +7,26 @@ export const productApi = {
     categories?: string[],
     minPrice?: number,
     maxPrice?: number,
-    rating?: number
+    rating?: number,
+    sizes?: string[]
   ) => {
     let url = `/api/v1/products?page=${page}&size=${size}`;
+    if (sizes && sizes.length > 0) {
+      url += `&sizes=${sizes}`;
+    }
+    if (minPrice) {
+      url += `&minPrice=${minPrice}`;
+    }
+    if (maxPrice) {
+      url += `&maxPrice=${maxPrice}`;
+    }
     if (rating) {
       url += `&averageRating=${rating}`;
-    }
-    if (minPrice && maxPrice) {
-      url += `&filter=price>:${minPrice} and price<:${maxPrice}`;
     }
     if (categories && categories.length > 0) {
       url += `&filter=category.id in [${categories}]`;
     }
+    console.log(url);
 
     const response = await http.get({
       url,

@@ -2,7 +2,8 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { cartApi } from "@/services/cart.api";
 import { CartItem } from "@/types/cart";
 import { useToast } from "./use-toast";
-import Cookies from "js-cookie";
+import { useRouter } from "next/navigation";
+import { revalidateApi } from "@/services/revalidate.api";
 
 export function useUpdateCartItem() {
   const queryClient = useQueryClient();
@@ -45,7 +46,8 @@ export function useUpdateCartItem() {
         description: "Không thể cập nhật số lượng sản phẩm",
       });
     },
-    onSettled: () => {
+    onSettled: async () => {
+      await revalidateApi.Cart();
       queryClient.invalidateQueries({ queryKey: ["cart"] });
     },
   });
@@ -118,7 +120,8 @@ export function useDeleteCartItem() {
         description: "Đã xóa sản phẩm khỏi giỏ hàng",
       });
     },
-    onSettled: () => {
+    onSettled: async () => {
+      await revalidateApi.Cart();
       queryClient.invalidateQueries({ queryKey: ["cart"] });
     },
   });
@@ -127,6 +130,7 @@ export function useDeleteCartItem() {
 export function useAddToCartMutation() {
   const queryClient = useQueryClient();
   const { toast } = useToast();
+  const router = useRouter();
 
   return useMutation({
     mutationFn: async ({
@@ -143,6 +147,18 @@ export function useAddToCartMutation() {
         title: "Thêm vào giỏ hàng thành công",
         description: "Sản phẩm đã được thêm vào giỏ hàng của bạn",
       });
+      queryClient.invalidateQueries({ queryKey: ["cart"] });
+      router.refresh();
+    },
+    onError: (error: any) => {
+      toast({
+        variant: "destructive",
+        title: "Lỗi",
+        description: error?.message || "Không thể thêm sản phẩm vào giỏ hàng",
+      });
+    },
+    onSettled: async () => {
+      await revalidateApi.Cart();
       queryClient.invalidateQueries({ queryKey: ["cart"] });
     },
   });

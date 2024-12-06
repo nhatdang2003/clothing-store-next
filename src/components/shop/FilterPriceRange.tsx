@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { formatPrice } from "@/lib/utils";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { toast } from "@/hooks/use-toast";
 
 interface FilterPriceRangeProps {
   className?: string;
@@ -27,17 +28,37 @@ export function FilterPriceRange({ className = "" }: FilterPriceRangeProps) {
 
   const handleApplyFilter = () => {
     // Validate giá trị
-    const min = Number(minPrice);
-    const max = Number(maxPrice);
+    const min = minPrice ? Number(minPrice) : null;
+    const max = maxPrice ? Number(maxPrice) : null;
 
-    if (isNaN(min) || isNaN(max) || min < 0 || max < 0 || min > max) {
+    // Kiểm tra giá trị hợp lệ
+    if (
+      (min !== null && (isNaN(min) || min < 0)) ||
+      (max !== null && (isNaN(max) || max < 0)) ||
+      (min !== null && max !== null && min > max)
+    ) {
+      toast({
+        title: "Giá trị không hợp lệ",
+        description: "Vui lòng kiểm tra lại giá trị nhập vào",
+      });
       return;
     }
 
     // Cập nhật URL
     const params = new URLSearchParams(searchParams);
-    params.set("minPrice", min.toString());
-    params.set("maxPrice", max.toString());
+
+    // Chỉ thêm params khi có giá trị
+    if (min !== null) {
+      params.set("minPrice", min.toString());
+    } else {
+      params.delete("minPrice");
+    }
+
+    if (max !== null) {
+      params.set("maxPrice", max.toString());
+    } else {
+      params.delete("maxPrice");
+    }
 
     // Reset về trang 1 khi filter thay đổi
     params.set("page", "1");

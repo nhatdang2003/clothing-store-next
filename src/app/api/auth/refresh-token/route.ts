@@ -3,13 +3,11 @@ import * as jose from "jose";
 import http from "@/services/http";
 import { cookies } from "next/headers";
 
-// Đánh dấu route này là dynamic
-export const dynamic = "force-dynamic";
-
 // Tạo instance riêng cho backend API
 export async function GET() {
   try {
-    const refreshToken = cookies().get("refresh_token")?.value;
+    const cookieStore = await cookies();
+    const refreshToken = cookieStore.get("refresh_token")?.value;
 
     if (!refreshToken) {
       return NextResponse.json(
@@ -33,8 +31,6 @@ export async function GET() {
     // Decode new tokens to get expiration
     const { exp: accessExp } = jose.decodeJwt(access_token);
     const { exp: refreshExp } = jose.decodeJwt(refresh_token);
-
-    const cookieStore = cookies();
 
     // Set new access token with JWT expiration
     cookieStore.set("access_token", access_token, {

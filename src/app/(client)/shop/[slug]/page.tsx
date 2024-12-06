@@ -1,22 +1,18 @@
-import SizeSelector from "@/components/detail/size-selector";
-import ColorSelector from "@/components/detail/color-selector";
-import { Star, Truck } from "lucide-react";
 import ReviewSection from "@/components/detail/review-section";
 import RelatedProducts from "@/components/detail/related-products";
-import ImageGallery from "@/components/detail/image-gallery";
 import { productApi } from "@/services/product.api";
-import { formatPrice } from "@/lib/utils";
 import InfoProduct from "@/components/detail/info-product";
 
 export default async function DetailPage({
   params,
 }: {
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 }) {
   let product: any;
   let relatedProducts: any;
+  const { slug } = await params;
   try {
-    product = await productApi.getProductBySlug(params.slug);
+    product = await productApi.getProductBySlug(slug);
     relatedProducts = await productApi.getProductsByCategory(
       product.categoryId
     );

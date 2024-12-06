@@ -16,6 +16,7 @@ import {
   useDeleteCartItem,
 } from "@/hooks/use-cart-query";
 import { CartItem } from "@/types/cart";
+import Link from "next/link";
 
 interface CartItemRowProps {
   item: CartItem;
@@ -56,7 +57,9 @@ function CartItemRow({
 
       <div className="flex-grow flex flex-col justify-between">
         <div>
-          <h2 className="text-lg font-semibold">{item.productName}</h2>
+          <Link href={`/shop/${item.slug}`}>
+            <h2 className="text-lg font-semibold">{item.productName}</h2>
+          </Link>
           <p className="text-sm text-muted-foreground">
             Màu: {item.productVariant.color}
           </p>

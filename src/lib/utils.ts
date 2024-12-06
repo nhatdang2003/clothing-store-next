@@ -1,3 +1,9 @@
+import {
+  PAYMENT_METHOD,
+  PAYMENT_STATUS,
+  SHIPPING_METHOD,
+  STATUS_ORDER,
+} from "@/constants/order";
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 
@@ -5,33 +11,33 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-export const getAccessToken = () => {
-  try {
-    const authStorage = localStorage.getItem("auth-storage");
-    if (!authStorage) return null;
-
-    return JSON.parse(authStorage).state.access_token;
-  } catch (error) {
-    console.error("Error getting access token:", error);
-    return null;
-  }
-};
-
-export const getRefreshToken = () => {
-  try {
-    const authStorage = localStorage.getItem("auth-storage");
-    if (!authStorage) return null;
-
-    return JSON.parse(authStorage).state.refresh_token;
-  } catch (error) {
-    console.error("Error getting refresh token:", error);
-    return null;
-  }
-};
-
 export const formatPrice = (price: number) => {
   return new Intl.NumberFormat("vi-VN", {
     style: "currency",
     currency: "VND",
   }).format(price);
+};
+
+export const getStatusText = (status: string) => {
+  return STATUS_ORDER.find((item: any) => item.value === status)?.label;
+};
+
+export const getPaymentStatusText = (status: string) => {
+  return PAYMENT_STATUS.find((item: any) => item.value === status)?.label;
+};
+
+export const getStatusColor = (status: string) => {
+  return STATUS_ORDER.find((item: any) => item.value === status)?.color;
+};
+
+export const getPaymentStatusColor = (status: string) => {
+  return PAYMENT_STATUS.find((item: any) => item.value === status)?.color;
+};
+
+export const getShippingMethodText = (status: string) => {
+  return SHIPPING_METHOD.find((item: any) => item.value === status)?.label;
+};
+
+export const getPaymentMethodText = (status: string) => {
+  return PAYMENT_METHOD.find((item: any) => item.value === status)?.label;
 };

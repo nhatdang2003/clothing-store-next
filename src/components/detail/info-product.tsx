@@ -85,7 +85,7 @@ const InfoProduct = ({ product }: { product: any }) => {
       });
       return;
     }
-
+    console.log(selectedVariant?.currentUserCartQuantity);
     if (!Cookies.get("access_token")) {
       router.push("/login?redirect=/shop/" + product.slug);
       return;

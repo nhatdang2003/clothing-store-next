@@ -40,31 +40,17 @@ export default function ProductCard({ product }: { product: any }) {
           </div>
         </div>
         <CardContent className="py-4 px-3">
-          <div className="flex items-start sm:items-start flex-col  gap-2">
+          <div className="flex items-start sm:items-end flex-col sm:flex-row gap-2">
             <div
-              className={`text-md xl:text-lg font-bold leading-none ${
+              className={`text-xl font-bold leading-none ${
                 product.discountRate > 0 ? "text-red-500" : ""
               }`}
             >
-              {product.minPriceWithDiscount === product.maxPriceWithDiscount ? (
-                formatPrice(product.minPriceWithDiscount)
-              ) : (
-                <>
-                  {formatPrice(product.minPriceWithDiscount)} -{" "}
-                  {formatPrice(product.maxPriceWithDiscount)}
-                </>
-              )}
+              {formatPrice(product.minPriceWithDiscount)}
             </div>
             {product.discountRate > 0 && (
               <div className="text-sm font-bold leading-none line-through text-gray-500">
-                {product.minPrice === product.maxPrice ? (
-                  formatPrice(product.minPrice)
-                ) : (
-                  <>
-                    {formatPrice(product.minPrice)} -{" "}
-                    {formatPrice(product.maxPrice)}
-                  </>
-                )}
+                {formatPrice(product.minPrice)}
               </div>
             )}
           </div>

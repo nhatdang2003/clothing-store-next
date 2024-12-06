@@ -12,6 +12,7 @@ export interface CartItem {
   quantity: number;
   inStock: number;
   image: string;
+  slug: string;
 }
 
 export interface CartListProps {
