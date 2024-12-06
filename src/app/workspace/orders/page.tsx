@@ -7,15 +7,16 @@ export const dynamic = "force-dynamic";
 export default async function OrdersPage({
   searchParams,
 }: {
-  searchParams: any;
+  searchParams: Promise<{
+    page: number;
+    size: number;
+    status: string;
+  }>;
 }) {
   let orders = [];
+  const { page, size, status } = await searchParams;
   try {
-    orders = await orderApi.getOrders(
-      searchParams.page - 1 || 0,
-      searchParams.size || 10,
-      searchParams.status
-    );
+    orders = await orderApi.getOrders(page - 1 || 0, size || 10, status);
   } catch (error) {
     console.log(error);
     return <div>Đã có lỗi xảy ra, vui lòng thử lại sau</div>;

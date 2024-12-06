@@ -3,15 +3,28 @@ export interface ProductVariant {
   color: string;
   size: string;
   quantity: number;
+  currentUserCartQuantity: number;
+  differencePrice: number;
   images: string[];
 }
 
 export interface Product {
   id: number;
   name: string;
-  price: number;
   description: string;
+  price: number;
+  minPrice: number;
+  maxPrice: number;
+  priceWithDiscount: number;
+  minPriceWithDiscount: number;
+  maxPriceWithDiscount: number;
+  categoryId: number;
+  categoryName: string;
+  discountRate: number;
+  averageRating: number | null;
+  slug: string;
+  colorDefault: string | null;
   images: string[];
   variants: ProductVariant[];
-  averageRating?: number;
+  featured: boolean;
 }

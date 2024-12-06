@@ -19,10 +19,12 @@ function ConfirmUserContent() {
   const router = useRouter();
   const [isAutoActivating, setIsAutoActivating] = useState(true);
   const { mutate: activate, isPending } = useActivateAccount();
+  const firstRender = useRef(false);
 
   useEffect(() => {
     const key = searchParams.get("key");
-    if (key && isAutoActivating) {
+    if (key && isAutoActivating && !firstRender.current) {
+      firstRender.current = true;
       activate(key, {
         onError: () => {
           setIsAutoActivating(false);
