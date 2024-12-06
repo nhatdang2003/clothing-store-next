@@ -4,7 +4,7 @@ import http from "@/services/http";
 
 export async function GET() {
   try {
-    const cookieStore = cookies();
+    const cookieStore = await cookies();
     const refreshToken = cookieStore.get("refresh_token")?.value;
 
     if (refreshToken) {
@@ -24,7 +24,7 @@ export async function GET() {
     });
   } catch (error) {
     // Always clear cookies even if API fails
-    const cookieStore = cookies();
+    const cookieStore = await cookies();
     cookieStore.delete("access_token");
     cookieStore.delete("refresh_token");
 

@@ -4,19 +4,35 @@ import { categoryApi } from "@/services/category.api";
 import { productApi } from "@/services/product.api";
 import React, { Suspense } from "react";
 
-const ShopPage = async ({ searchParams }: { searchParams: any }) => {
-  let categories = [];
+export const dynamic = "force-dynamic";
+
+export default async function ShopPage({
+  searchParams,
+}: {
+  searchParams: Promise<{
+    page: number;
+    size: number;
+    categories: string;
+    minPrice: number;
+    maxPrice: number;
+    rating: number;
+    sizes: string;
+  }>;
+}) {
+  let categoriesData = [];
   let productsData = [];
+  const { page, size, categories, minPrice, maxPrice, rating, sizes } =
+    await searchParams;
   try {
-    categories = await categoryApi.getCategories();
+    categoriesData = await categoryApi.getCategories();
     productsData = await productApi.getProducts(
-      searchParams.page - 1 || 0,
-      searchParams.size || 6,
-      searchParams.categories,
-      searchParams.minPrice,
-      searchParams.maxPrice,
-      searchParams.rating,
-      searchParams.sizes
+      page - 1 || 0,
+      size || 6,
+      categories,
+      minPrice,
+      maxPrice,
+      rating,
+      sizes
     );
   } catch (error) {
     return <div>Đã có lỗi xảy ra, vui lòng thử lại sau</div>;
@@ -26,12 +42,10 @@ const ShopPage = async ({ searchParams }: { searchParams: any }) => {
     <div className=" mx-auto px-4 py-8">
       <div className="flex flex-col md:flex-row gap-8">
         <Suspense fallback={<div>Loading...</div>}>
-          <FilterSidebar categories={categories} />
+          <FilterSidebar categories={categoriesData} />
         </Suspense>
         <ProductGrid productsData={productsData} />
       </div>
     </div>
   );
-};
-
-export default ShopPage;
+}

@@ -4,18 +4,21 @@ import { Search } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { orderApi } from "@/services/order.api";
 
+export const dynamic = "force-dynamic";
+
 export default async function OrdersPage({
   searchParams,
 }: {
-  searchParams: any;
+  searchParams: Promise<{
+    page: number;
+    size: number;
+    status: string;
+  }>;
 }) {
   let orders = [];
+  const { page, size, status } = await searchParams;
   try {
-    orders = await orderApi.getOrdersByUser(
-      searchParams.page - 1 || 0,
-      searchParams.size || 6,
-      searchParams.status
-    );
+    orders = await orderApi.getOrdersByUser(page - 1 || 0, size || 6, status);
   } catch (error) {
     console.log(error);
     return <div>Đã có lỗi xảy ra, vui lòng thử lại sau</div>;

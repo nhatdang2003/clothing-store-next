@@ -4,16 +4,13 @@ export const productApi = {
   getProducts: async (
     page: number,
     size: number,
-    categories?: string[],
+    categories?: string,
     minPrice?: number,
     maxPrice?: number,
     rating?: number,
-    sizes?: string[]
+    sizes?: string
   ) => {
     let url = `/api/v1/products?page=${page}&size=${size}`;
-    if (sizes && sizes.length > 0) {
-      url += `&sizes=${sizes}`;
-    }
     if (minPrice) {
       url += `&minPrice=${minPrice}`;
     }
@@ -26,7 +23,12 @@ export const productApi = {
     if (categories && categories.length > 0) {
       url += `&filter=category.id in [${categories}]`;
     }
-    console.log(url);
+    if (sizes && sizes.length > 0) {
+      const arrSize = sizes.split(",");
+      url += `&filter=(${arrSize
+        .map((size) => `variants.size~'${size}'`)
+        .join(" or ")})`;
+    }
 
     const response = await http.get({
       url,

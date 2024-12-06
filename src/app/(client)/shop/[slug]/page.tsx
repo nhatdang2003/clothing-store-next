@@ -3,6 +3,8 @@ import RelatedProducts from "@/components/detail/related-products";
 import { productApi } from "@/services/product.api";
 import InfoProduct from "@/components/detail/info-product";
 
+export const dynamic = "force-dynamic";
+
 export default async function DetailPage({
   params,
 }: {

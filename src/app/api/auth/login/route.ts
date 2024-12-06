@@ -17,7 +17,7 @@ export async function POST(request: NextRequest) {
     const { exp: accessExp } = jose.decodeJwt(access_token);
     const { exp: refreshExp } = jose.decodeJwt(refresh_token);
 
-    const cookieStore = cookies();
+    const cookieStore = await cookies();
 
     cookieStore.set("access_token", access_token, {
       secure: process.env.NODE_ENV === "production",
