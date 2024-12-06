@@ -13,7 +13,7 @@ export default function SizeSelector({
 }) {
   return (
     <div className="mb-6">
-      <h3 className="text-lg font-semibold mb-2">Select Size</h3>
+      <h3 className="text-lg font-semibold mb-2">Chọn kích thước</h3>
       <div className="flex flex-wrap gap-2">
         {sizes.map((size) => (
           <button

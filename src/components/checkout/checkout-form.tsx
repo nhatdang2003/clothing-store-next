@@ -14,6 +14,7 @@ import { ShippingProfileListDialog } from "@/components/modal/shipping-profile-l
 import { useShippingProfiles } from "@/hooks/use-shipping-query";
 import { useCreateOrder } from "@/hooks/use-checkout-mutation";
 import { useToast } from "@/hooks/use-toast";
+import { formatPrice, getColorText } from "@/lib/utils";
 
 interface Address {
   id: number;
@@ -180,22 +181,32 @@ export function CheckoutForm() {
                   <div className="flex-1 space-y-2">
                     <h3 className="font-medium">{item.productName}</h3>
                     <p className="text-sm text-gray-600">
-                      Màu: {item.productVariant.color}, Kích thước:{" "}
-                      {item.productVariant.size}
+                      Màu: {getColorText(item.productVariant.color)}, Kích
+                      thước: {item.productVariant.size}
                     </p>
-                    <p className="font-medium">
-                      {item.finalPrice.toLocaleString("vi-VN")}₫
-                    </p>
+                    <div className="flex items-center gap-2">
+                      <p className="font-medium text-red-500">
+                        {formatPrice(item.finalPrice)}
+                      </p>
+                      {item.discountRate > 0 && (
+                        <p className="text-sm text-gray-500 line-through">
+                          {formatPrice(item.price)}
+                        </p>
+                      )}
+                    </div>
                     <p className="text-sm text-gray-600">
                       Số lượng: {item.quantity}
                     </p>
-                    <p className="font-medium">
-                      Tổng:{" "}
-                      {(item.finalPrice * item.quantity).toLocaleString(
-                        "vi-VN"
+                    <div className="flex items-center gap-2">
+                      <p className="font-medium">
+                        Tổng: {formatPrice(item.finalPrice * item.quantity)}
+                      </p>
+                      {item.discountRate > 0 && (
+                        <p className="text-sm text-gray-500 line-through">
+                          {formatPrice(item.price * item.quantity)}
+                        </p>
                       )}
-                      ₫
-                    </p>
+                    </div>
                   </div>
                 </div>
               ))}

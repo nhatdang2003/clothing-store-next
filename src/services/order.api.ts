@@ -17,6 +17,7 @@ export const orderApi = {
     if (status) {
       url += `&filter=status~'${status}'`;
     }
+    url += "&sort=createdAt,desc";
     const response = await http.get({
       url,
     });

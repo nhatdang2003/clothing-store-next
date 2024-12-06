@@ -139,9 +139,48 @@ const InfoProduct = ({ product }: { product: any }) => {
               : "Chưa có đánh giá"}
           </span>
         </div>
-        <p className="text-2xl font-semibold mb-4">
-          {formatPrice(product.price)}
-        </p>
+        <div className="flex items-center gap-2 mb-4">
+          {selectedVariant ? (
+            <>
+              <p className="text-2xl font-semibold text-red-500">
+                {formatPrice(
+                  selectedVariant.differencePrice > 0
+                    ? (product.price + selectedVariant.differencePrice) *
+                        (1 - product.discountRate)
+                    : product.priceWithDiscount
+                )}
+              </p>
+              {product.discountRate > 0 && (
+                <p className="text-lg text-gray-500 line-through">
+                  {formatPrice(
+                    selectedVariant.differencePrice > 0
+                      ? product.price + selectedVariant.differencePrice
+                      : product.price
+                  )}
+                </p>
+              )}
+            </>
+          ) : (
+            <>
+              <p className="text-2xl font-semibold text-red-500">
+                {product.minPriceWithDiscount === product.maxPriceWithDiscount
+                  ? formatPrice(product.minPriceWithDiscount)
+                  : `${formatPrice(
+                      product.minPriceWithDiscount
+                    )} - ${formatPrice(product.maxPriceWithDiscount)}`}
+              </p>
+              {product.discountRate > 0 && (
+                <p className="text-lg text-gray-500 line-through">
+                  {product.minPrice === product.maxPrice
+                    ? formatPrice(product.minPrice)
+                    : `${formatPrice(product.minPrice)} - ${formatPrice(
+                        product.maxPrice
+                      )}`}
+                </p>
+              )}
+            </>
+          )}
+        </div>
         <p className="mb-6">{product.description}</p>
         <ColorSelector
           colors={Array.from(

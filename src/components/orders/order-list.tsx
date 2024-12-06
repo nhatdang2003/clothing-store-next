@@ -7,7 +7,12 @@ import { Badge } from "@/components/ui/badge";
 import Image from "next/image";
 import { Pagination } from "@/components/shared/pagination";
 import { Skeleton } from "@/components/ui/skeleton";
-import { formatPrice, getStatusColor, getStatusText } from "@/lib/utils";
+import {
+  formatPrice,
+  getColorText,
+  getStatusColor,
+  getStatusText,
+} from "@/lib/utils";
 
 interface LineItem {
   id: number;
@@ -152,7 +157,7 @@ export default function OrderList({ orders }: OrderListProps) {
               <div className="flex-1 text-center sm:text-left">
                 <h3 className="font-medium mb-1">{item.productName}</h3>
                 <div className="text-sm text-muted-foreground mb-2">
-                  Phân loại: {item.color}, {item.size}
+                  Màu: {getColorText(item.color)}, Kích thước: {item.size}
                 </div>
                 <div className="text-sm">x{item.quantity}</div>
               </div>

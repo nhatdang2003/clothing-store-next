@@ -18,4 +18,10 @@ export const checkoutApi = {
     });
     return response.data;
   },
+  vnpayReturn: async (queryString: string) => {
+    const response = await http.get({
+      url: `/api/v1/payment/vnpay_return?${queryString}`,
+    });
+    return response;
+  },
 };

@@ -5,7 +5,7 @@ import Image from "next/image";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Trash2, Loader2 } from "lucide-react";
-import { formatPrice } from "@/lib/utils";
+import { formatPrice, getColorText } from "@/lib/utils";
 import { QuantitySelector } from "../detail/quantity-selector";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useRouter } from "next/navigation";
@@ -61,12 +61,29 @@ function CartItemRow({
             <h2 className="text-lg font-semibold">{item.productName}</h2>
           </Link>
           <p className="text-sm text-muted-foreground">
-            Màu: {item.productVariant.color}
+            Màu: {getColorText(item.productVariant.color)}, Kích thước:{" "}
+            {item.productVariant.size}
           </p>
-          <p className="text-sm text-muted-foreground">
-            Kích thước: {item.productVariant.size}
-          </p>
-          <p className="font-medium mt-1">{formatPrice(item.finalPrice)}</p>
+          <div className="flex items-center gap-2 mt-1">
+            <p className="font-medium text-red-500">
+              {formatPrice(item.finalPrice)}
+            </p>
+            {item.discountRate > 0 && (
+              <p className="text-sm text-gray-500 line-through">
+                {formatPrice(item.price)}
+              </p>
+            )}
+          </div>
+          <div className="flex items-center gap-2">
+            <p className="font-medium">
+              Tổng: {formatPrice(item.finalPrice * item.quantity)}
+            </p>
+            {item.discountRate > 0 && (
+              <p className="text-sm text-gray-500 line-through">
+                {formatPrice(item.price * item.quantity)}
+              </p>
+            )}
+          </div>
         </div>
         <div className="flex items-center justify-between mt-2">
           <QuantitySelector
@@ -130,16 +147,24 @@ export default function CartList() {
   const orderSummary = {
     subtotal: cartItems.reduce((total: number, item: CartItem) => {
       if (selectedItems.includes(item.cartItemId.toString())) {
+        return total + item.price * item.quantity;
+      }
+      return total;
+    }, 0),
+    discount: cartItems.reduce((total: number, item: CartItem) => {
+      if (selectedItems.includes(item.cartItemId.toString())) {
+        return total + (item.price - item.finalPrice) * item.quantity;
+      }
+      return total;
+    }, 0),
+    shippingFee: 0,
+    total: cartItems.reduce((total: number, item: CartItem) => {
+      if (selectedItems.includes(item.cartItemId.toString())) {
         return total + item.finalPrice * item.quantity;
       }
       return total;
     }, 0),
-    discount: 0,
-    shippingFee: 0,
-    total: 0,
   };
-  orderSummary.total =
-    orderSummary.subtotal - orderSummary.discount + orderSummary.shippingFee;
 
   const handleSelectItem = (cartItemId: string, checked: boolean) => {
     setSelectedItems((prev) =>

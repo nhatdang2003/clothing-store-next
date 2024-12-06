@@ -9,6 +9,7 @@ export interface CartItem {
   };
   price: number;
   finalPrice: number;
+  discountRate: number;
   quantity: number;
   inStock: number;
   image: string;

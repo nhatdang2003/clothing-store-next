@@ -16,7 +16,7 @@ export default function ColorSelector({
 }: ColorSelectorProps) {
   return (
     <div className="mb-6">
-      <h3 className="text-lg font-semibold mb-2">Select Color</h3>
+      <h3 className="text-lg font-semibold mb-2">Chọn màu</h3>
       <div className="flex flex-wrap gap-2">
         {colors.map((color) => (
           <button

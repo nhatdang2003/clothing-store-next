@@ -30,7 +30,12 @@ export function useCreateOrder() {
       localStorage.removeItem("selectedItems");
 
       // Chuyển hướng đến trang chi tiết đơn hàng
-      router.push(`/account/orders/${response.id}`);
+      console.log(response);
+      if (response.paymentMethod === "COD") {
+        router.push(`/account/orders/${response.id}`);
+      } else {
+        router.push(response.paymentUrl);
+      }
     },
     onError: () => {
       toast({

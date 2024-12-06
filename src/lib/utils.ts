@@ -4,6 +4,7 @@ import {
   SHIPPING_METHOD,
   STATUS_ORDER,
 } from "@/constants/order";
+import { COLOR } from "@/constants/product";
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 
@@ -40,4 +41,8 @@ export const getShippingMethodText = (status: string) => {
 
 export const getPaymentMethodText = (status: string) => {
   return PAYMENT_METHOD.find((item: any) => item.value === status)?.label;
+};
+
+export const getColorText = (color: string) => {
+  return COLOR.find((item: any) => item.id === color)?.name;
 };
