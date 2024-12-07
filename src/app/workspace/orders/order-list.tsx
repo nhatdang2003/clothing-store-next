@@ -1,6 +1,8 @@
 "use client";
 
+import { useState } from "react";
 import { format } from "date-fns";
+import { Search } from "lucide-react";
 import {
   Table,
   TableBody,
@@ -9,9 +11,11 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-
 import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 import { Pagination } from "@/components/shared/pagination";
+import { OrderFilter } from "./components/order-filter";
 import {
   formatPrice,
   getPaymentMethodText,
@@ -21,9 +25,11 @@ import {
   getStatusColor,
   getStatusText,
 } from "@/lib/utils";
+import { ActiveFilters } from "./components/active-filters";
+import { OrderSearch } from "./components/order-search";
 
 export default function OrderList({ orders }: { orders: any }) {
-  const currentPage = orders.meta.page;
+  const currentPage = orders.meta.page + 1;
   const totalPages = orders.meta.pages;
   const data = orders.data;
 
@@ -31,7 +37,19 @@ export default function OrderList({ orders }: { orders: any }) {
 
   return (
     <div className="space-y-4">
-      <h1 className="text-2xl font-bold">Đơn hàng</h1>
+      <div className="flex items-center justify-between">
+        <h1 className="text-2xl font-bold">Đơn hàng</h1>
+      </div>
+
+      <div className="flex flex-col gap-4">
+        <div className="flex items-center justify-between gap-4">
+          <OrderSearch />
+          <OrderFilter onFiltersChange={(filters) => console.log(filters)} />
+        </div>
+
+        <ActiveFilters />
+      </div>
+
       <Table>
         <TableHeader>
           <TableRow>
@@ -88,6 +106,7 @@ export default function OrderList({ orders }: { orders: any }) {
           ))}
         </TableBody>
       </Table>
+
       <Pagination currentPage={currentPage} totalPages={totalPages} />
     </div>
   );
