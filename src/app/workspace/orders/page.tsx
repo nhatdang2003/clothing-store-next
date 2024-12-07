@@ -1,7 +1,6 @@
 import { orderApi } from "@/services/order.api";
 import React from "react";
 import OrderList from "./order-list";
-import console from "console";
 
 export const dynamic = "force-dynamic";
 

@@ -17,7 +17,11 @@ import Link from "next/link";
 
 export default function CategoryCarousel() {
   const [api, setApi] = React.useState<any>();
-  const { data: categories, isLoading, error } = useCategoryListQuery();
+  const { data, isLoading, error } = useCategoryListQuery({
+    page: 1,
+    pageSize: 10000,
+  });
+  const categories = data?.data;
 
   React.useEffect(() => {
     if (!api) return;

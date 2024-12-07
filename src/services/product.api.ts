@@ -73,7 +73,7 @@ export const productApi = {
   },
   getProductsBySearch: async (search: string) => {
     const response = await http.get({
-      url: `/api/v1/products?filter=name~'${search}'`,
+      url: `/api/v1/products?filter=name~'${encodeURIComponent(search)}'`,
     });
     return response;
   },

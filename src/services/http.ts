@@ -95,6 +95,9 @@ const request = async (
       console.log(errorData);
       throw new Error(errorData.message || "Something went wrong!");
     }
+    if (response.status === STATUS_CODE.NO_CONTENT) {
+      return null;
+    }
     return await response.json();
   } catch (error: any) {
     console.error("API Error:", error.message);

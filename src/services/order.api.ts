@@ -28,7 +28,7 @@ export const orderApi = {
       url += `&filter=deliveryMethod~'${deliveryMethod}'`;
     }
     if (search) {
-      url += `&filter=code~'${search}'`;
+      url += `&filter=code~'${encodeURIComponent(search)}'`;
     }
     url += "&sort=createdAt,desc";
     const response = await http.get({
