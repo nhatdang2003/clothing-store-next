@@ -8,6 +8,7 @@ export const productApi = {
     minPrice?: number,
     maxPrice?: number,
     rating?: number,
+    colors?: string,
     sizes?: string
   ) => {
     let url = `/api/v1/products?page=${page}&size=${size}`;
@@ -22,6 +23,12 @@ export const productApi = {
     }
     if (categories && categories.length > 0) {
       url += `&filter=category.id in [${categories}]`;
+    }
+    if (colors && colors.length > 0) {
+      const arrColor = colors.split(",");
+      url += `&filter=(${arrColor
+        .map((color) => `variants.color~'${color}'`)
+        .join(" or ")})`;
     }
     if (sizes && sizes.length > 0) {
       const arrSize = sizes.split(",");

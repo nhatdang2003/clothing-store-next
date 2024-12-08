@@ -16,12 +16,13 @@ export default async function ShopPage({
     minPrice: number;
     maxPrice: number;
     rating: number;
+    colors: string;
     sizes: string;
   }>;
 }) {
   let categoriesData = [];
   let productsData = [];
-  const { page, size, categories, minPrice, maxPrice, rating, sizes } =
+  const { page, size, categories, minPrice, maxPrice, rating, colors, sizes } =
     await searchParams;
   try {
     categoriesData = await categoryApi.getCategories(1, 10000);
@@ -32,6 +33,7 @@ export default async function ShopPage({
       minPrice,
       maxPrice,
       rating,
+      colors,
       sizes
     );
   } catch (error) {
