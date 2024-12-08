@@ -1,5 +1,7 @@
+import ScalableStoreLogo from "@/components/ui/logo-store";
 import { Facebook, Instagram, Twitter, Linkedin } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 
 export default function LayoutAuth({
   children,
@@ -24,9 +26,11 @@ export default function LayoutAuth({
       {/* Left side with welcome text (hidden on mobile) */}
       <div className="relative hidden w-1/2 lg:block">
         <div className="absolute inset-0 flex flex-col justify-between p-12">
-          <div>
-            <h1 className="text-4xl font-bold text-white">Easy Store</h1>
-          </div>
+          <Link href="/">
+            <div className="w-[300px]">
+              <ScalableStoreLogo />
+            </div>
+          </Link>
           <div>
             <h2 className="mb-2 text-5xl font-bold text-white">Xin chào!</h2>
             <p className="mb-4 text-2xl text-white">
@@ -47,7 +51,12 @@ export default function LayoutAuth({
       </div>
 
       {/* Right side with login form */}
-      <div className="relative flex w-full items-center justify-center lg:w-1/2">
+      <div className="relative flex flex-col w-full items-center justify-center lg:w-1/2 gap-8">
+        <Link href="/">
+          <div className="w-[300px] p-4 lg:hidden bg-white/40 backdrop-blur-sm rounded-xl shadow-lg">
+            <ScalableStoreLogo />
+          </div>
+        </Link>
         {children}
       </div>
     </div>

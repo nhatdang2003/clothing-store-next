@@ -184,13 +184,12 @@ export function ShippingProfileDialog({
         <div className="flex-1 overflow-y-auto p-6">
           <form onSubmit={onSubmit} className="space-y-6">
             <div className="grid gap-6 md:grid-cols-2">
-              {/* First Name */}
               <div className="space-y-2">
-                <Label htmlFor="firstName">
+                <Label htmlFor="lastName">
                   Họ <span className="text-red-500">*</span>
                 </Label>
                 <Controller
-                  name="firstName"
+                  name="lastName"
                   control={control}
                   render={({ field }) => (
                     <div>
@@ -209,13 +208,12 @@ export function ShippingProfileDialog({
                 />
               </div>
 
-              {/* Last Name */}
               <div className="space-y-2">
-                <Label htmlFor="lastName">
+                <Label htmlFor="firstName">
                   Tên <span className="text-red-500">*</span>
                 </Label>
                 <Controller
-                  name="lastName"
+                  name="firstName"
                   control={control}
                   render={({ field }) => (
                     <div>

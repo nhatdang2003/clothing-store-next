@@ -5,6 +5,8 @@ import {
   STATUS_ORDER,
 } from "@/constants/order";
 import { COLOR } from "@/constants/product";
+import { GENDER_OPTIONS } from "@/constants/profile";
+import { ROLE } from "@/constants/role";
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 
@@ -45,4 +47,16 @@ export const getPaymentMethodText = (status: string) => {
 
 export const getColorText = (color: string) => {
   return COLOR.find((item: any) => item.id === color)?.name;
+};
+
+export const getRoleText = (role: string) => {
+  return ROLE.find((item: any) => item.name === role)?.label;
+};
+
+export const getRoleId = (role: string) => {
+  return ROLE.find((item: any) => item.name === role)?.id;
+};
+
+export const getGenderText = (gender: string) => {
+  return GENDER_OPTIONS.find((item: any) => item.value === gender)?.label;
 };

@@ -183,118 +183,116 @@ export default function PromotionList({ initialData }: any) {
         </AlertDialogContent>
       </AlertDialog>
 
-      <div className="rounded-md border">
-        <>
-          <Table>
-            <TableHeader>
-              <TableRow className="hover:bg-transparent">
-                <TableHead>Tên khuyến mãi</TableHead>
-                <TableHead>Giảm giá</TableHead>
-                <TableHead>Thời gian</TableHead>
-                <TableHead>Phạm vi áp dụng</TableHead>
-                <TableHead>Trạng thái</TableHead>
-                <TableHead className="text-right">Thao tác</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {promotions.map((promotion: any) => (
-                <TableRow key={promotion.id}>
-                  <TableCell className="font-medium">
-                    {promotion.name}
-                    <p className="text-sm text-muted-foreground">
-                      {promotion.description}
+      <>
+        <Table>
+          <TableHeader>
+            <TableRow className="hover:bg-transparent">
+              <TableHead>Tên khuyến mãi</TableHead>
+              <TableHead>Giảm giá</TableHead>
+              <TableHead>Thời gian</TableHead>
+              <TableHead>Phạm vi áp dụng</TableHead>
+              <TableHead>Trạng thái</TableHead>
+              <TableHead className="text-right">Thao tác</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {promotions.map((promotion: any) => (
+              <TableRow key={promotion.id}>
+                <TableCell className="font-medium">
+                  {promotion.name}
+                  <p className="text-sm text-muted-foreground">
+                    {promotion.description}
+                  </p>
+                </TableCell>
+                <TableCell>
+                  <Badge variant="destructive">
+                    -{promotion.discountRate}%
+                  </Badge>
+                </TableCell>
+                <TableCell>
+                  <div className="text-sm">
+                    <p>
+                      Bắt đầu:{" "}
+                      {format(new Date(promotion.startDate), "dd/MM/yyyy")}
                     </p>
-                  </TableCell>
-                  <TableCell>
-                    <Badge variant="destructive">
-                      -{promotion.discountRate}%
-                    </Badge>
-                  </TableCell>
-                  <TableCell>
-                    <div className="text-sm">
-                      <p>
-                        Bắt đầu:{" "}
-                        {format(new Date(promotion.startDate), "dd/MM/yyyy")}
-                      </p>
-                      <p>
-                        Kết thúc:{" "}
-                        {format(new Date(promotion.endDate), "dd/MM/yyyy")}
-                      </p>
-                    </div>
-                  </TableCell>
-                  <TableCell>
-                    <div className="space-y-1">
-                      <div className="flex items-center gap-1.5">
-                        {promotion.categories.length > 0 && (
-                          <>
-                            <Badge variant="outline">
-                              {promotion.categories.length} danh mục
-                            </Badge>
-                            {promotion.products.length > 0 && (
-                              <span className="text-muted-foreground">•</span>
-                            )}
-                          </>
-                        )}
-                        {promotion.products.length > 0 && (
+                    <p>
+                      Kết thúc:{" "}
+                      {format(new Date(promotion.endDate), "dd/MM/yyyy")}
+                    </p>
+                  </div>
+                </TableCell>
+                <TableCell>
+                  <div className="space-y-1">
+                    <div className="flex items-center gap-1.5">
+                      {promotion.categories.length > 0 && (
+                        <>
                           <Badge variant="outline">
-                            {promotion.products.length} sản phẩm
+                            {promotion.categories.length} danh mục
                           </Badge>
-                        )}
-                      </div>
+                          {promotion.products.length > 0 && (
+                            <span className="text-muted-foreground">•</span>
+                          )}
+                        </>
+                      )}
+                      {promotion.products.length > 0 && (
+                        <Badge variant="outline">
+                          {promotion.products.length} sản phẩm
+                        </Badge>
+                      )}
                     </div>
-                  </TableCell>
-                  <TableCell>
-                    {new Date() < new Date(promotion.startDate) ? (
-                      <Badge variant="outline">Sắp diễn ra</Badge>
-                    ) : new Date() > new Date(promotion.endDate) ? (
-                      <Badge variant="destructive">Đã kết thúc</Badge>
-                    ) : (
-                      <Badge variant="success">Đang diễn ra</Badge>
-                    )}
-                  </TableCell>
-                  <TableCell className="text-right">
-                    <DropdownMenu>
-                      <DropdownMenuTrigger asChild>
-                        <Button variant="ghost" className="h-8 w-8 p-0">
-                          <span className="sr-only">Mở menu</span>
-                          <MoreHorizontal className="h-4 w-4" />
-                        </Button>
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent align="end">
-                        <DropdownMenuItem
-                          onClick={() => setEditingPromotion(promotion)}
-                        >
-                          <Pencil className="mr-2 h-4 w-4" />
-                          <span>Chỉnh sửa</span>
-                        </DropdownMenuItem>
-                        <DropdownMenuItem
-                          onClick={() => setDeletingPromotion(promotion)}
-                          className="text-destructive focus:text-destructive"
-                        >
-                          <Trash2 className="mr-2 h-4 w-4" />
-                          <span>Xóa</span>
-                        </DropdownMenuItem>
-                      </DropdownMenuContent>
-                    </DropdownMenu>
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
+                  </div>
+                </TableCell>
+                <TableCell>
+                  {new Date() < new Date(promotion.startDate) ? (
+                    <Badge variant="outline">Sắp diễn ra</Badge>
+                  ) : new Date() > new Date(promotion.endDate) ? (
+                    <Badge variant="destructive">Đã kết thúc</Badge>
+                  ) : (
+                    <Badge variant="success">Đang diễn ra</Badge>
+                  )}
+                </TableCell>
+                <TableCell className="text-right">
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button variant="ghost" className="h-8 w-8 p-0">
+                        <span className="sr-only">Mở menu</span>
+                        <MoreHorizontal className="h-4 w-4" />
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end">
+                      <DropdownMenuItem
+                        onClick={() => setEditingPromotion(promotion)}
+                      >
+                        <Pencil className="mr-2 h-4 w-4" />
+                        <span>Chỉnh sửa</span>
+                      </DropdownMenuItem>
+                      <DropdownMenuItem
+                        onClick={() => setDeletingPromotion(promotion)}
+                        className="text-destructive focus:text-destructive"
+                      >
+                        <Trash2 className="mr-2 h-4 w-4" />
+                        <span>Xóa</span>
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
 
-          {promotions.length === 0 && (
-            <div className="text-center py-8 text-muted-foreground">
-              Chưa có khuyến mãi nào
-            </div>
-          )}
+        {promotions.length === 0 && (
+          <div className="text-center py-8 text-muted-foreground">
+            Chưa có khuyến mãi nào
+          </div>
+        )}
 
-          {meta && (
-            <div className="flex flex-col gap-2">
-              <Pagination currentPage={meta.page + 1} totalPages={meta.pages} />
-            </div>
-          )}
-        </>
-      </div>
+        {meta && (
+          <div className="flex flex-col gap-2">
+            <Pagination currentPage={meta.page + 1} totalPages={meta.pages} />
+          </div>
+        )}
+      </>
     </div>
   );
 }

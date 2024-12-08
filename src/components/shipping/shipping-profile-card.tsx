@@ -16,7 +16,7 @@ export function ShippingProfileCard({
           <div className="space-y-2">
             <div className="flex items-center gap-2">
               <h3 className="font-medium">
-                {profile.firstName} {profile.lastName}
+                {profile.lastName} {profile.firstName}
               </h3>
               {profile.default && <Badge variant="secondary">Mặc định</Badge>}
             </div>

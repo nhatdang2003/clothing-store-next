@@ -56,7 +56,7 @@ export const productApi = {
   },
   getLatestProducts: async () => {
     const response = await http.get({
-      url: `/api/v1/products?sort=createdAt&order=desc`,
+      url: `/api/v1/products?sort=createdAt,desc`,
     });
     return response.data;
   },
