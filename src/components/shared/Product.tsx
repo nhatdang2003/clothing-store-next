@@ -6,25 +6,60 @@ import Link from "next/link";
 import { Star } from "lucide-react";
 import Image from "next/image";
 import { formatPrice } from "@/lib/utils";
+import { useState } from "react";
 
 export default function ProductCard({ product }: { product: any }) {
+  const [isHovered, setIsHovered] = useState(false);
+
   const calculateDiscountPercentage = (price: number, discountRate: number) => {
     return Math.round(discountRate * 100);
   };
 
   return (
-    <Card className="w-full bg-card text-card-foreground shadow-sm">
+    <Card
+      className="w-full bg-card text-card-foreground shadow-sm group cursor-pointer overflow-hidden"
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+    >
       <Link href={`/shop/${product.slug}`}>
-        <div className="relative">
-          <Image
-            src={product.images[0]}
-            alt={product.name}
-            width={300}
-            height={400}
-            className="w-full rounded-t-lg object-cover aspect-[2/3]"
-          />
+        <div className="relative overflow-hidden">
+          <div className="relative aspect-[2/3]">
+            {product.images.length > 1 && (
+              <Image
+                src={product.images[1]}
+                alt={`${product.name} - Hình ảnh thứ 2`}
+                fill
+                className={`
+                  absolute inset-0 rounded-t-lg object-cover 
+                  transition-[visibility,opacity,transform] duration-[350ms,350ms,600ms] ease-[ease,ease,cubic-bezier(.61,1,.88,1)]
+                  ${
+                    isHovered
+                      ? "visible opacity-100 scale-106"
+                      : "invisible opacity-0 scale-100"
+                  }
+                `}
+              />
+            )}
+            <Image
+              src={product.images[0]}
+              alt={product.name}
+              fill
+              className={`
+                rounded-t-lg object-cover
+                transition-[visibility,opacity,transform] duration-[350ms,350ms,600ms] ease-[ease,ease,cubic-bezier(.61,1,.88,1)]
+                ${
+                  isHovered
+                    ? "invisible opacity-0 scale-106"
+                    : "visible opacity-100 scale-100"
+                }
+              `}
+            />
+          </div>
           {product.discountRate > 0 && (
-            <Badge variant="destructive" className="absolute top-2 right-2">
+            <Badge
+              variant="destructive"
+              className="absolute top-2 right-2 z-10"
+            >
               -
               {calculateDiscountPercentage(product.price, product.discountRate)}
               %

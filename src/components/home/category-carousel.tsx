@@ -56,7 +56,10 @@ export default function CategoryCarousel() {
                 key={index}
                 className="basis-1/2 md:basis-1/3 lg:basis-1/4 pl-4"
               >
-                <Link href={`/category/${category.id}`} className="block group">
+                <Link
+                  href={`/shop?categories=${category.id}`}
+                  className="block group"
+                >
                   <Card className="overflow-hidden border-2 transition-all duration-300 group-hover:border-primary">
                     <CardContent className="p-0 relative">
                       <div className="relative aspect-[4/5] overflow-hidden">

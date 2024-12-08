@@ -3,9 +3,26 @@
 import { useState } from "react";
 import { format } from "date-fns";
 import { Plus, Pencil, Trash2, MoreHorizontal } from "lucide-react";
-import { usePromotionListQuery } from "@/hooks/use-promotion-query";
+import {
+  usePromotionListQuery,
+  useAddPromotionMutation,
+  useUpdatePromotionMutation,
+  useDeletePromotionMutation,
+} from "@/hooks/use-promotion-query";
 import { PromotionSearch } from "@/components/promotions/promotion-search";
 import { Button } from "@/components/ui/button";
+import { useToast } from "@/hooks/use-toast";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 import {
   Table,
   TableBody,
@@ -29,21 +46,73 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { PromotionForm } from "@/components/promotions/promotion-form";
-import { useAddPromotionMutation } from "@/hooks/use-promotion-query";
+import { useSearchParams } from "next/navigation";
 
 export default function PromotionList({ initialData }: any) {
+  const searchParams = useSearchParams();
+  const search = searchParams.get("search") || "";
   const [open, setOpen] = useState(false);
-  const { data, isLoading } = usePromotionListQuery({ initialData });
+  const [editingPromotion, setEditingPromotion] = useState<any>(null);
+  const [deletingPromotion, setDeletingPromotion] = useState<any>(null);
+  const { data, isLoading } = usePromotionListQuery({
+    initialData,
+    search,
+  });
   const addPromotionMutation = useAddPromotionMutation();
+  const updatePromotionMutation = useUpdatePromotionMutation();
+  const deletePromotionMutation = useDeletePromotionMutation();
+  const { toast } = useToast();
   const promotions = data?.data || [];
   const meta = data?.meta;
 
   const handleAddPromotion = async (data: any) => {
     try {
       await addPromotionMutation.mutateAsync(data);
+      toast({
+        variant: "success",
+        title: "Thêm khuyến mãi thành công",
+      });
       setOpen(false);
     } catch (error) {
-      console.error(error);
+      toast({
+        variant: "destructive",
+        title: "Có lỗi xảy ra khi thêm khuyến mãi",
+      });
+    }
+  };
+
+  const handleUpdatePromotion = async (data: any) => {
+    try {
+      await updatePromotionMutation.mutateAsync({
+        id: editingPromotion.id,
+        ...data,
+      });
+      toast({
+        variant: "success",
+        title: "Cập nhật khuyến mãi thành công",
+      });
+      setEditingPromotion(null);
+    } catch (error) {
+      toast({
+        variant: "destructive",
+        title: "Có lỗi xảy ra khi cập nhật khuyến mãi",
+      });
+    }
+  };
+
+  const handleDeletePromotion = async () => {
+    try {
+      await deletePromotionMutation.mutateAsync(deletingPromotion.id);
+      toast({
+        variant: "success",
+        title: "Xóa khuyến mãi thành công",
+      });
+      setDeletingPromotion(null);
+    } catch (error) {
+      toast({
+        variant: "destructive",
+        title: "Có lỗi xảy ra khi xóa khuyến mãi",
+      });
     }
   };
 
@@ -72,6 +141,48 @@ export default function PromotionList({ initialData }: any) {
         </DialogContent>
       </Dialog>
 
+      <Dialog
+        open={!!editingPromotion}
+        onOpenChange={() => setEditingPromotion(null)}
+      >
+        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle>Chỉnh sửa khuyến mãi</DialogTitle>
+          </DialogHeader>
+          <PromotionForm
+            promotion={editingPromotion}
+            onSubmit={handleUpdatePromotion}
+            isLoading={updatePromotionMutation.isPending}
+            onCancel={() => setEditingPromotion(null)}
+          />
+        </DialogContent>
+      </Dialog>
+
+      <AlertDialog
+        open={!!deletingPromotion}
+        onOpenChange={() => setDeletingPromotion(null)}
+      >
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Xác nhận xóa?</AlertDialogTitle>
+            <AlertDialogDescription>
+              Hành động này sẽ xóa vĩnh viễn khuyến mãi và gỡ bỏ tất cả các liên
+              kết với sản phẩm và danh mục. Hành động này không thể hoàn tác.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Hủy</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={handleDeletePromotion}
+              disabled={deletePromotionMutation.isPending}
+              className="bg-destructive hover:bg-destructive/90"
+            >
+              {deletePromotionMutation.isPending ? "Đang xóa..." : "Xóa"}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
       <div className="rounded-md border">
         <>
           <Table>
@@ -95,7 +206,7 @@ export default function PromotionList({ initialData }: any) {
                     </p>
                   </TableCell>
                   <TableCell>
-                    <Badge variant="secondary">
+                    <Badge variant="destructive">
                       -{promotion.discountRate}%
                     </Badge>
                   </TableCell>
@@ -150,11 +261,16 @@ export default function PromotionList({ initialData }: any) {
                         </Button>
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="end">
-                        <DropdownMenuItem>
+                        <DropdownMenuItem
+                          onClick={() => setEditingPromotion(promotion)}
+                        >
                           <Pencil className="mr-2 h-4 w-4" />
                           <span>Chỉnh sửa</span>
                         </DropdownMenuItem>
-                        <DropdownMenuItem className="text-destructive">
+                        <DropdownMenuItem
+                          onClick={() => setDeletingPromotion(promotion)}
+                          className="text-destructive focus:text-destructive"
+                        >
                           <Trash2 className="mr-2 h-4 w-4" />
                           <span>Xóa</span>
                         </DropdownMenuItem>

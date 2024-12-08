@@ -23,8 +23,8 @@ export const promotionApi = {
   },
   updatePromotion: ({ id, ...data }: any) => {
     return http.put({
-      url: `/api/v1/promotions/${id}`,
-      body: data,
+      url: `/api/v1/promotions`,
+      body: { id, ...data },
     });
   },
   deletePromotion: (id: number) => {

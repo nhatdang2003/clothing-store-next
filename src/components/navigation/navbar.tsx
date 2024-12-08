@@ -7,6 +7,8 @@ import NavigationMobile from "./navbarMobile";
 import { NavbarUser } from "./navbarUser";
 import { CartIcon } from "@/components/cart/cart-icon";
 import { Search } from "@/components/search/search";
+import Image from "next/image";
+import StoreLogo from "../ui/logo-store";
 
 export default function Navigation({ userInfo }: { userInfo: any }) {
   const [isVisible, setIsVisible] = useState(true);
@@ -41,9 +43,11 @@ export default function Navigation({ userInfo }: { userInfo: any }) {
       <div className="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
-          <div className="flex-shrink-0 flex items-center">
-            <Link href="/" className="text-2xl font-bold text-primary">
-              EzStore
+          <div className="flex-shrink-0 flex items-center  ">
+            <Link href="/">
+              <div className="w-[150px]">
+                <StoreLogo />
+              </div>
             </Link>
           </div>
 
@@ -86,7 +90,7 @@ export default function Navigation({ userInfo }: { userInfo: any }) {
           </div>
 
           {/* Mobile Menu Button */}
-          <div className="lg:hidden flex items-center space-x-2">
+          <div className="lg:hidden flex items-center space-x-2 justify-end flex-1">
             <CartIcon />
             <NavigationMobile userInfo={userInfo} />
           </div>

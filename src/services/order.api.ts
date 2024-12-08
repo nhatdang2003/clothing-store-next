@@ -11,7 +11,7 @@ export const orderApi = {
     deliveryMethod?: string,
     search?: string
   ) => {
-    let url = `/api/v1/orders?page=${page}&size=${size}`;
+    let url = `/api/v1/orders?page=${page - 1}&size=${size}`;
     if (status) {
       url += `&filter=status~'${status}'`;
     }
@@ -38,7 +38,7 @@ export const orderApi = {
     return response.data;
   },
   getOrdersByUser: async (page: number, size: number, status?: string) => {
-    let url = `/api/v1/orders/user?page=${page}&size=${size}`;
+    let url = `/api/v1/orders/user?page=${page - 1}&size=${size}`;
     if (status) {
       url += `&filter=status~'${status}'`;
     }

@@ -24,7 +24,7 @@ const reviews = [
 export default function ReviewSection() {
   return (
     <section className="mt-12">
-      <h2 className="text-2xl font-bold mb-4">Customer Reviews</h2>
+      <h2 className="text-2xl font-bold mb-4">Đánh giá của khách hàng</h2>
       <div className="space-y-4">
         {reviews.map((review) => (
           <div key={review.id} className="border-b pb-4">

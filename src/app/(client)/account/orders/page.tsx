@@ -18,7 +18,7 @@ export default async function OrdersPage({
   let orders = [];
   const { page, size, status } = await searchParams;
   try {
-    orders = await orderApi.getOrdersByUser(page - 1 || 0, size || 6, status);
+    orders = await orderApi.getOrdersByUser(page || 1, size || 6, status);
   } catch (error) {
     console.log(error);
     return <div>Đã có lỗi xảy ra, vui lòng thử lại sau</div>;

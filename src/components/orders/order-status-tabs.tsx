@@ -19,30 +19,32 @@ export default function OrderStatusTabs() {
   };
 
   return (
-    <div className="w-full mb-6 overflow-x-auto">
-      <Tabs
-        defaultValue="all"
-        className="w-full flex justify-center"
-        onValueChange={handleTabChange}
-      >
-        <TabsList className="w-max flex-nowrap ">
-          <TabsTrigger
-            value="all"
-            className="rounded-full data-[state=active]:bg-primary data-[state=active]:text-primary-foreground whitespace-nowrap"
-          >
-            Tất cả
-          </TabsTrigger>
-          {STATUS_ORDER.map((status) => (
+    <div className="w-full mb-6">
+      <div className="overflow-x-auto">
+        <Tabs
+          defaultValue="all"
+          className="w-full text-center"
+          onValueChange={handleTabChange}
+        >
+          <TabsList className="w-max">
             <TabsTrigger
-              key={status.value}
-              value={status.value}
+              value="all"
               className="rounded-full data-[state=active]:bg-primary data-[state=active]:text-primary-foreground whitespace-nowrap"
             >
-              {status.label}
+              Tất cả
             </TabsTrigger>
-          ))}
-        </TabsList>
-      </Tabs>
+            {STATUS_ORDER.map((status) => (
+              <TabsTrigger
+                key={status.value}
+                value={status.value}
+                className="rounded-full data-[state=active]:bg-primary data-[state=active]:text-primary-foreground whitespace-nowrap"
+              >
+                {status.label}
+              </TabsTrigger>
+            ))}
+          </TabsList>
+        </Tabs>
+      </div>
     </div>
   );
 }

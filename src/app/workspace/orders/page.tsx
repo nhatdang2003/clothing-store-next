@@ -31,7 +31,7 @@ export default async function OrdersPage({
   } = await searchParams;
   try {
     orders = await orderApi.getOrders(
-      page - 1 || 0,
+      page || 1,
       size || 10,
       status,
       paymentStatus,

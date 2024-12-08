@@ -16,6 +16,8 @@ import { Input } from "@/components/ui/input";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { usePathname, useRouter } from "next/navigation";
 import { useLogout } from "@/hooks/use-auth-query";
+import Image from "next/image";
+import ScalableStoreLogo from "../ui/logo-store";
 
 export default function NavigationMobile({ userInfo }: { userInfo: any }) {
   const [isOpen, setIsOpen] = useState(false);
@@ -44,7 +46,9 @@ export default function NavigationMobile({ userInfo }: { userInfo: any }) {
             className="text-2xl font-bold text-primary mb-4"
             onClick={() => setIsOpen(false)}
           >
-            Logo
+            <div className="w-[150px]">
+              <ScalableStoreLogo />
+            </div>
           </Link>
 
           {/* Search Bar in drawer */}

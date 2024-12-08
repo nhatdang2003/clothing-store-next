@@ -15,9 +15,9 @@ export default async function PromotionsPage({
   }>;
 }) {
   let promotions = [];
-  const { page } = await searchParams;
+  const { page, search } = await searchParams;
   try {
-    promotions = await promotionApi.getPromotions(page, PAGE_SIZE);
+    promotions = await promotionApi.getPromotions(page, PAGE_SIZE, search);
   } catch (error) {
     console.log(error);
     return <div>Đã có lỗi xảy ra, vui lòng thử lại sau</div>;

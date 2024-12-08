@@ -45,7 +45,7 @@ export function Search() {
         const response = await productApi.getProductsBySearch(debouncedSearch);
         console.log("Search response:", response);
 
-        const products = response?.data?.content || response?.data || [];
+        const products = response || [];
         console.log("Processed products:", products);
 
         setResults(products.data);

@@ -11,7 +11,7 @@ export const productApi = {
     colors?: string,
     sizes?: string
   ) => {
-    let url = `/api/v1/products?page=${page}&size=${size}`;
+    let url = `/api/v1/products?page=${page - 1}&size=${size}`;
     if (minPrice) {
       url += `&minPrice=${minPrice}`;
     }
@@ -52,36 +52,36 @@ export const productApi = {
     const response = await http.get({
       url: `/api/v1/products?filter=isFeatured`,
     });
-    return response;
+    return response.data;
   },
   getLatestProducts: async () => {
     const response = await http.get({
       url: `/api/v1/products?sort=createdAt&order=desc`,
     });
-    return response;
+    return response.data;
   },
   getBestSellerProducts: async () => {
     const response = await http.get({
       url: `/api/v1/products?isBestSeller&days=30`,
     });
-    return response;
+    return response.data;
   },
   getDiscountProducts: async () => {
     const response = await http.get({
       url: `/api/v1/products?isDiscounted`,
     });
-    return response;
+    return response.data;
   },
   getProductsByCategory: async (category: string) => {
     const response = await http.get({
       url: `/api/v1/products?filter=category.id:${category}`,
     });
-    return response;
+    return response.data;
   },
   getProductsBySearch: async (search: string) => {
     const response = await http.get({
       url: `/api/v1/products?filter=name~'${encodeURIComponent(search)}'`,
     });
-    return response;
+    return response.data;
   },
 };

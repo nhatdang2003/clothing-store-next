@@ -11,10 +11,11 @@ export default async function HomeContent() {
       productApi.getLatestProducts(),
       productApi.getDiscountProducts(),
     ]);
+    console.log(response);
     products = {
-      featured: response[0].data.data,
-      new: response[1].data.data,
-      sale: response[2].data.data,
+      featured: response[0].data,
+      new: response[1].data,
+      sale: response[2].data,
     };
   } catch (error) {
     console.error("Error fetching products:", error);

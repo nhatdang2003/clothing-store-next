@@ -28,6 +28,17 @@ import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useCategoryListQuery } from "@/hooks/use-category-query";
 import { useProductListQuery } from "@/hooks/use-product-query";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 
 interface PromotionRequest {
   id?: number;
@@ -43,8 +54,11 @@ interface PromotionRequest {
 const formSchema = z
   .object({
     name: z.string().min(1, "Vui lòng nhập tên khuyến mãi"),
-    description: z.string().optional(),
-    discountRate: z.number().min(0).max(100, "Giảm giá phải từ 0-100%"),
+    description: z.string().min(1, "Vui lòng nhập mô tả khuyến mãi"),
+    discountRate: z
+      .number()
+      .min(1, "Vui lòng nhập %")
+      .max(100, "Giảm giá phải từ 1-100%"),
     startDate: z.date({
       required_error: "Vui lòng chọn ngày bắt đầu",
     }),
@@ -67,14 +81,16 @@ const formSchema = z
 
 interface PromotionFormProps {
   promotion?: any;
-  onSubmit: (data: PromotionRequest) => void;
+  onSubmit: (data: any) => void;
   isLoading?: boolean;
+  onCancel?: () => void;
 }
 
 export function PromotionForm({
   promotion,
   onSubmit,
   isLoading,
+  onCancel,
 }: PromotionFormProps) {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -135,7 +151,11 @@ export function PromotionForm({
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-4">
+      <form
+        id="promotion-form"
+        onSubmit={form.handleSubmit(handleSubmit)}
+        className="space-y-6"
+      >
         <FormField
           control={form.control}
           name="name"
@@ -352,10 +372,42 @@ export function PromotionForm({
           />
         </div>
 
-        <div className="flex justify-end gap-4">
-          <Button type="submit" disabled={isLoading}>
-            {promotion ? "Cập nhật" : "Thêm mới"}
-          </Button>
+        <div className="flex items-center justify-end gap-4">
+          {onCancel && (
+            <Button
+              type="button"
+              variant="outline"
+              onClick={onCancel}
+              disabled={isLoading}
+            >
+              Hủy
+            </Button>
+          )}
+          <AlertDialog>
+            <AlertDialogTrigger asChild>
+              <Button type="button" disabled={isLoading}>
+                {promotion ? "Cập nhật" : "Thêm mới"}
+              </Button>
+            </AlertDialogTrigger>
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle>
+                  {promotion ? "Xác nhận cập nhật?" : "Xác nhận thêm mới?"}
+                </AlertDialogTitle>
+                <AlertDialogDescription>
+                  {promotion
+                    ? "Hành động này sẽ cập nhật thông tin khuyến mãi. Các sản phẩm đang áp dụng khuyến mãi này sẽ được cập nhật giá mới."
+                    : "Hành động này sẽ tạo khuyến mãi mới và áp dụng giá mới cho các sản phẩm được chọn."}
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel>Hủy</AlertDialogCancel>
+                <AlertDialogAction type="submit" form="promotion-form">
+                  Xác nhận
+                </AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
         </div>
       </form>
     </Form>

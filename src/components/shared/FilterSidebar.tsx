@@ -23,7 +23,7 @@ export function FilterSidebar({
   const [isMobileFilterOpen, setIsMobileFilterOpen] = useState(false);
 
   return (
-    <div className="w-full md:w-72 space-y-6">
+    <div className="w-full md:w-72 flex flex-col gap-4">
       <div className="md:hidden">
         <button
           className="w-full bg-gray-200 p-2 rounded-md text-left"
@@ -35,7 +35,7 @@ export function FilterSidebar({
       <div
         className={`${
           isMobileFilterOpen ? "max-h-screen opacity-100" : "max-h-0 opacity-0"
-        } md:min-h-screen md:opacity-100 transition-all duration-300 ease-in-out md:block space-y-6`}
+        } md:max-h-none md:opacity-100 transition-all duration-300 ease-in-out md:block space-y-6`}
       >
         <FilterCategories className="mx-1" categories={categories.data} />
         <FilterColors className="mx-1" />
