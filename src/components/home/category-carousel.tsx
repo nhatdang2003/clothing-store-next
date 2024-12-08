@@ -39,6 +39,9 @@ export default function CategoryCarousel() {
 
   return (
     <div className="container max-w-6xl mx-auto px-4 py-8 relative">
+      <h2 className="text-2xl font-semibold mb-4 text-center">
+        Danh Mục Sản Phẩm
+      </h2>
       <Carousel
         opts={{
           align: "start",

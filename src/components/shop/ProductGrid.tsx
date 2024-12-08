@@ -3,7 +3,6 @@
 import { useState } from "react";
 import ProductCard from "../shared/Product";
 import { Pagination } from "../shared/pagination";
-import ProductNotFound from "../shared/ProductNotFound";
 import { ShoppingBag } from "lucide-react";
 
 export function ProductGrid({ productsData }: { productsData: any }) {

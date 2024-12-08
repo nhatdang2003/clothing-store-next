@@ -5,7 +5,7 @@ export const dynamic = "force-dynamic";
 
 export default function HomePage() {
   return (
-    <Suspense fallback={<div>Loading...</div>}>
+    <Suspense fallback={<div className="h-screen">Loading...</div>}>
       <HomeContent />
     </Suspense>
   );

@@ -1,5 +1,6 @@
 import Navigation from "@/components/navigation/navbar";
 import { accountApi } from "@/services/account.api";
+import { Footer } from "@/components/footer/footer";
 
 export default async function LayoutShop({
   children,
@@ -18,6 +19,7 @@ export default async function LayoutShop({
     <div>
       <Navigation userInfo={userInfo} />
       <div className="pt-[64px]">{children}</div>
+      <Footer />
     </div>
   );
 }

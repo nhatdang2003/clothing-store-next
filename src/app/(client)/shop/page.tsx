@@ -28,7 +28,7 @@ export default async function ShopPage({
     categoriesData = await categoryApi.getCategories(1, 10000);
     productsData = await productApi.getProducts(
       page - 1 || 0,
-      size || 6,
+      size || 12,
       categories,
       minPrice,
       maxPrice,

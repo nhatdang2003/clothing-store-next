@@ -116,6 +116,7 @@ export function useDeleteCartItem() {
     },
     onSuccess: () => {
       toast({
+        variant: "success",
         title: "Thành công",
         description: "Đã xóa sản phẩm khỏi giỏ hàng",
       });
@@ -144,6 +145,7 @@ export function useAddToCartMutation() {
     },
     onSuccess: () => {
       toast({
+        variant: "success",
         title: "Thêm vào giỏ hàng thành công",
         description: "Sản phẩm đã được thêm vào giỏ hàng của bạn",
       });

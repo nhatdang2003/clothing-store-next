@@ -142,7 +142,11 @@ const InfoProduct = ({ product }: { product: any }) => {
         <div className="flex items-center gap-2 mb-4">
           {selectedVariant ? (
             <>
-              <p className="text-2xl font-semibold text-red-500">
+              <p
+                className={`text-2xl font-semibold ${
+                  product.discountRate > 0 ? "text-red-500" : "text-black"
+                }`}
+              >
                 {formatPrice(
                   selectedVariant.differencePrice > 0
                     ? (product.price + selectedVariant.differencePrice) *
@@ -162,7 +166,11 @@ const InfoProduct = ({ product }: { product: any }) => {
             </>
           ) : (
             <>
-              <p className="text-2xl font-semibold text-red-500">
+              <p
+                className={`text-2xl font-semibold ${
+                  product.discountRate > 0 ? "text-red-500" : "text-black"
+                }`}
+              >
                 {product.minPriceWithDiscount === product.maxPriceWithDiscount
                   ? formatPrice(product.minPriceWithDiscount)
                   : `${formatPrice(
