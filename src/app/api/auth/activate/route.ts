@@ -20,14 +20,14 @@ export async function POST(request: Request) {
     const cookieStore = await cookies();
 
     cookieStore.set("access_token", access_token, {
-      secure: process.env.NODE_ENV === "production",
+      //   secure: process.env.NODE_ENV === "production",
       sameSite: "lax",
       expires: new Date(accessExp! * 1000), // Convert to milliseconds
     });
 
     cookieStore.set("refresh_token", refresh_token, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
+      //   secure: process.env.NODE_ENV === "production",
       sameSite: "lax",
       expires: new Date(refreshExp! * 1000), // Convert to milliseconds
     });

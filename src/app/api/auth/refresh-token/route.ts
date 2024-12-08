@@ -34,7 +34,7 @@ export async function GET() {
 
     // Set new access token with JWT expiration
     cookieStore.set("access_token", access_token, {
-      secure: process.env.NODE_ENV === "production",
+      //   secure: process.env.NODE_ENV === "production",
       sameSite: "lax",
       expires: new Date(accessExp! * 1000),
     });
@@ -42,7 +42,7 @@ export async function GET() {
     // Set new refresh token with JWT expiration
     cookieStore.set("refresh_token", refresh_token, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
+      //   secure: process.env.NODE_ENV === "production",
       sameSite: "lax",
       expires: new Date(refreshExp! * 1000),
     });

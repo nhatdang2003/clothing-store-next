@@ -24,7 +24,7 @@ export default async function ShopPage({
   const { page, size, categories, minPrice, maxPrice, rating, sizes } =
     await searchParams;
   try {
-    categoriesData = await categoryApi.getCategories();
+    categoriesData = await categoryApi.getCategories(1, 10000);
     productsData = await productApi.getProducts(
       page - 1 || 0,
       size || 6,
