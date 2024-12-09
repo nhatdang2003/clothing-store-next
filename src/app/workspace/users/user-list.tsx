@@ -87,6 +87,7 @@ export default function UserList({ initialData }: any) {
       await updateUserMutation.mutateAsync({
         id: editingUser.id,
         ...data,
+        password: data.password !== "" ? data.password : null,
       });
       setEditingUser(null);
     } catch (error) {

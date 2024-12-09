@@ -36,7 +36,19 @@ import { useToast } from "@/hooks/use-toast";
 
 const formSchema = z.object({
   email: z.string().email(),
-  password: z.string().min(6).optional().or(z.literal(null)),
+  password: z
+    .string()
+    .refine((password) => {
+      if (password === "") return true;
+      return (
+        password.length >= 8 &&
+        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*(),.?":{}|<>])[A-Za-z\d!@#$%^&*(),.?":{}|<>]+$/.test(
+          password
+        )
+      );
+    }, "Mật khẩu phải chứa ít nhất 8 ký tự, 1 chữ cái viết hoa, 1 chữ cái viết thường, 1 số và 1 ký tự đặc biệt")
+    .optional()
+    .or(z.literal("")),
   firstName: z.string().min(1),
   lastName: z.string().min(1),
   birthDate: z.date(),
@@ -84,7 +96,7 @@ export function UserForm({ user, onSubmit, isLoading }: UserFormProps) {
     resolver: zodResolver(formSchema),
     defaultValues: {
       email: user?.email || "",
-      password: null,
+      password: "",
       firstName: user?.firstName || "",
       lastName: user?.lastName || "",
       birthDate: user?.birthDate ? new Date(user.birthDate) : undefined,
