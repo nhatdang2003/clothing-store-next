@@ -1,8 +1,6 @@
 "use client";
 
-import { useState } from "react";
 import { format } from "date-fns";
-import { Search } from "lucide-react";
 import {
   Table,
   TableBody,
@@ -12,10 +10,8 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
 import { Pagination } from "@/components/shared/pagination";
-import { OrderFilter } from "../../../components/orders/order-filter";
+import { OrderFilter } from "@/components/orders/order-filter";
 import {
   formatPrice,
   getPaymentMethodText,
@@ -25,8 +21,8 @@ import {
   getStatusColor,
   getStatusText,
 } from "@/lib/utils";
-import { ActiveFilters } from "../../../components/orders/active-filters";
-import { OrderSearch } from "../../../components/orders/order-search";
+import { ActiveFilters } from "@/components/orders/active-filters";
+import { OrderSearch } from "@/components/orders/order-search";
 
 export default function OrderList({ orders }: { orders: any }) {
   const currentPage = orders.meta.page + 1;

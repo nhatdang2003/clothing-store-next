@@ -15,6 +15,9 @@ export function middleware(request: NextRequest) {
 
   // 1. Chưa đăng nhập không cho vào private routes
   if (!refresh_token && isProtectedPath) {
+    if (pathname.startsWith("/workspace")) {
+      return NextResponse.redirect(new URL("/workspace", request.url));
+    }
     return NextResponse.redirect(new URL("/login", request.url));
   }
   // 2. Đã đăng nhập không cho vào public routes
@@ -49,5 +52,6 @@ export const config = {
     "/profile/:path*",
     "/settings/:path*",
     "/account/:path*",
+    "/workspace/:path*",
   ],
 };

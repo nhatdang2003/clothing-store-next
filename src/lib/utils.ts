@@ -60,3 +60,15 @@ export const getRoleId = (role: string) => {
 export const getGenderText = (gender: string) => {
   return GENDER_OPTIONS.find((item: any) => item.value === gender)?.label;
 };
+
+export const checkUserWorkspace = (scope: string) => {
+  if (
+    scope === "ROLE_ADMIN" ||
+    scope === "ROLE_MANAGER" ||
+    scope ||
+    "ROLE_STAFF"
+  ) {
+    return true;
+  }
+  return false;
+};

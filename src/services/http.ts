@@ -1,6 +1,8 @@
 import { STATUS_CODE } from "@/constants/response";
 import { redirect } from "next/navigation";
 import Cookies from "js-cookie";
+import * as jose from "jose";
+import { checkUserWorkspace } from "@/lib/utils";
 
 const publicApi = [
   "/api/auth/login",
@@ -84,10 +86,20 @@ const request = async (
         if (refreshResponse.ok) {
           return request(url, base_url, method, body, options);
         } else {
+          const decodedToken = jose.decodeJwt(token || "");
+          const scope = (decodedToken as { scope?: string })?.scope || "";
           if (typeof window !== "undefined") {
-            window.location.href = "/login";
+            if (checkUserWorkspace(scope)) {
+              window.location.href = "/workspace";
+            } else {
+              window.location.href = "/login";
+            }
           } else {
-            redirect("/login");
+            if (checkUserWorkspace(scope)) {
+              redirect("/workspace");
+            } else {
+              redirect("/login");
+            }
           }
         }
       }

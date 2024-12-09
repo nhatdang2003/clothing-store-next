@@ -41,8 +41,10 @@ export default async function OrdersPage({
       search
     );
     console.log(orders);
-  } catch (error) {
-    console.log(error);
+  } catch (error: any) {
+    if (error.message === "NEXT_REDIRECT") {
+      throw error;
+    }
     return <div>Đã có lỗi xảy ra, vui lòng thử lại sau</div>;
   }
   return <OrderList orders={orders} />;

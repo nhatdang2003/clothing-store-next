@@ -22,43 +22,52 @@ const InfoProduct = ({ product }: { product: any }) => {
   const [selectedVariant, setSelectedVariant] = useState<any | null>(null);
   const [images, setImages] = useState(product.images);
   const [showSuccess, setShowSuccess] = useState(false);
+  const [availableSizes, setAvailableSizes] = useState<string[]>([]);
 
   const router = useRouter();
   const { toast } = useToast();
   const addToCartMutation = useAddToCartMutation();
 
-  useEffect(() => {
-    // Tìm tất cả variants có màu được chọn
-    const variantsWithColor = product.variants.filter(
-      (v: any) => v.color === selectedColor
-    );
+  const handleColorChange = (color: string | null) => {
+    setSelectedColor(color);
+    // Reset size when color changes
+    setSelectedSize(null);
+    setSelectedVariant(null);
 
-    // Cập nhật ảnh nếu có màu được chọn
-    if (variantsWithColor.length > 0) {
-      // Lấy ảnh từ variant đầu tiên của màu đó
-      setImages([...variantsWithColor[0].images, ...product.images]);
-    } else {
-      setImages(product.images);
-    }
-
-    // Tìm variant hoàn chỉnh nếu có cả màu và size
-    if (selectedColor && selectedSize) {
-      const completeVariant = variantsWithColor.find(
-        (v: any) => v.size === selectedSize
+    if (color) {
+      // Lọc ra các variants có màu được chọn
+      const variantsWithColor = product.variants.filter(
+        (v: any) => v.color === color
       );
 
-      setSelectedVariant(completeVariant);
+      // Cập nhật danh sách size có sẵn
+      const sizes = Array.from(
+        new Set(variantsWithColor.map((v: any) => v.size))
+      ) as string[];
+      setAvailableSizes(sizes);
 
-      // Chỉ điều chỉnh số lượng khi có variant hoàn chỉnh
-      if (completeVariant && quantity > completeVariant.quantity) {
-        setQuantity(
-          completeVariant.quantity - completeVariant.currentUserCartQuantity
-        );
+      // Cập nhật images
+      if (variantsWithColor.length > 0) {
+        setImages([...variantsWithColor[0].images, ...product.images]);
       }
+    } else {
+      // Reset everything when no color is selected
+      setAvailableSizes([]);
+      setImages(product.images);
+    }
+  };
+
+  const handleSizeChange = (size: string | null) => {
+    setSelectedSize(size);
+    if (selectedColor && size) {
+      const variant = product.variants.find(
+        (v: any) => v.color === selectedColor && v.size === size
+      );
+      setSelectedVariant(variant || null);
     } else {
       setSelectedVariant(null);
     }
-  }, [selectedSize, selectedColor, product.variants, product.images, quantity]);
+  };
 
   const handleAddToCart = () => {
     if (!selectedColor) {
@@ -195,15 +204,17 @@ const InfoProduct = ({ product }: { product: any }) => {
             new Set(product?.variants?.map((variant: any) => variant.color))
           )}
           value={selectedColor}
-          setValue={(color: string | null) => setSelectedColor(color)}
+          setValue={handleColorChange}
         />
-        <SizeSelector
-          sizes={Array.from(
-            new Set(product?.variants?.map((variant: any) => variant.size))
-          )}
-          value={selectedSize}
-          setValue={(size: string | null) => setSelectedSize(size)}
-        />
+
+        {selectedColor && availableSizes.length > 0 && (
+          <SizeSelector
+            sizes={availableSizes}
+            value={selectedSize}
+            setValue={handleSizeChange}
+          />
+        )}
+
         {!selectedVariant ||
         selectedVariant?.quantity - selectedVariant?.currentUserCartQuantity >
           0 ? (
