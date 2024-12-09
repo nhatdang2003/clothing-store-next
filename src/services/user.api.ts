@@ -1,10 +1,13 @@
+import { url } from "inspector";
 import http from "./http";
 
 export const userApi = {
   getUsers: async (page: number = 1, size: number = 10, search?: string) => {
     let url = `/api/v1/users?page=${page - 1}&size=${size}`;
     if (search) {
-      url += `&search=${search}`;
+      url += `&filter=profile.fullName~'${encodeURIComponent(
+        search
+      )}' or email~'${encodeURIComponent(search)}'`;
     }
     const response = await http.get({
       url,

@@ -84,4 +84,21 @@ export const productApi = {
     });
     return response.data;
   },
+  createProduct: (data: any) => {
+    return http.post({
+      url: "/api/v1/products",
+      body: data,
+    });
+  },
+  updateProduct: ({ data }: any) => {
+    return http.put({
+      url: `/api/v1/products`,
+      body: { data },
+    });
+  },
+  deleteProduct: (id: number) => {
+    return http.delete({
+      url: `/api/v1/products/${id}`,
+    });
+  },
 };

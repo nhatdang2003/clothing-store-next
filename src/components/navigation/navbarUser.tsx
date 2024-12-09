@@ -51,7 +51,7 @@ export function NavbarUser({ userInfo }: { userInfo: any }) {
                 <span>Đơn hàng</span>
               </Link>
               <Link
-                href="/shipping"
+                href="/account/shipping-info"
                 className="flex items-center gap-2 text-sm hover:bg-muted px-2 py-1 rounded-md"
               >
                 <ShoppingBag className="h-4 w-4" />

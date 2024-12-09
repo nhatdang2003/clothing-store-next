@@ -11,16 +11,8 @@ import {
   CarouselApi,
 } from "@/components/ui/carousel";
 import { ChevronLeft, ChevronRight, Pause, Play } from "lucide-react";
-import http from "@/services/http";
-import { productApi } from "@/services/product.api";
-
-// Giả định rằng bạn có một mảng các sự kiện với URL hình ảnh
-const events = [
-  { id: 1, imageUrl: "/bg.webp" },
-  { id: 2, imageUrl: "/bg.webp" },
-  { id: 3, imageUrl: "/bg.webp" },
-  { id: 4, imageUrl: "/bg.webp" },
-];
+import { CAROUSEL } from "@/constants/image";
+import Link from "next/link";
 
 export default function HomeCarousel({
   autoScrollInterval = 4000,
@@ -70,7 +62,7 @@ export default function HomeCarousel({
       className="w-full mx-auto relative"
     >
       <CarouselContent>
-        {events.map((event, index) => (
+        {CAROUSEL.map((event, index) => (
           <CarouselItem key={event.id}>
             <Card className="border-none">
               <CardContent className="p-0 relative aspect-[2/0.8]">
@@ -85,6 +77,23 @@ export default function HomeCarousel({
           </CarouselItem>
         ))}
       </CarouselContent>
+      <div className="absolute inset-0 z-10 bg-black/30 flex flex-col items-center justify-center text-white pointer-events-none">
+        <h2 className="text-3xl font-bold mb-4 hidden md:block">
+          Chào mừng đến với cửa hàng
+        </h2>
+        <p className="text-xl mb-8 hidden md:block">
+          Khám phá bộ sưu tập mới nhất của chúng tôi
+        </p>
+        <Link href="/shop">
+          <Button
+            variant="default"
+            size="lg"
+            className="bg-white text-black hover:bg-white/90 pointer-events-auto"
+          >
+            Mua ngay
+          </Button>
+        </Link>
+      </div>
       <div className="absolute inset-0 flex items-center justify-between p-4">
         <Button
           variant="outline"
@@ -107,7 +116,7 @@ export default function HomeCarousel({
       </div>
       <div className="absolute bottom-4 left-0 right-0">
         <div className="flex items-center justify-center gap-2">
-          {events.map((_, index) => (
+          {CAROUSEL.map((_, index) => (
             <Button
               key={index}
               variant="outline"

@@ -92,11 +92,14 @@ export default function ProductCard({ product }: { product: any }) {
           <div className="mt-2 flex items-center gap-1">
             {product.averageRating ? (
               <>
+                <span className="text-sm md:text-base leading-none">
+                  {" "}
+                  {product.averageRating}
+                </span>
                 <Star
                   className="h-4 sm:h-6 w-4 sm:w-6 fill-yellow-400"
                   color="yellow-400"
                 />
-                <span className="text-sm"> {product.averageRating}</span>
               </>
             ) : (
               <span className="text-sm text-muted-foreground">

@@ -28,3 +28,24 @@ export interface Product {
   variants: ProductVariant[];
   featured: boolean;
 }
+
+export interface Variant {
+  id: number;
+  color: string;
+  size: string;
+  quantity: number;
+  differencePrice: number;
+  images: string[];
+}
+
+export interface ProductData {
+  id: number;
+  name: string;
+  description: string;
+  price: number;
+  categoryId: number;
+  isFeatured: boolean;
+  colorDefault: string;
+  images: string[];
+  variants: Variant[];
+}

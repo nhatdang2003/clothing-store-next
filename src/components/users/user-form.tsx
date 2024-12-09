@@ -135,7 +135,7 @@ export function UserForm({ user, onSubmit, isLoading }: UserFormProps) {
             <FormItem>
               <FormLabel>Email</FormLabel>
               <FormControl>
-                <Input {...field} type="email" />
+                <Input {...field} type="email" disabled={user} />
               </FormControl>
               <FormMessage />
             </FormItem>

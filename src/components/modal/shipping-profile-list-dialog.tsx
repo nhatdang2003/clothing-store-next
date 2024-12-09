@@ -56,7 +56,7 @@ export function ShippingProfileListDialog({
     useState<ShippingProfile | null>(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [selectedItem, setSelectedItem] = useState<ShippingProfile | null>(
-    null
+    profiles[0]
   );
 
   const deleteProfile = useDeleteShippingProfile();
@@ -107,6 +107,7 @@ export function ShippingProfileListDialog({
             </Button>
             <Button
               onClick={() => {
+                console.log(selectedItem);
                 if (selectedItem) {
                   onSelect(selectedItem);
                   onOpenChange(false);

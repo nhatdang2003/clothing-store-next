@@ -157,7 +157,7 @@ const InfoProduct = ({ product }: { product: any }) => {
                 }`}
               >
                 {formatPrice(
-                  selectedVariant.differencePrice > 0
+                  selectedVariant.differencePrice !== 0
                     ? (product.price + selectedVariant.differencePrice) *
                         (1 - product.discountRate)
                     : product.priceWithDiscount
@@ -166,7 +166,7 @@ const InfoProduct = ({ product }: { product: any }) => {
               {product.discountRate > 0 && (
                 <p className="text-lg text-gray-500 line-through">
                   {formatPrice(
-                    selectedVariant.differencePrice > 0
+                    selectedVariant.differencePrice !== 0
                       ? product.price + selectedVariant.differencePrice
                       : product.price
                   )}

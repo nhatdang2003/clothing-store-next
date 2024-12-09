@@ -141,7 +141,7 @@ export default function CategoryList({ initialData }: CategoryListProps) {
                   <img
                     src={category.imageUrl}
                     alt={category.name}
-                    className="w-20 h-20 object-cover"
+                    className="w-20 object-cover aspect-[2/3]"
                   />
                 </TableCell>
                 <TableCell className="text-right">

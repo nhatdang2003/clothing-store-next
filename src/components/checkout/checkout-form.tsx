@@ -55,14 +55,16 @@ export function CheckoutForm() {
       try {
         const selectedItems = localStorage.getItem("selectedItems");
         const response = await checkoutApi.getPreview({
+          shippingProfileId: currentAddress.id !== 0 ? currentAddress.id : null,
           cartItemIds: selectedItems ? JSON.parse(selectedItems) : [],
           note: "",
           paymentMethod: "COD",
           deliveryMethod: "GHN",
         });
+        console.log(response);
 
         setCheckoutData(response);
-        if (response.shippingProfile) {
+        if (response.shippingProfile.id !== currentAddress.id) {
           setCurrentAddress(response.shippingProfile);
         }
       } catch (error) {
@@ -70,7 +72,7 @@ export function CheckoutForm() {
       }
     };
     fetchData();
-  }, []);
+  }, [currentAddress]);
 
   if (!checkoutData) {
     return <div>Loading...</div>;
@@ -255,7 +257,9 @@ export function CheckoutForm() {
                 <span className="text-sm text-gray-600">Tổng tiền hàng</span>
                 <span className="font-medium">
                   {(
-                    checkoutData.finalTotal - checkoutData.shippingFee
+                    checkoutData.finalTotal -
+                    checkoutData.shippingFee +
+                    checkoutData.discount
                   ).toLocaleString("vi-VN")}
                   ₫
                 </span>
@@ -269,9 +273,11 @@ export function CheckoutForm() {
               <div className="flex justify-between items-center">
                 <span className="text-sm text-gray-600">Phí vận chuyển</span>
                 <span className="font-medium">
-                  {checkoutData.shippingFee === 0
-                    ? "Miễn phí"
-                    : `${checkoutData.shippingFee.toLocaleString("vi-VN")}₫`}
+                  {checkoutData.shippingFee
+                    ? checkoutData.shippingFee === 0
+                      ? "Miễn phí"
+                      : `${checkoutData.shippingFee.toLocaleString("vi-VN")}₫`
+                    : "Chưa tính"}
                 </span>
               </div>
               <Separator className="bg-black" />

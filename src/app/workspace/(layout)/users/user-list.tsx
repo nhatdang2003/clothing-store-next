@@ -49,22 +49,22 @@ import { Input } from "@/components/ui/input";
 import { useDebounce } from "@/hooks/use-debounce";
 import { ROLE } from "@/constants/role";
 import { getGenderText } from "@/lib/utils";
+import { SearchInput } from "@/components/shared/search-input";
 
 export default function UserList({ initialData }: any) {
   const searchParams = useSearchParams();
-  const page = searchParams.get("page") || 1;
+  const page = searchParams.get("page") || "1";
   const search = searchParams.get("search") || "";
-  const [searchTerm, setSearchTerm] = useState(search);
-  const debouncedSearch = useDebounce(searchTerm);
-  const [open, setOpen] = useState(false);
-  const [editingUser, setEditingUser] = useState<any>(null);
-  const [deletingUser, setDeletingUser] = useState<any>(null);
 
   const { data, isLoading } = useUserListQuery({
     initialData,
     page: Number(page),
-    search: debouncedSearch,
+    search,
   });
+
+  const [open, setOpen] = useState(false);
+  const [editingUser, setEditingUser] = useState<any>(null);
+  const [deletingUser, setDeletingUser] = useState<any>(null);
 
   const addUserMutation = useAddUserMutation();
   const updateUserMutation = useUpdateUserMutation();
@@ -111,11 +111,9 @@ export default function UserList({ initialData }: any) {
       </div>
 
       <div className="flex justify-between items-center">
-        <Input
+        <SearchInput
           placeholder="Tìm kiếm người dùng..."
           className="max-w-sm"
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
         />
         <Button onClick={() => setOpen(true)}>
           <Plus className="mr-2 h-4 w-4" /> Thêm người dùng
@@ -135,7 +133,7 @@ export default function UserList({ initialData }: any) {
       </Dialog>
 
       <Dialog open={!!editingUser} onOpenChange={() => setEditingUser(null)}>
-        <DialogContent className="max-w-2xl">
+        <DialogContent className="max-w-2xl" aria-describedby={"test"}>
           <DialogHeader>
             <DialogTitle>Chỉnh sửa người dùng</DialogTitle>
           </DialogHeader>

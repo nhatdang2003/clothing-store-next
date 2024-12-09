@@ -2,10 +2,11 @@ import http from "./http";
 
 export const imageApi = {
   getPresignedUrl: async (fileName: string) => {
+    const [name, extension] = fileName.split(".");
     const response = await http.post({
       url: "/api/v1/products/upload-images",
       body: {
-        fileName,
+        fileName: `${name}-${new Date().getTime()}.${extension}`,
       },
     });
     return response.data;
