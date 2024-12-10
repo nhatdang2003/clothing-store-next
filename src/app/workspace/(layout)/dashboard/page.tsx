@@ -33,10 +33,15 @@ import {
 import { format } from "date-fns";
 import { orderApi } from "@/services/order.api";
 import page from "../../page";
+import http from "@/services/http";
+import { title } from "process";
 
 export default async function DashboardPage() {
   const orders = await orderApi.getOrders(1, 5);
   const data = orders.data;
+  const res = await http.get({ url: "/api/v1/workspace/dashboard" });
+  const dataDashboard = res.data;
+  console.log(dataDashboard);
   return (
     <div className="flex">
       {/* Main Content */}
@@ -48,25 +53,25 @@ export default async function DashboardPage() {
             {[
               {
                 title: "Total Revenue",
-                value: "$54,230",
+                value: formatPrice(dataDashboard.totalRevenue),
                 icon: DollarSign,
                 color: "text-green-600",
               },
               {
                 title: "Orders",
-                value: "1,240",
+                value: dataDashboard.totalOrders,
                 icon: ShoppingBag,
                 color: "text-blue-600",
               },
               {
                 title: "Customers",
-                value: "3,540",
+                value: dataDashboard.totalUsers,
                 icon: Users,
                 color: "text-yellow-600",
               },
               {
                 title: "Products",
-                value: "450",
+                value: dataDashboard.totalProducts,
                 icon: Package,
                 color: "text-purple-600",
               },
