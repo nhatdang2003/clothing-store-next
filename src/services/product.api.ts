@@ -85,15 +85,16 @@ export const productApi = {
     return response.data;
   },
   createProduct: (data: any) => {
+    console.log(">>>>>DATA", data);
     return http.post({
       url: "/api/v1/products",
-      body: data,
+      body: { ...data.data },
     });
   },
-  updateProduct: ({ data }: any) => {
+  updateProduct: (data: any) => {
     return http.put({
       url: `/api/v1/products`,
-      body: { data },
+      body: { ...data.data },
     });
   },
   deleteProduct: (id: number) => {

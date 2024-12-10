@@ -45,11 +45,10 @@ import {
   useDeleteProductMutation,
 } from "@/hooks/use-product-query";
 import Image from "next/image";
-import ProductDialog from "@/components/products/product-dialog";
 import { ProductData } from "@/types/product";
-import { toast } from "@/hooks/use-toast";
+import { ProductFormDialog } from "@/components/products/product-form-dialog";
 
-export default function ProductList({ initialData }: any) {
+export default function ProductList() {
   const searchParams = useSearchParams();
   const page = searchParams.get("page") || "1";
   const search = searchParams.get("search") || "";
@@ -68,15 +67,22 @@ export default function ProductList({ initialData }: any) {
 
   const handleAddProduct = async (productData: ProductData) => {
     try {
-      await addProductMutation.mutateAsync(productData);
-    } catch (error) {}
+      await addProductMutation.mutateAsync({
+        data: productData,
+      });
+    } catch (error) {
+      throw error;
+    }
   };
 
   const handleEditProduct = async (productData: ProductData) => {
     try {
-      await updateProductMutation.mutateAsync({ data: productData });
-      setEditingProduct(null);
-    } catch (error) {}
+      await updateProductMutation.mutateAsync({
+        data: productData,
+      });
+    } catch (error) {
+      throw error;
+    }
   };
 
   const handleDeleteProduct = async () => {
@@ -95,7 +101,12 @@ export default function ProductList({ initialData }: any) {
     <div className="space-y-4">
       <div className="flex justify-between items-center">
         <h2 className="text-3xl font-bold tracking-tight">Sản phẩm</h2>
-        <ProductDialog mode="add" onSubmit={handleAddProduct} />
+        <ProductFormDialog
+          mode="add"
+          onSubmit={handleAddProduct}
+          addProductMutation={addProductMutation}
+          updateProductMutation={updateProductMutation}
+        />
       </div>
 
       <Table>
@@ -144,13 +155,15 @@ export default function ProductList({ initialData }: any) {
                     </Button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="end">
-                    <DropdownMenuItem>
-                      <ProductDialog
+                    <div className="cursor-pointer">
+                      <ProductFormDialog
                         mode="edit"
-                        initialData={product}
+                        product={product}
                         onSubmit={handleEditProduct}
+                        addProductMutation={addProductMutation}
+                        updateProductMutation={updateProductMutation}
                       />
-                    </DropdownMenuItem>
+                    </div>
                     <DropdownMenuItem
                       className="text-destructive"
                       onClick={() => setDeletingProduct(product)}
