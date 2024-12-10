@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm, useFieldArray, Controller } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -32,6 +32,7 @@ import { imageApi } from "@/services/image.api";
 import { ProductData } from "@/types/product";
 import { toast, useToast } from "@/hooks/use-toast";
 import { Size, COLOR } from "@/constants/product";
+import { categoryApi } from "@/services/category.api";
 
 interface Category {
   id: number;
@@ -60,9 +61,46 @@ interface ProductFormData {
 
 // Assume we have a list of categories from an API or context
 const categories: Category[] = [
-  { id: 1, name: "Điện tử" },
-  { id: 2, name: "Quần áo" },
-  { id: 3, name: "Sách" },
+  {
+    id: 1,
+    name: "Áo Cardigan & Áo len",
+  },
+  {
+    id: 2,
+    name: "Áo khoác & Áo khoác dài",
+  },
+  {
+    id: 3,
+    name: "Áo sơ mi & Áo kiểu",
+  },
+  {
+    id: 4,
+    name: "Quần Jeans",
+  },
+  {
+    id: 5,
+    name: "Chân váy",
+  },
+  {
+    id: 6,
+    name: "Áo nỉ & Áo hoodie",
+  },
+  {
+    id: 7,
+    name: "Blazer & Áo Ghile Nữ",
+  },
+  {
+    id: 8,
+    name: "Quần Short",
+  },
+  {
+    id: 9,
+    name: "Quần áo Basic",
+  },
+  {
+    id: 10,
+    name: "Đồ ngủ",
+  },
 ];
 
 // Chuyển đổi enum Size thành array options
