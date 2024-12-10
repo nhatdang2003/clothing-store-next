@@ -36,7 +36,7 @@ export const useUpdateProductMutation = () => {
   const { toast } = useToast();
 
   return useMutation({
-    mutationFn: ({ data }: { data: any }) => productApi.updateProduct({ data }),
+    mutationFn: (data: any) => productApi.updateProduct(data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["products"] });
       toast({

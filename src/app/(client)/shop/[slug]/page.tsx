@@ -25,7 +25,7 @@ export default async function DetailPage({
   return (
     <div className="container mx-auto px-4 py-8">
       <InfoProduct product={product} />
-      <ReviewSection />
+      <ReviewSection slug={slug} />
       <RelatedProducts relatedProducts={relatedProducts.data} />
     </div>
   );

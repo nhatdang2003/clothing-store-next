@@ -35,7 +35,7 @@ export default async function ProductsPage({
 
   return (
     <Suspense fallback={<div>Loading...</div>}>
-      <ProductList initialData={products} />
+      <ProductList />
     </Suspense>
   );
 }
