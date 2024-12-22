@@ -78,7 +78,7 @@ export function ShippingProfileListDialog({
             <DialogTitle>Chọn địa chỉ giao hàng</DialogTitle>
           </DialogHeader>
 
-          <ScrollArea className="max-h-[70vh] pr-4">
+          <ScrollArea className="max-h-[70vh] pt-6">
             <RadioGroup
               defaultValue={selectedProfileId?.toString()}
               onValueChange={(value) => {

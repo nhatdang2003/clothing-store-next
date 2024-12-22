@@ -56,14 +56,16 @@ interface ShippingProfileDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   profile: ShippingProfile | null;
+  refresh?: boolean;
 }
 
 export function ShippingProfileDialog({
   open,
   onOpenChange,
   profile,
+  refresh,
 }: ShippingProfileDialogProps) {
-  const createProfile = useCreateShippingProfile();
+  const createProfile = useCreateShippingProfile(refresh);
   const updateProfile = useUpdateShippingProfile();
   const { toast } = useToast();
   const [provinces, setProvinces] = useState<any[]>([]);
@@ -174,7 +176,7 @@ export function ShippingProfileDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-2xl h-[90vh] flex flex-col p-0">
+      <DialogContent className="max-w-2xl max-h-[90vh] flex flex-col p-0">
         <DialogHeader className="p-6 border-b">
           <DialogTitle>
             {profile ? "Chỉnh sửa địa chỉ" : "Thêm địa chỉ mới"}

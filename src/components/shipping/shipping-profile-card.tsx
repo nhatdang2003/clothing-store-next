@@ -10,7 +10,7 @@ export function ShippingProfileCard({
   onDelete,
 }: ShippingProfileCardProps) {
   return (
-    <Card className="shadow-lg">
+    <Card className="shadow-lg flex-1">
       <CardContent className="p-6">
         <div className="flex justify-between items-start lg:flex-row flex-col gap-2">
           <div className="space-y-2">

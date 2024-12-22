@@ -22,7 +22,7 @@ export function middleware(request: NextRequest) {
   }
   // 2. Đã đăng nhập không cho vào public routes
   if (refresh_token && isPublicPath) {
-    return NextResponse.redirect(new URL("/dashboard", request.url));
+    return NextResponse.redirect(new URL("/", request.url));
   }
   // 3. Đã đăng nhập nhưng access_token hết hạn
   if (refresh_token && !access_token && isProtectedPath) {

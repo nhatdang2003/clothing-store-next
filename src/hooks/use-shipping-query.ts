@@ -2,6 +2,7 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { shippingApi } from "@/services/shipping.api";
 import { useToast } from "./use-toast";
 import type { ShippingProfile } from "@/types/shipping";
+import { useRouter } from "next/navigation";
 
 export function useShippingProfiles() {
   const { toast } = useToast();
@@ -70,9 +71,10 @@ export function useUpdateShippingProfile() {
   });
 }
 
-export function useCreateShippingProfile() {
+export function useCreateShippingProfile(refresh?: boolean) {
   const queryClient = useQueryClient();
   const { toast } = useToast();
+  const router = useRouter();
 
   return useMutation({
     mutationFn: async (data: ShippingProfile) => {
@@ -89,6 +91,7 @@ export function useCreateShippingProfile() {
         description: "Thêm địa chỉ giao hàng thành công",
         variant: "success",
       });
+      refresh && window.location.reload();
     },
     onError: () => {
       toast({

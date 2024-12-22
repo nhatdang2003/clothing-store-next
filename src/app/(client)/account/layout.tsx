@@ -35,7 +35,7 @@ export default function LayoutAccount({
       <div className="md:flex">
         {/* Sidebar */}
         <div className="md:w-64 md:min-h-screen border-r bg-white shadow-sm">
-          <nav className="space-y-1 px-3 py-4 md:py-8 ">
+          <nav className="space-y-1 px-3 py-4 md:py-8">
             {navItems.map((item) => {
               const isActive = pathname === item.href;
               const Icon = item.icon;

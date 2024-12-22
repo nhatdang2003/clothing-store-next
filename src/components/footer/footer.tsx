@@ -2,6 +2,7 @@ import Link from "next/link";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Facebook, Instagram, Twitter } from "lucide-react";
+import ScalableStoreLogo from "../ui/logo-store";
 
 export function Footer() {
   return (
@@ -9,7 +10,11 @@ export function Footer() {
       <div className="container mx-auto px-4">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <div className="space-y-4">
-            <h3 className="text-lg font-semibold">EzStore</h3>
+            <div className="w-[200px]">
+              <Link href="/">
+                <ScalableStoreLogo />
+              </Link>
+            </div>
             <p className="text-sm">
               Điểm đến cho thời trang sành điệu của bạn.
             </p>

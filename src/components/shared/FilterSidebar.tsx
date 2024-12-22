@@ -34,7 +34,7 @@ export function FilterSidebar({
       </div>
       <div
         className={`${
-          isMobileFilterOpen ? "max-h-screen opacity-100" : "max-h-0 opacity-0"
+          isMobileFilterOpen ? "opacity-100" : "max-h-0 opacity-0"
         } md:max-h-none md:opacity-100 transition-all duration-300 ease-in-out md:block space-y-6`}
       >
         <FilterCategories className="mx-1" categories={categories.data} />

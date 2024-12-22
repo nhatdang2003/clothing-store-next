@@ -15,6 +15,8 @@ import { useShippingProfiles } from "@/hooks/use-shipping-query";
 import { useCreateOrder } from "@/hooks/use-checkout-mutation";
 import { useToast } from "@/hooks/use-toast";
 import { formatPrice, getColorText } from "@/lib/utils";
+import { ShippingProfileDialog } from "../modal/shipping-profile-dialog";
+import { useRouter } from "next/navigation";
 
 interface Address {
   id: number;
@@ -46,16 +48,23 @@ export function CheckoutForm() {
   const [showAddressForm, setShowAddressForm] = useState(false);
   const [checkoutData, setCheckoutData] = useState<any | null>(null);
   const [showAddressDialog, setShowAddressDialog] = useState(false);
+  const [showNewAddressDialog, setShowNewAddressDialog] = useState(false);
   const { data: profiles, isLoading } = useShippingProfiles();
   const createOrder = useCreateOrder();
   const { toast } = useToast();
+  const router = useRouter();
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const selectedItems = localStorage.getItem("selectedItems");
+        if (!selectedItems) {
+          router.push("/cart");
+          return;
+        }
         const response = await checkoutApi.getPreview({
-          shippingProfileId: currentAddress.id !== 0 ? currentAddress.id : null,
+          shippingProfileId:
+            currentAddress?.id !== 0 ? currentAddress?.id : null,
           cartItemIds: selectedItems ? JSON.parse(selectedItems) : [],
           note: "",
           paymentMethod: "COD",
@@ -64,7 +73,7 @@ export function CheckoutForm() {
         console.log(response);
 
         setCheckoutData(response);
-        if (response.shippingProfile.id !== currentAddress.id) {
+        if (response.shippingProfile?.id !== currentAddress?.id) {
           setCurrentAddress(response.shippingProfile);
         }
       } catch (error) {
@@ -79,7 +88,7 @@ export function CheckoutForm() {
   }
 
   const handleCreateOrder = async () => {
-    if (!currentAddress.id) {
+    if (!currentAddress?.id) {
       toast({
         title: "Lỗi",
         description: "Vui lòng chọn địa chỉ giao hàng",
@@ -106,7 +115,7 @@ export function CheckoutForm() {
         note: "", // Có thể thêm field note nếu cần
         paymentMethod,
         deliveryMethod: "GHN", // Có thể thêm option chọn đơn vị vận chuyển
-        shippingProfileId: currentAddress.id,
+        shippingProfileId: currentAddress?.id,
       });
     } catch (error) {
       console.error("Error creating order:", error);
@@ -117,46 +126,61 @@ export function CheckoutForm() {
     <div className="grid gap-6 lg:grid-cols-2">
       {/* Cột bên trái: Địa chỉ nhận hàng */}
       <div>
-        <Card className="border-black">
-          <CardHeader>
-            <CardTitle className="flex items-center text-lg justify-between">
-              <div className="flex items-center">
-                <MapPin className="mr-2 h-5 w-5" />
-                Thông tin nhận hàng
+        {currentAddress ? (
+          <Card className="border-black">
+            <CardHeader>
+              <CardTitle className="flex items-center text-lg justify-between">
+                <div className="flex items-center">
+                  <MapPin className="mr-2 h-5 w-5" />
+                  Thông tin nhận hàng
+                </div>
+                <Button
+                  variant="outline"
+                  className="border-black"
+                  onClick={() => setShowAddressDialog(true)}
+                >
+                  Thay đổi địa chỉ
+                </Button>
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-3">
+                <p>
+                  <strong>Họ tên:</strong> {currentAddress.firstName}{" "}
+                  {currentAddress.lastName}
+                </p>
+                <p>
+                  <strong>Số điện thoại:</strong> {currentAddress.phoneNumber}
+                </p>
+                <p>
+                  <strong>Địa chỉ:</strong> {currentAddress.address}
+                </p>
+                <p>
+                  <strong>Phường/Xã:</strong> {currentAddress.ward}
+                </p>
+                <p>
+                  <strong>Quận/Huyện:</strong> {currentAddress.district}
+                </p>
+                <p>
+                  <strong>Tỉnh/Thành phố:</strong> {currentAddress.province}
+                </p>
               </div>
-              <Button
-                variant="outline"
-                className="border-black"
-                onClick={() => setShowAddressDialog(true)}
-              >
-                Thay đổi địa chỉ
-              </Button>
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-3">
-              <p>
-                <strong>Họ tên:</strong> {currentAddress.firstName}{" "}
-                {currentAddress.lastName}
-              </p>
-              <p>
-                <strong>Số điện thoại:</strong> {currentAddress.phoneNumber}
-              </p>
-              <p>
-                <strong>Địa chỉ:</strong> {currentAddress.address}
-              </p>
-              <p>
-                <strong>Phường/Xã:</strong> {currentAddress.ward}
-              </p>
-              <p>
-                <strong>Quận/Huyện:</strong> {currentAddress.district}
-              </p>
-              <p>
-                <strong>Tỉnh/Thành phố:</strong> {currentAddress.province}
-              </p>
+            </CardContent>
+          </Card>
+        ) : (
+          <Button
+            className="w-full h-40 border-2 border-dashed border-gray-300 hover:border-black transition-colors"
+            variant="outline"
+            onClick={() => setShowNewAddressDialog(true)}
+          >
+            <div className="flex flex-col items-center gap-2">
+              <MapPin className="h-8 w-8" />
+              <span className="text-lg font-medium">
+                Vui lòng thêm địa chỉ mới để đặt hàng
+              </span>
             </div>
-          </CardContent>
-        </Card>
+          </Button>
+        )}
       </div>
 
       {/* Cột bên phải */}
@@ -288,7 +312,7 @@ export function CheckoutForm() {
               <Button
                 className="w-full bg-black hover:bg-gray-800 text-white"
                 onClick={handleCreateOrder}
-                disabled={createOrder.isPending || !currentAddress.id}
+                disabled={createOrder.isPending || !currentAddress}
               >
                 {createOrder.isPending ? "Đang xử lý..." : "Đặt hàng"}
               </Button>
@@ -303,6 +327,13 @@ export function CheckoutForm() {
         profiles={profiles || []}
         selectedProfileId={currentAddress?.id}
         onSelect={(profile) => setCurrentAddress(profile)}
+      />
+
+      <ShippingProfileDialog
+        open={showNewAddressDialog}
+        onOpenChange={setShowNewAddressDialog}
+        profile={null}
+        refresh={true}
       />
     </div>
   );

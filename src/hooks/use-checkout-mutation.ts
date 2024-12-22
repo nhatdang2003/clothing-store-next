@@ -1,4 +1,4 @@
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { checkoutApi } from "@/services/checkout.api";
 import { useToast } from "./use-toast";
 import { useRouter } from "next/navigation";

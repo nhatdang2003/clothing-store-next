@@ -20,7 +20,7 @@ const InfoProduct = ({ product }: { product: any }) => {
   const [selectedSize, setSelectedSize] = useState<string | null>(null);
   const [selectedColor, setSelectedColor] = useState<string | null>(null);
   const [selectedVariant, setSelectedVariant] = useState<any | null>(null);
-  const [images, setImages] = useState(product.images);
+  const [images, setImages] = useState<Set<string>>(new Set(product.images));
   const [showSuccess, setShowSuccess] = useState(false);
   const [availableSizes, setAvailableSizes] = useState<string[]>([]);
 
@@ -48,12 +48,16 @@ const InfoProduct = ({ product }: { product: any }) => {
 
       // Cập nhật images
       if (variantsWithColor.length > 0) {
-        setImages([...variantsWithColor[0].images, ...product.images]);
+        const newImages = new Set([
+          ...variantsWithColor[0].images,
+          ...product.images,
+        ]);
+        setImages(newImages);
       }
     } else {
       // Reset everything when no color is selected
       setAvailableSizes([]);
-      setImages(product.images);
+      setImages(new Set(product.images));
     }
   };
 
@@ -116,7 +120,7 @@ const InfoProduct = ({ product }: { product: any }) => {
   return (
     <div className="grid md:grid-cols-2 gap-x-16 gap-y-8">
       <div>
-        <ImageGallery images={images} alt={product.name} />
+        <ImageGallery images={Array.from(images)} alt={product.name} />
       </div>
       <div>
         {showSuccess && (
@@ -148,7 +152,7 @@ const InfoProduct = ({ product }: { product: any }) => {
               : "Chưa có đánh giá"}
           </span>
         </div>
-        <div className="flex items-center gap-2 mb-4">
+        <div className="flex md:items-center flex-col md:flex-row gap-2 mb-4">
           {selectedVariant ? (
             <>
               <p
