@@ -113,7 +113,7 @@ export default function UserList({ initialData }: any) {
       <div className="flex justify-between items-center">
         <SearchInput
           placeholder="Tìm kiếm người dùng..."
-          className="max-w-sm"
+          className="w-[300px]"
         />
         <Button onClick={() => setOpen(true)}>
           <Plus className="mr-2 h-4 w-4" /> Thêm người dùng

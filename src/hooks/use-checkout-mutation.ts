@@ -2,6 +2,7 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import { checkoutApi } from "@/services/checkout.api";
 import { useToast } from "./use-toast";
 import { useRouter } from "next/navigation";
+import { queryClient } from "@/lib/react-query";
 
 interface CreateOrderData {
   cartItemIds: number[];
@@ -20,6 +21,7 @@ export function useCreateOrder() {
       return await checkoutApi.createOrder(data);
     },
     onSuccess: (response) => {
+      queryClient.invalidateQueries({ queryKey: ["cart"] });
       toast({
         title: "Đặt hàng thành công",
         description: "Đơn hàng của bạn đã được tạo thành công",

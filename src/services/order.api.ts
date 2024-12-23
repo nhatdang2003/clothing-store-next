@@ -41,14 +41,38 @@ export const orderApi = {
     console.log(url);
     return response.data;
   },
-  getOrdersByUser: async (page: number, size: number, status?: string) => {
+  getOrdersByUser: async (
+    page: number,
+    size: number,
+    status?: string,
+    search?: string
+  ) => {
     let url = `/api/v1/orders/user?page=${page - 1}&size=${size}`;
     if (status) {
       url += `&filter=status~'${status}'`;
     }
+    if (search) {
+      url += `&filter=code~'${encodeURIComponent(
+        search
+      )}' or shippingInformation.fullName~'${encodeURIComponent(
+        search
+      )}' or shippingInformation.phoneNumber~'${encodeURIComponent(search)}'`;
+    }
     url += "&sort=createdAt,desc";
     const response = await http.get({
       url,
+    });
+    return response.data;
+  },
+  getOrderById: async (id: string) => {
+    const response = await http.get({
+      url: `/api/v1/orders/${id}`,
+    });
+    return response.data;
+  },
+  continuePayment: async (id: string) => {
+    const response = await http.get({
+      url: `/api/v1/orders/continue-payment/${id}`,
     });
     return response.data;
   },

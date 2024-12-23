@@ -126,12 +126,12 @@ export default function ProductList() {
           {products.map((product: any) => (
             <TableRow key={product.id}>
               <TableCell>
-                <div className="relative w-16 h-16">
+                <div className="relative w-16 aspect-[2/3]">
                   <Image
                     src={product.images[0]}
                     alt={product.name}
                     fill
-                    className="object-cover rounded-md"
+                    className=" object-cover rounded-md"
                   />
                 </div>
               </TableCell>
@@ -140,7 +140,13 @@ export default function ProductList() {
               <TableCell>{formatPrice(product.price)}</TableCell>
               <TableCell>{formatPrice(product.priceWithDiscount)}</TableCell>
               <TableCell>
-                <Badge variant="secondary">{product.discountRate * 100}%</Badge>
+                <Badge
+                  variant={
+                    product.discountRate > 0 ? "destructive" : "secondary"
+                  }
+                >
+                  {product.discountRate * 100}%
+                </Badge>
               </TableCell>
               <TableCell>
                 <Badge variant={product.featured ? "default" : "secondary"}>
@@ -165,7 +171,7 @@ export default function ProductList() {
                       />
                     </div>
                     <DropdownMenuItem
-                      className="text-destructive"
+                      className="text-destructive py-2 px-4 focus:text-destructive cursor-pointer"
                       onClick={() => setDeletingProduct(product)}
                     >
                       <Trash2 className="mr-2 h-4 w-4" />

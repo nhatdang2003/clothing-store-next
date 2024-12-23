@@ -26,13 +26,14 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Trash2, Image, Loader2 } from "lucide-react";
+import { Trash2, Image, Loader2, Pencil, PlusCircle } from "lucide-react";
 import { ImageUpload } from "./image-upload";
 import { imageApi } from "@/services/image.api";
 import { ProductData } from "@/types/product";
 import { toast, useToast } from "@/hooks/use-toast";
 import { Size, COLOR } from "@/constants/product";
 import { categoryApi } from "@/services/category.api";
+import { cn } from "@/lib/utils";
 
 interface Category {
   id: number;
@@ -146,6 +147,7 @@ export function ProductFormDialog({
     formState: { errors },
     setValue,
     reset,
+    watch,
   } = useForm<ProductData>({
     defaultValues: product || {
       id: 0,
@@ -201,7 +203,6 @@ export function ProductFormDialog({
         ...uploadedImages.filter((img) => img.url).map((img) => img.url!),
         ...newImageUrls,
       ];
-      console.log(finalImages);
 
       const finalProductData = {
         ...data,
@@ -213,7 +214,6 @@ export function ProductFormDialog({
           // Lọc images từ finalImages dựa trên những ảnh đã chọn trong variant
           images: variant.images.map((img: any) => {
             // Tìm ảnh tương ứng trong finalImages
-            console.log(img.file?.name?.split(".")[0]);
             const finalImage = finalImages.find((final) =>
               final.includes(img.file?.name?.split(".")[0])
             );
@@ -237,7 +237,15 @@ export function ProductFormDialog({
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
-        <Button variant={mode === "add" ? "default" : "outline"}>
+        <Button
+          variant={mode === "add" ? "default" : "ghost"}
+          className={mode === "add" ? "" : "w-full"}
+        >
+          {mode === "add" ? (
+            <PlusCircle className="mr-2 h-4 w-4" />
+          ) : (
+            <Pencil className="mr-2 h-4 w-4" />
+          )}
           {mode === "add" ? "Thêm sản phẩm" : "Chỉnh sửa"}
         </Button>
       </DialogTrigger>
@@ -247,7 +255,10 @@ export function ProductFormDialog({
             {mode === "add" ? "Thêm sản phẩm mới" : "Chỉnh sửa sản phẩm"}
           </DialogTitle>
         </DialogHeader>
-        <form onSubmit={handleSubmit(handleFormSubmit)} className="space-y-8">
+        <form
+          onSubmit={handleSubmit(handleFormSubmit)}
+          className="space-y-4 py-3"
+        >
           <div>
             <Label htmlFor="name">Tên sản phẩm</Label>
             <Input
@@ -452,21 +463,33 @@ export function ProductFormDialog({
                         <PopoverContent className="w-80">
                           <div className="grid grid-cols-3 gap-2">
                             {uploadedImages.map((image: any, imgIndex) => {
-                              console.log(image);
+                              const isSelected = field.value.some(
+                                (img: any) => {
+                                  console.log("Ảnh đã chọn", img);
+                                  console.log("Ảnh đã tải lên", image);
+                                  return (
+                                    (img.url || img.preview || img) ===
+                                    (image.url || image.preview)
+                                  );
+                                }
+                              );
+
                               return (
                                 <div
                                   key={imgIndex}
-                                  className={`cursor-pointer border p-1 ${
-                                    field.value.includes(image)
-                                      ? "border-primary"
-                                      : "border-gray-200"
-                                  }`}
+                                  className={cn(
+                                    `cursor-pointer relative p-1 rounded-md
+                                    transition-all duration-200 ease-in-out`,
+                                    isSelected
+                                      ? "border-2 border-primary ring-2 ring-primary/20"
+                                      : "border border-gray-200 hover:border-gray-300"
+                                  )}
                                   onClick={() => {
-                                    const newImages = field.value.includes(
-                                      image
-                                    )
+                                    const newImages = isSelected
                                       ? field.value.filter(
-                                          (img: string) => img !== image
+                                          (img: any) =>
+                                            (img.url || img.preview) !==
+                                            (image.url || image.preview)
                                         )
                                       : [...field.value, image];
                                     field.onChange(newImages);
@@ -475,7 +498,7 @@ export function ProductFormDialog({
                                   <img
                                     src={image.preview}
                                     alt={`Ảnh biến thể ${imgIndex + 1}`}
-                                    className="w-full h-20 object-cover"
+                                    className="w-full aspect-[2/3] object-cover rounded"
                                   />
                                 </div>
                               );

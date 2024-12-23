@@ -30,7 +30,6 @@ export function ImageUpload({
         file,
         preview: URL.createObjectURL(file),
       }));
-      console.log(newImages);
       const updatedImages = [...uploadedImages, ...newImages];
       setUploadedImages(updatedImages);
       onImagesUploaded(updatedImages);
@@ -65,24 +64,23 @@ export function ImageUpload({
         <input {...getInputProps()} />
         <p>Kéo thả ảnh vào đây, hoặc nhấp để chọn ảnh</p>
       </div>
-      <div className="mt-4 grid grid-cols-4 gap-4">
+      <div className="mt-4 grid grid-cols-6 gap-4">
         {uploadedImages.map((image, index) => {
-          console.log(image);
           return (
             <div key={index} className="relative">
               <img
                 src={image.preview}
                 alt={`Uploaded ${index + 1}`}
-                className="w-full h-32 object-cover"
+                className="w-full aspect-[2/3] object-cover"
               />
               <Button
                 type="button"
-                variant="destructive"
+                variant="ghost"
                 size="icon"
-                className="absolute top-0 right-0"
+                className="absolute top-0 right-0 text-red-500 hover:text-red-600 hover:bg-transparent"
                 onClick={() => removeImage(index)}
               >
-                <X className="h-4 w-4" />
+                <X className="h-6 w-6" />
               </Button>
             </div>
           );

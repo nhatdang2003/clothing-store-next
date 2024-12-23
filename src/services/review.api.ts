@@ -11,4 +11,24 @@ export const reviewApi = {
     });
     return response.data;
   },
+  getReviewByOrder: async (orderId: string) => {
+    const response = await http.get({
+      url: `/api/v1/orders/user/${orderId}/reviews`,
+    });
+    return response.data;
+  },
+  createReview: async (data: any) => {
+    const response = await http.post({
+      url: "/api/v1/orders/user/reviews",
+      body: data,
+    });
+    return response.data;
+  },
+  updateReview: async (data: any) => {
+    const response = await http.put({
+      url: `/api/v1/orders/user/reviews`,
+      body: data,
+    });
+    return response.data;
+  },
 };

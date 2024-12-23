@@ -18,6 +18,7 @@ import {
   SidebarInset,
 } from "@/components/ui/sidebar";
 import { SIDEBAR } from "@/constants/sidebar";
+import ScalableStoreLogo from "../ui/logo-store";
 
 export function WorkspaceLayout({
   children,
@@ -38,19 +39,11 @@ export function WorkspaceLayout({
             <SidebarHeader>
               <SidebarMenu>
                 <SidebarMenuItem>
-                  <SidebarMenuButton size="lg" asChild>
+                  <div className="w-[200px] px-2">
                     <Link href="/">
-                      <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-primary text-primary-foreground">
-                        <StoreIcon className="size-4" />
-                      </div>
-                      <div className="flex flex-col gap-0.5 leading-none">
-                        <span className="font-semibold">EzStore</span>
-                        <span className="text-xs text-muted-foreground">
-                          Manage your app
-                        </span>
-                      </div>
+                      <ScalableStoreLogo />
                     </Link>
-                  </SidebarMenuButton>
+                  </div>
                 </SidebarMenuItem>
               </SidebarMenu>
             </SidebarHeader>

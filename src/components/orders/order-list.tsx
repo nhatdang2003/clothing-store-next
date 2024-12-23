@@ -13,6 +13,12 @@ import {
   getStatusColor,
   getStatusText,
 } from "@/lib/utils";
+import { OrderDetailModal } from "../modal/detail-order-dialog";
+import { orderApi } from "@/services/order.api";
+import { useRouter } from "next/navigation";
+import { useToast } from "@/hooks/use-toast";
+import { CreditCard, Star } from "lucide-react";
+import { ProductReviewModal } from "../modal/product-review-modal";
 
 interface LineItem {
   id: number;
@@ -71,6 +77,8 @@ interface OrderListProps {
 export default function OrderList({ orders }: OrderListProps) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const router = useRouter();
+  const { toast } = useToast();
 
   // Lấy thông tin pagination từ meta
   const currentPage = orders.meta.page + 1; // Vì API trả về page bắt đầu từ 0
@@ -87,6 +95,19 @@ export default function OrderList({ orders }: OrderListProps) {
           hour: "2-digit",
           minute: "2-digit",
         });
+  };
+
+  const continuePayment = async (id: string) => {
+    try {
+      const response = await orderApi.continuePayment(id);
+      router.push(response.paymentUrl);
+    } catch (error) {
+      toast({
+        title: "Lỗi",
+        description: "Đã có lỗi xảy ra, vui lòng thử lại",
+        variant: "destructive",
+      });
+    }
   };
 
   if (loading) {
@@ -195,7 +216,7 @@ export default function OrderList({ orders }: OrderListProps) {
               <div className="text-sm text-muted-foreground">
                 {order.lineItems.length} sản phẩm
               </div>
-              <div className="text-right">
+              <div className="text-center sm:text-right">
                 <div className="text-sm text-muted-foreground">
                   Tổng tiền hàng: {formatPrice(order.total)}
                 </div>
@@ -221,15 +242,23 @@ export default function OrderList({ orders }: OrderListProps) {
                 </span>
                 <span>{order.paymentMethod}</span>
               </div>
-              <div className="flex gap-2">
-                <Button variant="outline" className="w-full sm:w-auto">
-                  Chi tiết đơn hàng
-                </Button>
-                {order.canReview && !order.isReviewed && (
-                  <Button variant="default" className="w-full sm:w-auto">
-                    Đánh giá
-                  </Button>
-                )}
+              <div className="flex gap-2 flex-wrap sm:flex-nowrap">
+                <OrderDetailModal orderId={order.id.toString()} />
+                {order.paymentMethod === "VNPAY" &&
+                  order.paymentStatus === "PENDING" && (
+                    <Button
+                      variant="outline"
+                      className="w-full sm:w-auto"
+                      onClick={() => continuePayment(order.id.toString())}
+                    >
+                      <CreditCard className="h-6 w-6 mr-2" />
+                      Tiếp tục thanh toán
+                    </Button>
+                  )}
+                {order.canReview ||
+                  (order.isReviewed && (
+                    <ProductReviewModal orderId={order.id.toString()} />
+                  ))}
               </div>
             </div>
           </div>

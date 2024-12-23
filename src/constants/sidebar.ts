@@ -10,18 +10,18 @@ import {
 export const SIDEBAR = {
   ADMIN: [
     { title: "Dashboard", icon: LayoutDashboard, href: "/workspace/dashboard" },
-    { title: "Users", icon: Users, href: "/workspace/users" },
-    { title: "Products", icon: Package, href: "/workspace/products" },
-    { title: "Categories", icon: Layers, href: "/workspace/categories" },
-    { title: "Orders", icon: ShoppingCart, href: "/workspace/orders" },
-    { title: "Promotions", icon: Gift, href: "/workspace/promotions" },
+    { title: "Người dùng", icon: Users, href: "/workspace/users" },
+    { title: "Sản phẩm", icon: Package, href: "/workspace/products" },
+    { title: "Danh mục", icon: Layers, href: "/workspace/categories" },
+    { title: "Đơn hàng", icon: ShoppingCart, href: "/workspace/orders" },
+    { title: "Khuyến mãi", icon: Gift, href: "/workspace/promotions" },
   ],
   STAFF: [
     { title: "Dashboard", icon: LayoutDashboard, href: "/workspace/dashboard" },
-    { title: "Products", icon: Package, href: "/workspace/products" },
-    { title: "Categories", icon: Layers, href: "/workspace/categories" },
-    { title: "Orders", icon: ShoppingCart, href: "/workspace/orders" },
-    { title: "Promotions", icon: Gift, href: "/workspace/promotions" },
+    { title: "Sản phẩm", icon: Package, href: "/workspace/products" },
+    { title: "Danh mục", icon: Layers, href: "/workspace/categories" },
+    { title: "Đơn hàng", icon: ShoppingCart, href: "/workspace/orders" },
+    { title: "Khuyến mãi", icon: Gift, href: "/workspace/promotions" },
   ],
-  USER: [{ title: "Orders", icon: ShoppingCart, href: "/workspace/orders" }],
+  USER: [{ title: "Đơn hàng", icon: ShoppingCart, href: "/workspace/orders" }],
 };
