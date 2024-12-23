@@ -53,7 +53,7 @@ export default function ProductList() {
   const page = searchParams.get("page") || "1";
   const search = searchParams.get("search") || "";
 
-  const { data, isLoading } = useProductListQuery(Number(page), 10);
+  const { data, isLoading } = useProductListQuery(Number(page), 10, search);
   const addProductMutation = useAddProductMutation();
   const updateProductMutation = useUpdateProductMutation();
   const deleteProductMutation = useDeleteProductMutation();
@@ -99,8 +99,9 @@ export default function ProductList() {
 
   return (
     <div className="space-y-4">
+      <h2 className="text-3xl font-bold tracking-tight">Sản phẩm</h2>
       <div className="flex justify-between items-center">
-        <h2 className="text-3xl font-bold tracking-tight">Sản phẩm</h2>
+        <SearchInput placeholder="Tìm kiếm sản phẩm..." className="w-[300px]" />
         <ProductFormDialog
           mode="add"
           onSubmit={handleAddProduct}

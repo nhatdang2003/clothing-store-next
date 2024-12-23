@@ -9,8 +9,18 @@ export const orderApi = {
     orderStatus?: string,
     paymentMethod?: string,
     deliveryMethod?: string,
+    from?: string,
+    to?: string,
     search?: string
   ) => {
+    if (from) {
+      const [day, month, year] = from.split("/");
+      from = `${year}-${month}-${day}`;
+    }
+    if (to) {
+      const [day, month, year] = to.split("/");
+      to = `${year}-${month}-${day}`;
+    }
     let url = `/api/v1/orders?page=${page - 1}&size=${size}`;
     if (status) {
       url += `&filter=status~'${status}'`;
@@ -26,6 +36,12 @@ export const orderApi = {
     }
     if (deliveryMethod) {
       url += `&filter=deliveryMethod~'${deliveryMethod}'`;
+    }
+    if (from) {
+      url += `&filter=orderDate>:'${from}'`;
+    }
+    if (to) {
+      url += `&filter=orderDate<:'${to}'`;
     }
     if (search) {
       url += `&filter=code~'${encodeURIComponent(
@@ -73,6 +89,13 @@ export const orderApi = {
   continuePayment: async (id: string) => {
     const response = await http.get({
       url: `/api/v1/orders/continue-payment/${id}`,
+    });
+    return response.data;
+  },
+  updateOrderStatus: async (id: string, status: string) => {
+    const response = await http.put({
+      url: `/api/v1/orders/status`,
+      body: { orderId: id, status },
     });
     return response.data;
   },

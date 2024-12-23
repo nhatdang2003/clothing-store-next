@@ -23,6 +23,16 @@ import {
 } from "@/lib/utils";
 import { ActiveFilters } from "@/components/orders/active-filters";
 import { OrderSearch } from "@/components/orders/order-search";
+import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { MoreHorizontal } from "lucide-react";
+import { useUpdateOrderStatus } from "@/hooks/use-order-query";
+import { OrderDetailModal } from "@/components/modal/detail-order-dialog";
 
 export default function OrderList({ orders }: { orders: any }) {
   const currentPage = orders.meta.page + 1;
@@ -97,6 +107,19 @@ export default function OrderList({ orders }: { orders: any }) {
               </TableCell>
               <TableCell className="text-center">
                 {getShippingMethodText(order.deliveryMethod)}
+              </TableCell>
+              <TableCell>
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="ghost" size="icon">
+                      <MoreHorizontal className="h-4 w-4" />
+                      <span className="sr-only">Open menu</span>
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end">
+                    <OrderDetailModal orderId={order.id} updateStatus={true} />
+                  </DropdownMenuContent>
+                </DropdownMenu>
               </TableCell>
             </TableRow>
           ))}

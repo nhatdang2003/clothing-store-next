@@ -11,3 +11,24 @@ export const useOrder = (id: string) => {
     enabled: !!id,
   });
 };
+
+export const useUpdateOrderStatus = () => {
+  const { toast } = useToast();
+  return useMutation({
+    mutationFn: (data: { orderId: string; status: string }) =>
+      orderApi.updateOrderStatus(data.orderId, data.status),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["order"] });
+      toast({
+        title: "Cập nhật trạng thái thành công",
+        variant: "success",
+      });
+    },
+    onError: () => {
+      toast({
+        title: "Cập nhật trạng thái thất bại",
+        variant: "destructive",
+      });
+    },
+  });
+};

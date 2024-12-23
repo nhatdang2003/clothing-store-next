@@ -23,18 +23,28 @@ import {
   formatPrice,
 } from "@/lib/utils";
 import { useOrder } from "@/hooks/use-order-query";
+import { useUpdateOrderStatus } from "@/hooks/use-order-query";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { STATUS_ORDER } from "@/constants/order";
 
 interface OrderDetailModalProps {
   orderId: string;
+  updateStatus?: boolean;
 }
 
-export function OrderDetailModal({ orderId }: OrderDetailModalProps) {
+export function OrderDetailModal({
+  orderId,
+  updateStatus,
+}: OrderDetailModalProps) {
   const [isOpen, setIsOpen] = useState(false);
   const { data: order, isLoading } = useOrder(orderId);
-
-  const handlePrint = () => {
-    window.print();
-  };
+  const { mutate: updateOrderStatus } = useUpdateOrderStatus();
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
@@ -110,7 +120,10 @@ export function OrderDetailModal({ orderId }: OrderDetailModalProps) {
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
-        <Button variant="outline" className="w-full sm:w-auto">
+        <Button
+          variant={updateStatus ? "ghost" : "outline"}
+          className="w-full sm:w-auto"
+        >
           <Eye className="h-6 w-6 mr-2" />
           Xem chi tiết
         </Button>
@@ -258,6 +271,37 @@ export function OrderDetailModal({ orderId }: OrderDetailModalProps) {
                   </div>
                 </div>
               </div>
+
+              {/* Order Actions */}
+              {updateStatus && order && (
+                <div className="border-t pt-4 mt-4">
+                  <div className="flex flex-col sm:flex-row items-center justify-end gap-4">
+                    <div className="text-sm text-muted-foreground">
+                      Trạng thái hiện tại: {getStatusText(order.status)}
+                    </div>
+                    <Select
+                      value={order.status}
+                      onValueChange={(value) => {
+                        updateOrderStatus({
+                          orderId,
+                          status: value,
+                        });
+                      }}
+                    >
+                      <SelectTrigger className="w-[200px]">
+                        <SelectValue placeholder="Chọn trạng thái" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {STATUS_ORDER.map((status) => (
+                          <SelectItem key={status.value} value={status.value}>
+                            {status.label}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                </div>
+              )}
             </div>
           ) : (
             <div className="p-4 text-center text-muted-foreground">

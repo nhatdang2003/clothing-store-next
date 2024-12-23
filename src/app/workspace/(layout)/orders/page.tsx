@@ -15,6 +15,8 @@ export default async function OrdersPage({
     orderStatus: string;
     paymentMethod: string;
     deliveryMethod: string;
+    from: string;
+    to: string;
     search: string;
   }>;
 }) {
@@ -28,6 +30,8 @@ export default async function OrdersPage({
     paymentMethod,
     deliveryMethod,
     search,
+    from,
+    to,
   } = await searchParams;
   try {
     orders = await orderApi.getOrders(
@@ -38,6 +42,8 @@ export default async function OrdersPage({
       orderStatus,
       paymentMethod,
       deliveryMethod,
+      from,
+      to,
       search
     );
     console.log(orders);

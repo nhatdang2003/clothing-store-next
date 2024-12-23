@@ -4,6 +4,7 @@ export const productApi = {
   getProducts: async (
     page: number,
     size: number,
+    search?: string,
     categories?: string,
     minPrice?: number,
     maxPrice?: number,
@@ -35,6 +36,9 @@ export const productApi = {
       url += `&filter=(${arrSize
         .map((size) => `variants.size~'${size}'`)
         .join(" or ")})`;
+    }
+    if (search) {
+      url += `&filter=name~'${search}'`;
     }
 
     const response = await http.get({
