@@ -44,7 +44,7 @@ export interface ProductData {
   description: string;
   price: number;
   categoryId: number;
-  isFeatured: boolean;
+  featured: boolean;
   colorDefault: string;
   images: string[];
   variants: Variant[];

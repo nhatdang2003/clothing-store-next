@@ -33,9 +33,6 @@ export function SearchInput({
       params.delete("search");
     }
 
-    // Reset về trang 1 khi search
-    params.set("page", "1");
-
     router.push(`${pathname}?${params.toString()}`);
   }, [debouncedSearch, pathname, router, searchParams]);
 

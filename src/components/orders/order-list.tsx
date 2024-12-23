@@ -264,13 +264,11 @@ export default function OrderList({ orders }: OrderListProps) {
           </div>
         </Card>
       ))}
-      {totalPages > 1 && (
-        <Pagination
-          currentPage={currentPage}
-          totalPages={totalPages}
-          className="mt-8"
-        />
-      )}
+      <Pagination
+        currentPage={currentPage}
+        totalPages={totalPages}
+        className="mt-8"
+      />
     </div>
   );
 }

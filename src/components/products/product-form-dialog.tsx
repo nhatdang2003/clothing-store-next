@@ -155,7 +155,7 @@ export function ProductFormDialog({
       description: "",
       price: 0,
       categoryId: 0,
-      isFeatured: false,
+      featured: false,
       images: [],
       variants: [
         { color: "", size: "", quantity: 0, differencePrice: 0, images: [] },
@@ -186,45 +186,54 @@ export function ProductFormDialog({
       // Upload new images if they have file property
       const newImageUrls = await Promise.all(
         uploadedImages
-          .filter((img) => img.file) // Chỉ lấy những ảnh mới (có file)
+          .filter((img) => img.file) // Chỉ upload những ảnh mới
           .map(async (img) => {
             const fileName = `${img.file!.name}`;
             const { signedUrl } = await imageApi.getPresignedUrl(fileName);
-            const uploadResponse = await imageApi.uploadImage(
-              signedUrl,
-              img.file!
-            );
-            return uploadResponse.url.split("?")[0];
+            await imageApi.uploadImage(signedUrl, img.file!);
+            return signedUrl.split("?")[0]; // Lấy URL không có query params
           })
       );
 
       // Combine existing URLs with new URLs
       const finalImages = [
-        ...uploadedImages.filter((img) => img.url).map((img) => img.url!),
+        ...uploadedImages
+          .filter((img) => !img.file) // Giữ lại những ảnh cũ
+          .map((img) => img.url!),
         ...newImageUrls,
       ];
 
+      // Xử lý variants
+      const processedVariants = data.variants.map((variant) => ({
+        ...variant,
+        id: mode === "edit" ? variant.id || 0 : 0, // Giữ id cũ nếu là edit mode
+        images: variant.images.map((img: any) => {
+          if (typeof img === "string") return img;
+          return img.url || img.preview;
+        }),
+      }));
+
       const finalProductData = {
         ...data,
-        id: mode === "add" ? 0 : data.id,
+        id: mode === "edit" ? data.id : 0,
         images: finalImages,
-        variants: data.variants.map((variant) => ({
-          ...variant,
-          id: mode === "add" ? 0 : variant.id,
-          // Lọc images từ finalImages dựa trên những ảnh đã chọn trong variant
-          images: variant.images.map((img: any) => {
-            // Tìm ảnh tương ứng trong finalImages
-            const finalImage = finalImages.find((final) =>
-              final.includes(img.file?.name?.split(".")[0])
-            );
-            return finalImage || "";
-          }),
-        })),
+        variants: processedVariants,
       };
 
-      await onSubmit(finalProductData);
+      if (mode === "edit") {
+        await updateProductMutation.mutateAsync({
+          id: data.id,
+          data: finalProductData,
+        });
+      } else {
+        await addProductMutation.mutateAsync({
+          data: finalProductData,
+        });
+      }
+
       setIsOpen(false);
       reset();
+      setUploadedImages([]); // Reset uploaded images
     } catch (error: any) {
       toast({
         variant: "destructive",
@@ -233,6 +242,38 @@ export function ProductFormDialog({
       });
     }
   };
+
+  useEffect(() => {
+    if (mode === "edit" && product) {
+      // Set uploaded images from existing product
+      setUploadedImages(
+        product.images.map((url) => ({
+          url,
+          preview: url,
+          file: null,
+        }))
+      );
+
+      // Reset form with product data
+      reset({
+        id: product.id,
+        name: product.name,
+        description: product.description,
+        price: product.price,
+        categoryId: product.categoryId,
+        isFeatured: product.isFeatured,
+        images: product.images,
+        variants: product.variants.map((variant) => ({
+          ...variant,
+          images: variant.images.map((url) => ({
+            url,
+            preview: url,
+            file: null,
+          })),
+        })),
+      });
+    }
+  }, [mode, product, reset]);
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
@@ -328,8 +369,8 @@ export function ProductFormDialog({
           </div>
 
           <div className="flex items-center space-x-2">
-            <Checkbox id="isFeatured" {...register("isFeatured")} />
-            <Label htmlFor="isFeatured">Sản phẩm nổi bật</Label>
+            <Checkbox id="featured" {...register("featured")} />
+            <Label htmlFor="featured">Sản phẩm nổi bật</Label>
           </div>
 
           <div>
@@ -432,7 +473,7 @@ export function ProductFormDialog({
                     <Input
                       type="number"
                       {...register(`variants.${index}.differencePrice`, {
-                        required: "Vui lòng nhập chênh lệch giá",
+                        required: "Vui lòng nh��p chênh lệch giá",
                       })}
                     />
                     {errors.variants?.[index]?.differencePrice && (
