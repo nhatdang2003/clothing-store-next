@@ -247,6 +247,7 @@ export function ProductFormDialog({
     if (mode === "edit" && product) {
       // Set uploaded images from existing product
       setUploadedImages(
+        // @ts-ignore
         product.images.map((url) => ({
           url,
           preview: url,
@@ -261,8 +262,9 @@ export function ProductFormDialog({
         description: product.description,
         price: product.price,
         categoryId: product.categoryId,
-        isFeatured: product.isFeatured,
+        featured: product.featured,
         images: product.images,
+        // @ts-ignore
         variants: product.variants.map((variant) => ({
           ...variant,
           images: variant.images.map((url) => ({
@@ -473,7 +475,7 @@ export function ProductFormDialog({
                     <Input
                       type="number"
                       {...register(`variants.${index}.differencePrice`, {
-                        required: "Vui lòng nh��p chênh lệch giá",
+                        required: "Vui lòng nhập chênh lệch giá",
                       })}
                     />
                     {errors.variants?.[index]?.differencePrice && (

@@ -35,6 +35,7 @@ import { orderApi } from "@/services/order.api";
 import page from "../../page";
 import http from "@/services/http";
 import { title } from "process";
+import RevenueChart from "@/components/dashboard/revenue-chart";
 
 export default async function DashboardPage() {
   const orders = await orderApi.getOrders(1, 5);
@@ -52,25 +53,25 @@ export default async function DashboardPage() {
           <div className="grid gap-6 mb-8 md:grid-cols-2 xl:grid-cols-4">
             {[
               {
-                title: "Total Revenue",
+                title: "Tổng doanh thu",
                 value: formatPrice(dataDashboard.totalRevenue),
                 icon: DollarSign,
                 color: "text-green-600",
               },
               {
-                title: "Orders",
+                title: "Tổng đơn hàng",
                 value: dataDashboard.totalOrders,
                 icon: ShoppingBag,
                 color: "text-blue-600",
               },
               {
-                title: "Customers",
+                title: "Tổng khách hàng",
                 value: dataDashboard.totalUsers,
                 icon: Users,
                 color: "text-yellow-600",
               },
               {
-                title: "Products",
+                title: "Tổng sản phẩm",
                 value: dataDashboard.totalProducts,
                 icon: Package,
                 color: "text-purple-600",
@@ -90,10 +91,12 @@ export default async function DashboardPage() {
             ))}
           </div>
 
+          <RevenueChart />
+
           {/* Recent Orders */}
           <Card className="mb-8">
             <CardHeader>
-              <CardTitle>Recent Orders</CardTitle>
+              <CardTitle>Đơn hàng mới nhất</CardTitle>
             </CardHeader>
             <CardContent>
               <Table>

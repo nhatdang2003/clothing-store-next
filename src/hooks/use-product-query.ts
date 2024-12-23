@@ -5,7 +5,7 @@ import { useToast } from "./use-toast";
 export const useProductListQuery = (
   page: number,
   size: number,
-  search: string
+  search?: string
 ) => {
   return useQuery({
     queryKey: ["products", page, size, search],

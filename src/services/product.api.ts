@@ -4,13 +4,13 @@ export const productApi = {
   getProducts: async (
     page: number,
     size: number,
-    search?: string,
     categories?: string,
     minPrice?: number,
     maxPrice?: number,
     rating?: number,
     colors?: string,
-    sizes?: string
+    sizes?: string,
+    search?: string
   ) => {
     let url = `/api/v1/products?page=${page - 1}&size=${size}`;
     if (minPrice) {
