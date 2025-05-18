@@ -245,6 +245,7 @@ export function ProductFormDialog({
 
   useEffect(() => {
     if (mode === "edit" && product) {
+      console.log("product", product);
       // Set uploaded images from existing product
       setUploadedImages(
         // @ts-ignore
