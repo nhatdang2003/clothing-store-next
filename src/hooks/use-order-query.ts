@@ -15,13 +15,17 @@ export const useOrder = (id: string) => {
 export const useOrders = ({
     page = 1,
     size = 6,
+    status = "",
+    search = "",
 }: {
     page?: number;
     size?: number;
+    status?: string;
+    search?: string;
 }) => {
     return useQuery({
-        queryKey: ["orders", page, size],
-        queryFn: () => orderApi.getOrdersByUser(page, size),
+        queryKey: ["orders", page, size, status, search],
+        queryFn: () => orderApi.getOrdersByUser(page, size, status, search),
     });
 };
 

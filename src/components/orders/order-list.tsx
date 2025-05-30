@@ -15,7 +15,7 @@ import {
 } from "@/lib/utils";
 import { OrderDetailModal } from "../modal/detail-order-dialog";
 import { orderApi } from "@/services/order.api";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import { useToast } from "@/hooks/use-toast";
 import { CreditCard, Star } from "lucide-react";
 import { ProductReviewModal } from "../modal/product-review-modal";
@@ -67,11 +67,17 @@ interface ApiResponse {
 export default function OrderList() {
     const router = useRouter();
     const { toast } = useToast();
+    const searchParams = useSearchParams();
+    const page = searchParams.get("page") || "1";
+    const size = searchParams.get("size") || "6";
+    const status = searchParams.get("status") || "";
+    const search = searchParams.get("search") || "";
     const { data: orders, isLoading, error: ordersError } = useOrders({
-        page: 1,
-        size: 6,
+        page: parseInt(page),
+        size: parseInt(size),
+        status,
+        search,
     });
-    console.log(orders);
     // Lấy thông tin pagination từ meta
     const currentPage = orders?.meta?.page + 1; // Vì API trả về page bắt đầu từ 0
     const totalPages = orders?.meta?.pages;
