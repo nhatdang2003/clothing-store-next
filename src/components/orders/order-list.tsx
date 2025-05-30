@@ -262,6 +262,7 @@ export default function OrderList() {
                     </div>
                 </Card>
             ))}
+
             <Pagination
                 currentPage={currentPage}
                 totalPages={totalPages}

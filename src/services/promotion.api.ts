@@ -1,35 +1,25 @@
-import http from "./http";
+import httpClient from "./axios-config";
 
 export const promotionApi = {
-  getPromotions: async (
-    page: number = 1,
-    pageSize: number = 10,
-    search?: string
-  ) => {
-    let url = `/api/v1/promotions?page=${page - 1}&size=${pageSize}`;
-    if (search) {
-      url += `&filter=name~'${encodeURIComponent(search)}'`;
-    }
-    const response = await http.get({
-      url,
-    });
-    return response.data;
-  },
-  createPromotion: (data: any) => {
-    return http.post({
-      url: "/api/v1/promotions",
-      body: data,
-    });
-  },
-  updatePromotion: ({ id, ...data }: any) => {
-    return http.put({
-      url: `/api/v1/promotions`,
-      body: { id, ...data },
-    });
-  },
-  deletePromotion: (id: number) => {
-    return http.delete({
-      url: `/api/v1/promotions/${id}`,
-    });
-  },
+    getPromotions: async (
+        page: number = 1,
+        pageSize: number = 10,
+        search?: string
+    ) => {
+        let url = `/api/v1/promotions?page=${page - 1}&size=${pageSize}`;
+        if (search) {
+            url += `&filter=name~'${encodeURIComponent(search)}'`;
+        }
+        const response = await httpClient.get(url);
+        return response.data;
+    },
+    createPromotion: (data: any) => {
+        return httpClient.post("/api/v1/promotions", data);
+    },
+    updatePromotion: ({ id, ...data }: any) => {
+        return httpClient.put("/api/v1/promotions", { id, ...data });
+    },
+    deletePromotion: (id: number) => {
+        return httpClient.delete(`/api/v1/promotions/${id}`);
+    },
 };

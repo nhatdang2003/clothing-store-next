@@ -1,10 +1,9 @@
 import { ChangePasswordRequest, CreatePasswordRequest } from "@/types/account";
-import http from "./http";
 import httpClient from "./axios-config";
 
 export const accountApi = {
     getInfo: async () => {
-        const response = await http.get({ url: "/api/v1/users/info" });
+        const response = await httpClient.get("/api/v1/users/info");
         return response.data;
     },
     getProfile: async () => {
@@ -16,7 +15,7 @@ export const accountApi = {
         return response.data;
     },
     getShippingInfo: async () => {
-        const response = await http.get({ url: "/api/v1/shipping-profiles" });
+        const response = await httpClient.get("/api/v1/shipping-profiles");
         return response.data;
     },
     createPassword: async (data: CreatePasswordRequest) => {
@@ -28,7 +27,7 @@ export const accountApi = {
         return response.data;
     },
     getRoles: async () => {
-        const response = await http.get({ url: "/api/v1/users/roles" });
+        const response = await httpClient.get("/api/v1/users/roles");
         return response.data;
     },
 };

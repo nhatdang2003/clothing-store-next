@@ -1,12 +1,8 @@
-import http from "./http";
+import httpClient from "./axios-config";
 
 export const workspaceApi = {
-  login: async (data: any) => {
-    const response = await http.post({
-      url: "/api/auth/workspace",
-      base_url: "",
-      body: data,
-    });
-    return response;
-  },
+    login: async (data: any) => {
+        const response = await httpClient.post("/api/auth/workspace", data);
+        return response;
+    },
 };

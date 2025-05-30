@@ -1,5 +1,4 @@
 import type { LoginCredentials, RegisterCredentials } from "@/types/auth";
-import http from "./http";
 import httpClient, { tokenManager } from "./axios-config";
 
 export const authApi = {
@@ -37,18 +36,12 @@ export const authApi = {
     },
 
     sendVerificationEmail: async (email: string) => {
-        const response = await http.get({
-            url: `/api/v1/auth/send-activation-email?email=${email}`,
-        });
+        const response = await httpClient.get(`/api/v1/auth/send-activation-email?email=${email}`);
         return response;
     },
 
     activateAccount: async (key: string) => {
-        const response = await http.post({
-            url: "/api/auth/activate",
-            base_url: "",
-            body: { key },
-        });
+        const response = await httpClient.post(`/api/v1/auth/activate?key=${key}`);
         return response;
     },
 
@@ -63,10 +56,7 @@ export const authApi = {
     },
 
     forgotPassword: async (data: { email: string }) => {
-        const response = await http.post({
-            url: "/api/v1/auth/recover-password",
-            body: data,
-        });
+        const response = await httpClient.post("/api/v1/auth/recover-password", data);
         return response;
     },
 
@@ -74,10 +64,7 @@ export const authApi = {
         data: { newPassword: string; confirmPassword: string },
         key: string
     ) => {
-        const response = await http.post({
-            url: `/api/v1/auth/reset-password?key=${key}`,
-            body: data,
-        });
+        const response = await httpClient.post(`/api/v1/auth/reset-password?key=${key}`, data);
         return response;
     },
 

@@ -1,5 +1,4 @@
 import { ShippingInfoSchema } from "@/schemas/shipping-info.schema";
-import http from "./http";
 import httpClient from "./axios-config";
 
 export const shippingApi = {

@@ -1,5 +1,4 @@
 import { CartItem } from "@/types/cart";
-import http from "./http";
 import httpClient from "./axios-config";
 
 export const cartApi = {
@@ -15,16 +14,11 @@ export const cartApi = {
         return response;
     },
     updateCartItem: async (item: CartItem) => {
-        const response = await http.put({
-            url: `/api/v1/carts/items`,
-            body: item,
-        });
+        const response = await httpClient.put('/api/v1/carts/items', item);
         return response;
     },
     deleteCartItem: async (cartItemId: string) => {
-        const response = await http.delete({
-            url: `/api/v1/carts/items/${cartItemId}`,
-        });
+        const response = await httpClient.delete(`/api/v1/carts/items/${cartItemId}`);
         return response;
     },
 };

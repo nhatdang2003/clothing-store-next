@@ -42,15 +42,11 @@ export const productApi = {
             url += `&filter=name~'${search}'`;
         }
 
-        const response = await http.get({
-            url,
-        });
+        const response = await httpClient.get(url);
         return response.data;
     },
     getProductBySlug: async (slug: string) => {
-        const response = await http.get({
-            url: `/api/v1/products/${slug}`,
-        });
+        const response = await httpClient.get(`/api/v1/products/${slug}`);
         return response.data;
     },
     getFeaturedProducts: async () => {
@@ -66,9 +62,9 @@ export const productApi = {
         return response.data;
     },
     getBestSellerProducts: async () => {
-        const response = await http.get({
-            url: `/api/v1/products?isBestSeller&days=30`,
-        });
+        const response = await httpClient.get(
+            `/api/v1/products?isBestSeller&days=30`
+        );
         return response.data;
     },
     getDiscountProducts: async () => {
@@ -78,33 +74,25 @@ export const productApi = {
         return response.data;
     },
     getProductsByCategory: async (category: string) => {
-        const response = await http.get({
-            url: `/api/v1/products?filter=category.id:${category}`,
-        });
+        const response = await httpClient.get(
+            `/api/v1/products?filter=category.id:${category}`
+        );
         return response.data;
     },
     getProductsBySearch: async (search: string) => {
-        const response = await http.get({
-            url: `/api/v1/products?filter=name~'${encodeURIComponent(search)}'`,
-        });
+        const response = await httpClient.get(
+            `/api/v1/products?filter=name~'${encodeURIComponent(search)}'`
+        );
         return response.data;
     },
     createProduct: (data: any) => {
         console.log(">>>>>DATA", data);
-        return http.post({
-            url: "/api/v1/products",
-            body: { ...data.data },
-        });
+        return httpClient.post("/api/v1/products", { ...data.data });
     },
     updateProduct: (data: any) => {
-        return http.put({
-            url: `/api/v1/products`,
-            body: { ...data.data },
-        });
+        return httpClient.put("/api/v1/products", { ...data.data });
     },
     deleteProduct: (id: number) => {
-        return http.delete({
-            url: `/api/v1/products/${id}`,
-        });
+        return httpClient.delete(`/api/v1/products/${id}`);
     },
 };
