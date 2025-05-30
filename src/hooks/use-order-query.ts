@@ -5,30 +5,43 @@ import { useToast } from "./use-toast";
 import { useRouter } from "next/navigation";
 
 export const useOrder = (id: string) => {
-  return useQuery({
-    queryKey: ["order", id],
-    queryFn: () => orderApi.getOrderById(id),
-    enabled: !!id,
-  });
+    return useQuery({
+        queryKey: ["order", id],
+        queryFn: () => orderApi.getOrderById(id),
+        enabled: !!id,
+    });
+};
+
+export const useOrders = ({
+    page = 1,
+    size = 6,
+}: {
+    page?: number;
+    size?: number;
+}) => {
+    return useQuery({
+        queryKey: ["orders", page, size],
+        queryFn: () => orderApi.getOrdersByUser(page, size),
+    });
 };
 
 export const useUpdateOrderStatus = () => {
-  const { toast } = useToast();
-  return useMutation({
-    mutationFn: (data: { orderId: string; status: string }) =>
-      orderApi.updateOrderStatus(data.orderId, data.status),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["order"] });
-      toast({
-        title: "Cập nhật trạng thái thành công",
-        variant: "success",
-      });
-    },
-    onError: () => {
-      toast({
-        title: "Cập nhật trạng thái thất bại",
-        variant: "destructive",
-      });
-    },
-  });
+    const { toast } = useToast();
+    return useMutation({
+        mutationFn: (data: { orderId: string; status: string }) =>
+            orderApi.updateOrderStatus(data.orderId, data.status),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ["order"] });
+            toast({
+                title: "Cập nhật trạng thái thành công",
+                variant: "success",
+            });
+        },
+        onError: () => {
+            toast({
+                title: "Cập nhật trạng thái thất bại",
+                variant: "destructive",
+            });
+        },
+    });
 };
