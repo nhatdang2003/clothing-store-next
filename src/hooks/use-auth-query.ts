@@ -107,7 +107,7 @@ export function useLogout(redirect: string) {
 
             return data;
         },
-        onSuccess: () => {
+        onSettled: () => {
             // Clear all queries and cache
             queryClient.clear();
             if (PROTECTED_PATHS.some((path) => redirect.startsWith(path))) {
