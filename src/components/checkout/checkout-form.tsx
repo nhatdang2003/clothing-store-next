@@ -339,7 +339,11 @@ export function CheckoutForm() {
                             <div className="flex items-center justify-between space-x-2">
                                 <div className="flex items-center gap-2">
                                     <Label htmlFor="usePoints" className="text-sm text-gray-600">
-                                        Sử dụng điểm tích lũy
+                                        Sử dụng điểm tích lũy (
+                                        {checkoutData.points
+                                            ? `${checkoutData.points} điểm = ${checkoutData.points.toLocaleString("vi-VN")}₫`
+                                            : "0 điểm"}
+                                        )
                                     </Label>
                                     <Switch
                                         id="usePoints"
@@ -347,9 +351,9 @@ export function CheckoutForm() {
                                         onCheckedChange={setIsUsePoint}
                                     />
                                 </div>
-                                <span className="font-medium">
+                                <span className="font-medium text-red-500">
                                     {checkoutData.pointDiscount
-                                        ? `${checkoutData.pointDiscount.toLocaleString("vi-VN")}₫`
+                                        ? `-${checkoutData.pointDiscount.toLocaleString("vi-VN")}₫`
                                         : "0₫"}
                                 </span>
                             </div>

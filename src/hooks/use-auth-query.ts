@@ -5,6 +5,7 @@ import { toast, useToast } from "./use-toast";
 import type { LoginCredentials, RegisterCredentials } from "@/types/auth";
 import { PROTECTED_PATHS } from "@/constants/routes";
 import { useUserStore } from "@/stores/useUserStore";
+import { queryClient } from "@/lib/react-query";
 
 export const authKeys = {
     all: ["auth"] as const,
@@ -27,6 +28,7 @@ export function useLogin(redirect: string) {
             }
             router.push(redirect ?? "/");
             router.refresh();
+            queryClient.invalidateQueries({ queryKey: ["cart"] });
         },
         onError: (error: any) => {
             toast({
@@ -79,6 +81,7 @@ export function useActivateAccount() {
                 variant: "success",
             });
             router.push("/");
+            queryClient.invalidateQueries({ queryKey: ["cart"] });
         },
         onError: (error) => {
             toast({
@@ -174,6 +177,7 @@ export const useGoogleLogin = () => {
             }
             router.push("/");
             router.refresh();
+            queryClient.invalidateQueries({ queryKey: ["cart"] });
         },
         onError: (error: any) => {
             console.log(error.message);
@@ -199,6 +203,7 @@ export const useVerifyOtp = () => {
                 description: "Tài khoản của bạn đã được kích hoạt. Chúc bạn mua hàng vui vẻ!",
                 variant: "success",
             });
+            queryClient.invalidateQueries({ queryKey: ["cart"] });
         },
         onError: (error: any) => {
             toast({
