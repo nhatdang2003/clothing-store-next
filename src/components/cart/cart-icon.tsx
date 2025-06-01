@@ -9,13 +9,9 @@ import { useUserStore } from "@/stores/useUserStore";
 export function CartIcon() {
     const isAuthenticated = useUserStore((state: any) => state.isAuthenticated);
 
-    let cartItems = [];
-    if (isAuthenticated) {
-        const { data } = useGetCart();
-        cartItems = data ?? [];
-    }
+    const { data: cartItems = [] } = useGetCart();
 
-    const itemCount = cartItems.length ?? 0;
+    const itemCount = isAuthenticated ? cartItems.length : 0;
 
     return (
         <Link href="/cart" passHref>

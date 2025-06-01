@@ -31,13 +31,13 @@ export function useCreateOrder() {
             // Xóa selected items khỏi localStorage
             localStorage.removeItem("selectedItems");
 
-            // Chuyển hướng đến trang chi tiết đơn hàng
-            console.log(response);
             if (response.paymentMethod === "COD") {
                 router.push(`/account/orders`);
             } else {
                 router.push(response.paymentUrl);
             }
+
+            queryClient.invalidateQueries({ queryKey: ["orders"] });
         },
         onError: () => {
             toast({
