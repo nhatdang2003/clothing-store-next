@@ -3,7 +3,6 @@ import { cartApi } from "@/services/cart.api";
 import { CartItem } from "@/types/cart";
 import { useToast } from "./use-toast";
 import { useRouter } from "next/navigation";
-import { tokenManager } from "@/services/axios-config";
 
 export function useUpdateCartItem() {
     const queryClient = useQueryClient();
@@ -54,7 +53,6 @@ export function useUpdateCartItem() {
 
 export function useGetCart() {
     const { toast } = useToast();
-    const token = tokenManager.getAccessToken();
 
     return useQuery({
         queryKey: ["cart"],
@@ -63,7 +61,7 @@ export function useGetCart() {
                 const response = await cartApi.getCart();
                 return response;
             } catch (error: any) {
-                if (error.response.status === 401) {
+                if (error.response?.status === 401) {
                     return [];
                 }
                 toast({
@@ -74,8 +72,6 @@ export function useGetCart() {
                 throw error;
             }
         },
-        enabled: Boolean(token),
-        staleTime: 1000 * 60, // 1 minute
     });
 }
 

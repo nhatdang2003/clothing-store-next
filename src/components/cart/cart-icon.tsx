@@ -8,7 +8,7 @@ import { useGetCart } from "@/hooks/use-cart-query";
 export function CartIcon() {
     const { data } = useGetCart();
 
-    const cartItems = data?.items || [];
+    const cartItems = data || [];
     const itemCount = cartItems.length;
 
     return (

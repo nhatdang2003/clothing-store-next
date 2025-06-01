@@ -1,10 +1,13 @@
 import { CartItem } from "@/types/cart";
-import httpClient from "./axios-config";
+import httpClient, { tokenManager } from "./axios-config";
 
 export const cartApi = {
     getCart: async () => {
-        const response = await httpClient.get('/api/v1/carts/items');
-        return response.data;
+        if (tokenManager.getAccessToken()) {
+            const response = await httpClient.get('/api/v1/carts/items');
+            return response.data;
+        }
+        return [];
     },
     addToCart: async (variantId: number, quantity: number) => {
         const response = await httpClient.post('/api/v1/carts/items', {
