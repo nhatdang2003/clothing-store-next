@@ -4,6 +4,7 @@ import { CartItem } from "@/types/cart";
 import { useToast } from "./use-toast";
 import { useRouter } from "next/navigation";
 import { revalidateApi } from "@/services/revalidate.api";
+import { tokenManager } from "@/services/axios-config";
 
 export function useUpdateCartItem() {
     const queryClient = useQueryClient();
@@ -55,6 +56,7 @@ export function useUpdateCartItem() {
 
 export function useGetCart() {
     const { toast } = useToast();
+    const token = tokenManager.getAccessToken();
 
     return useQuery({
         queryKey: ["cart"],
@@ -74,6 +76,7 @@ export function useGetCart() {
                 throw error;
             }
         },
+        enabled: Boolean(token),
         staleTime: 1000 * 60, // 1 minute
     });
 }

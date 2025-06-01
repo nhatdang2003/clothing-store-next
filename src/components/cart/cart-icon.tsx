@@ -4,17 +4,11 @@ import { ShoppingCart } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { useGetCart } from "@/hooks/use-cart-query";
-import { useUserStore } from "@/stores/useUserStore";
 
 export function CartIcon() {
-    const isAuthenticated = useUserStore((state: any) => state.isAuthenticated);
+    const { data } = useGetCart();
 
-    let cartItems = [];
-    if (isAuthenticated) {
-        const { data } = useGetCart();
-        cartItems = data?.items || [];
-    }
-
+    const cartItems = data?.items || [];
     const itemCount = cartItems.length;
 
     return (
