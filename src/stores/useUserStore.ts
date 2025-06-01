@@ -22,6 +22,9 @@ export const useUserStore = create(
                 user: user,
                 isAuthenticated: true,
             })),
+            setUser: (user: User) => set(() => ({
+                user: user,
+            })),
             resetAuthenticated: () => set(() => ({
                 user: {
                     id: 0,

@@ -23,9 +23,10 @@ export const authApi = {
             // Gọi refresh token endpoint, cookie sẽ được gửi tự động
             const response = await httpClient.get('/api/v1/auth/refresh');
 
+            console.log(response);
             // Cập nhật access token mới
-            if (response.access_token) {
-                tokenManager.setAccessToken(response.access_token);
+            if (response.data && response.data.access_token) {
+                tokenManager.setAccessToken(response.data.access_token);
             }
 
             return response;
@@ -56,15 +57,7 @@ export const authApi = {
     },
 
     forgotPassword: async (data: { email: string }) => {
-        const response = await httpClient.post("/api/v1/auth/recover-password", data);
-        return response;
-    },
-
-    resetPassword: async (
-        data: { newPassword: string; confirmPassword: string },
-        key: string
-    ) => {
-        const response = await httpClient.post(`/api/v1/auth/reset-password?key=${key}`, data);
+        const response = await httpClient.post("/api/v1/auth/recover-password-code", data);
         return response;
     },
 
@@ -86,6 +79,16 @@ export const authApi = {
             tokenManager.setAccessToken(response.data.access_token);
         }
 
+        return response;
+    },
+
+    verifyResetPasswordCode: async (data: { email: string, resetCode: string }) => {
+        const response = await httpClient.post("/api/v1/auth/verify-reset-code", data);
+        return response;
+    },
+
+    resetPassword: async (data: { email: string, resetCode: string, newPassword: string, confirmPassword: string }) => {
+        const response = await httpClient.post("/api/v1/auth/reset-password-code", data);
         return response;
     },
 };

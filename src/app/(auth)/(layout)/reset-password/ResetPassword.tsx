@@ -22,7 +22,8 @@ export default function ResetPasswordPage() {
     const resetPassword = useResetPassword();
     const router = useRouter();
     const searchParams = useSearchParams();
-    const key = searchParams.get("key") || "";
+    const email = searchParams.get("email") || "";
+    const code = searchParams.get("code") || "";
 
     const {
         control,
@@ -40,8 +41,10 @@ export default function ResetPasswordPage() {
     const onSubmit = async (data: ResetPasswordCredentials) => {
         try {
             await resetPassword.mutateAsync({
-                data,
-                key,
+                email,
+                resetCode: code,
+                newPassword: data.newPassword,
+                confirmPassword: data.confirmPassword,
             });
             reset();
             router.push("/login");

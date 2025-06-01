@@ -6,4 +6,5 @@ export const PUBLIC_ENDPOINTS = [
     '/api/v1/auth/send-activation-email',
     '/api/v1/auth/google',
     '/api/v1/auth/activate-code',
+    '/api/v1/categories'
 ];

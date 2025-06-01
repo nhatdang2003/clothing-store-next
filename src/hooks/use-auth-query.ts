@@ -29,10 +29,9 @@ export function useLogin(redirect: string) {
             router.refresh();
         },
         onError: (error: any) => {
-            console.log(error.message);
             toast({
                 variant: "destructive",
-                title: error?.message || "Đăng nhập thất bại",
+                title: error?.response?.data?.message || "Đăng nhập thất bại",
             });
         },
     });
@@ -119,10 +118,13 @@ export function useLogout(redirect: string) {
 }
 
 export const useForgotPassword = () => {
+    const router = useRouter();
     const { toast } = useToast();
+
     return useMutation({
         mutationFn: (data: { email: string }) => authApi.forgotPassword(data),
-        onSuccess: () => {
+        onSuccess: (_, variables) => {
+            router.push(`/verify-otp?email=${variables.email}&type=reset-password`);
             toast({
                 title: "Yêu cầu đặt lại mật khẩu đã được gửi",
                 description: "Vui lòng kiểm tra email của bạn.",
@@ -142,13 +144,7 @@ export const useForgotPassword = () => {
 export const useResetPassword = () => {
     const { toast } = useToast();
     return useMutation({
-        mutationFn: ({
-            data,
-            key,
-        }: {
-            data: { newPassword: string; confirmPassword: string };
-            key: string;
-        }) => authApi.resetPassword(data, key),
+        mutationFn: (data: { email: string, resetCode: string, newPassword: string; confirmPassword: string }) => authApi.resetPassword(data),
         onSuccess: () => {
             toast({
                 title: "Mật khẩu đã được đặt lại thành công",
@@ -199,10 +195,34 @@ export const useVerifyOtp = () => {
             router.push("/");
             router.refresh();
             toast({
-                title: "Mã kích hoạt đã được xác thực",
-                description: "Vui lòng đăng nhập.",
+                title: "Kích hoạt tài khoản thành công",
+                description: "Tài khoản của bạn đã được kích hoạt. Chúc bạn mua hàng vui vẻ!",
                 variant: "success",
             });
+        },
+        onError: (error: any) => {
+            toast({
+                variant: "destructive",
+                title: "Lỗi",
+                description: error.message || "Đã có lỗi xảy ra",
+            });
+        },
+    });
+};
+
+export const useVerifyResetPassword = () => {
+    const router = useRouter();
+    const { toast } = useToast();
+
+    return useMutation({
+        mutationFn: (data: { email: string, resetCode: string }) => authApi.verifyResetPasswordCode(data),
+        onSuccess: (_, variables) => {
+            toast({
+                title: "Xác thực mã OTP thành công",
+                description: "Vui lòng đặt lại mật khẩu.",
+                variant: "success",
+            });
+            router.push(`/reset-password?email=${variables.email}&code=${variables.resetCode}`);
         },
         onError: (error: any) => {
             toast({

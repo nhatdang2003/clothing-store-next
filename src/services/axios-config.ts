@@ -80,8 +80,7 @@ const createAxiosInstance = (): AxiosInstance => {
                             withCredentials: true, // Gửi cookies (refresh token)
                         }
                     );
-
-                    const { access_token } = refreshResponse.data;
+                    const { access_token } = refreshResponse.data?.data;
 
                     // Chỉ cập nhật access token trong localStorage
                     tokenManager.setAccessToken(access_token);
