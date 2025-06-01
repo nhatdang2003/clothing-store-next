@@ -3,7 +3,6 @@ import { cartApi } from "@/services/cart.api";
 import { CartItem } from "@/types/cart";
 import { useToast } from "./use-toast";
 import { useRouter } from "next/navigation";
-import { revalidateApi } from "@/services/revalidate.api";
 import { tokenManager } from "@/services/axios-config";
 
 export function useUpdateCartItem() {
@@ -48,7 +47,6 @@ export function useUpdateCartItem() {
             });
         },
         onSettled: async () => {
-            await revalidateApi.Cart();
             queryClient.invalidateQueries({ queryKey: ["cart"] });
         },
     });
@@ -125,7 +123,6 @@ export function useDeleteCartItem() {
             });
         },
         onSettled: async () => {
-            await revalidateApi.Cart();
             queryClient.invalidateQueries({ queryKey: ["cart"] });
         },
     });
@@ -163,7 +160,6 @@ export function useAddToCartMutation() {
             });
         },
         onSettled: async () => {
-            await revalidateApi.Cart();
             queryClient.invalidateQueries({ queryKey: ["cart"] });
         },
     });
