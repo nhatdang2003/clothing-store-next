@@ -146,10 +146,23 @@ const InfoProduct = ({ product }: { product: any }) => {
                     <div className="flex">
                         <Star className="w-5 h-5 text-yellow-500 fill-yellow-500" />
                     </div>
-                    <span className="ml-2 text-gray-600 leading-none">
-                        {product.averageRating
-                            ? `${product.averageRating} sao`
-                            : "Chưa có đánh giá"}
+                    <span className="flex items-center ml-2 text-gray-600 leading-none">
+                        {/* {`${product.averageRating
+                            ? `${(product.averageRating).toFixed(1)} sao`
+                            : "Chưa có đánh giá"} | ${product.numberOfReviews} đánh giá | ${product.numberOfSold} đã bán`} */}
+                        <span>{product.averageRating
+                            ? <span>
+                                <span className="text-primary font-semibold">{(product.averageRating).toFixed(1)}</span> sao
+                            </span>
+                            : "Chưa có đánh giá"}</span>
+                        <div className="h-6 w-[1px] bg-background bg-gray-400 mx-2" />
+                        <span>
+                            {product.numberOfReviews > 0 && <span><span className="text-primary font-semibold">{product.numberOfReviews}</span> đánh giá</span>}
+                        </span>
+                        <div className="h-6 w-[1px] bg-background bg-gray-400 mx-2" />
+                        <span>
+                            {product.numberOfSold > 0 && <span><span className="text-primary font-semibold">{product.numberOfSold}</span> đã bán</span>}
+                        </span>
                     </span>
                 </div>
                 <div className="flex md:items-center flex-col md:flex-row gap-2 mb-4">
@@ -255,7 +268,7 @@ const InfoProduct = ({ product }: { product: any }) => {
                     <span>Miễn phí vận chuyển đơn hàng trên 500.000đ</span>
                 </div>
             </div>
-        </div>
+        </div >
     );
 };
 

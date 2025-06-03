@@ -10,6 +10,7 @@ interface CreateOrderData {
     paymentMethod: string;
     deliveryMethod: string;
     shippingProfileId: number;
+    isUsePoint: boolean
 }
 
 export function useCreateOrder() {

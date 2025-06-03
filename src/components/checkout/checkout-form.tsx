@@ -18,6 +18,8 @@ import { formatPrice, getColorText } from "@/lib/utils";
 import { ShippingProfileDialog } from "../modal/shipping-profile-dialog";
 import { useRouter } from "next/navigation";
 import { Switch } from "@/components/ui/switch";
+import { Input } from "../ui/input";
+import { Textarea } from "../ui/textarea";
 
 interface Address {
     id: number;
@@ -52,6 +54,7 @@ export function CheckoutForm() {
     const [showNewAddressDialog, setShowNewAddressDialog] = useState(false);
     const [shippingMethod, setShippingMethod] = useState("GHN");
     const [isUsePoint, setIsUsePoint] = useState(false);
+    const [note, setNote] = useState("")
     const { data: profiles, isLoading } = useShippingProfiles();
     const createOrder = useCreateOrder();
     const { toast } = useToast();
@@ -113,13 +116,13 @@ export function CheckoutForm() {
                 });
                 return;
             }
-
             await createOrder.mutateAsync({
                 cartItemIds,
-                note: "", // Có thể thêm field note nếu cần
+                note: note, // Có thể thêm field note nếu cần
                 paymentMethod,
                 deliveryMethod: shippingMethod, // Có thể thêm option chọn đơn vị vận chuyển
                 shippingProfileId: currentAddress?.id,
+                isUsePoint: isUsePoint
             });
         } catch (error) {
             console.error("Error creating order:", error);
@@ -167,6 +170,14 @@ export function CheckoutForm() {
                                 </p>
                                 <p>
                                     <strong>Tỉnh/Thành phố:</strong> {currentAddress.province}
+                                </p>
+                                <p>
+                                    <div className="grid w-full gap-3">
+                                        <Label htmlFor="message"><strong>Ghi chú</strong></Label>
+                                        <Textarea value={note}
+                                            onChange={(e) => setNote(e.target.value)} rows={3}
+                                            className="resize-none" id="message" placeholder="Nhập ghi chú cho đơn hàng" />
+                                    </div>
                                 </p>
                             </div>
                         </CardContent>
