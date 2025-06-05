@@ -3,11 +3,13 @@
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { STATUS_ORDER } from "@/constants/order";
 import { useRouter, useSearchParams } from "next/navigation";
-import router from "next/router";
 
 export default function OrderStatusTabs() {
     const router = useRouter();
     const searchParams = useSearchParams();
+
+    // Lấy giá trị status từ URL, mặc định là "all" nếu không có
+    const currentStatus = searchParams.get("status") || "all";
 
     const handleTabChange = (value: string) => {
         const params = new URLSearchParams(searchParams);
@@ -24,11 +26,11 @@ export default function OrderStatusTabs() {
         <div className="w-full mb-6">
             <div className="overflow-x-auto">
                 <Tabs
-                    defaultValue="all"
+                    value={currentStatus}
                     className="w-full text-center"
                     onValueChange={handleTabChange}
                 >
-                    <TabsList className="w-max">
+                    <TabsList className="w-max rounded-full">
                         <TabsTrigger
                             value="all"
                             className="rounded-full data-[state=active]:bg-primary data-[state=active]:text-primary-foreground whitespace-nowrap"

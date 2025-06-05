@@ -21,4 +21,21 @@ export const reviewApi = {
         const response = await httpClient.put("/api/v1/orders/user/reviews", data);
         return response.data;
     },
+    getSignedUrls: async (data: { fileNames: string[] }) => {
+        const response = await httpClient.post("/api/v1/orders/user/reviews/upload", data);
+        return response.data;
+    },
+    uploadMedia: async (presignedUrl: string, file: File) => {
+        const response = await fetch(presignedUrl, {
+            method: "PUT",
+            body: file,
+            headers: {
+                "Content-Type": file.type,
+            },
+        });
+        if (!response.ok) {
+            throw new Error("Failed to upload image");
+        }
+        return response;
+    },
 };

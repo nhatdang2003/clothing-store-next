@@ -9,6 +9,7 @@ import { CartIcon } from "@/components/cart/cart-icon";
 import { Search } from "@/components/search/search";
 import StoreLogo from "../ui/logo-store";
 import { useUserStore } from "@/stores/useUserStore";
+import { NotificationBell } from "@/components/notifications/notification-bell";
 
 export default function Navigation() {
     const [isVisible, setIsVisible] = useState(true);
@@ -72,9 +73,10 @@ export default function Navigation() {
                         </Link>
                     </div>
 
-                    {/* Cart, Login and Sign Up Buttons */}
+                    {/* Cart, Notifications, Login and Sign Up Buttons */}
                     <div className="hidden lg:flex items-center space-x-2">
                         <CartIcon />
+                        {isAuthenticated && <NotificationBell />}
                         {isAuthenticated ? (
                             <NavbarUser />
                         ) : (
@@ -92,6 +94,7 @@ export default function Navigation() {
                     {/* Mobile Menu Button */}
                     <div className="lg:hidden flex items-center space-x-2 justify-end flex-1">
                         <CartIcon />
+                        {isAuthenticated && <NotificationBell />}
                         <NavigationMobile />
                     </div>
                 </div>

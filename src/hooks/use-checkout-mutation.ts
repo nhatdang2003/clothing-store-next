@@ -1,8 +1,7 @@
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { checkoutApi } from "@/services/checkout.api";
 import { useToast } from "./use-toast";
 import { useRouter } from "next/navigation";
-import { queryClient } from "@/lib/react-query";
 
 interface CreateOrderData {
     cartItemIds: number[];
@@ -16,6 +15,7 @@ interface CreateOrderData {
 export function useCreateOrder() {
     const { toast } = useToast();
     const router = useRouter();
+    const queryClient = useQueryClient();
 
     return useMutation({
         mutationFn: async (data: CreateOrderData) => {

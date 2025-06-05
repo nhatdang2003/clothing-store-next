@@ -5,7 +5,6 @@ import { toast, useToast } from "./use-toast";
 import type { LoginCredentials, RegisterCredentials } from "@/types/auth";
 import { PROTECTED_PATHS } from "@/constants/routes";
 import { useUserStore } from "@/stores/useUserStore";
-import { queryClient } from "@/lib/react-query";
 
 export const authKeys = {
     all: ["auth"] as const,
@@ -18,6 +17,7 @@ export function useLogin(redirect: string) {
     const router = useRouter();
     const { toast } = useToast();
     const setAuthenticated = useUserStore((state: any) => state.setAuthenticated)
+    const queryClient = useQueryClient();
 
     return useMutation({
         mutationKey: authKeys.login(),
@@ -42,6 +42,7 @@ export function useLogin(redirect: string) {
 export function useRegister() {
     const { toast } = useToast();
     const router = useRouter();
+    const queryClient = useQueryClient();
 
     const registerMutation = useMutation({
         mutationFn: (data: RegisterCredentials) => authApi.register(data),
@@ -70,6 +71,7 @@ export function useRegister() {
 export function useActivateAccount() {
     const { toast } = useToast();
     const router = useRouter();
+    const queryClient = useQueryClient();
 
     return useMutation({
         mutationFn: (key: string) => authApi.activateAccount(key),
@@ -168,6 +170,7 @@ export const useResetPassword = () => {
 export const useGoogleLogin = () => {
     const router = useRouter();
     const setAuthenticated = useUserStore((state: any) => state.setAuthenticated)
+    const queryClient = useQueryClient();
 
     return useMutation({
         mutationFn: (code: string) => authApi.google(code),
@@ -189,6 +192,7 @@ export const useVerifyOtp = () => {
     const router = useRouter();
     const setAuthenticated = useUserStore((state: any) => state.setAuthenticated)
     const { toast } = useToast();
+    const queryClient = useQueryClient();
 
     return useMutation({
         mutationFn: (data: { email: string, activationCode: string }) => authApi.verifyOtp(data),

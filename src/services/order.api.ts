@@ -88,4 +88,36 @@ export const orderApi = {
         const response = await httpClient.put(`/api/v1/orders/status`, { orderId: id, status });
         return response.data;
     },
+    cancelOrder: async (id: string, reason: string) => {
+        const response = await httpClient.put(`/api/v1/orders/status`, { orderId: id, status: "CANCELLED", reason });
+        return response.data;
+    },
+    returnOrder: async (data: { orderId: number; reason: string; bankName: string; accountNumber: string; accountHolderName: string; imageUrls: string[] }) => {
+        const response = await httpClient.post(`/api/v1/return-requests/user`, data);
+        return response.data;
+    },
+    getReturnedOrderById: async (id: string) => {
+        const response = await httpClient.get(`/api/v1/return-requests/orders/${id}`);
+        return response.data;
+    },
+    getPresignedUrl: async (fileName: string) => {
+        const [name, extension] = fileName.split(".");
+        const response = await httpClient.post("/api/v1/return-requests/upload-images", {
+            fileName: `${name}-${new Date().getTime()}.${extension}`,
+        });
+        return response.data;
+    },
+    uploadImage: async (presignedUrl: string, file: File) => {
+        const response = await fetch(presignedUrl, {
+            method: "PUT",
+            body: file,
+            headers: {
+                "Content-Type": file.type,
+            },
+        });
+        if (!response.ok) {
+            throw new Error("Failed to upload image");
+        }
+        return response;
+    },
 };

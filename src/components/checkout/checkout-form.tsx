@@ -171,14 +171,12 @@ export function CheckoutForm() {
                                 <p>
                                     <strong>Tỉnh/Thành phố:</strong> {currentAddress.province}
                                 </p>
-                                <p>
-                                    <div className="grid w-full gap-3">
-                                        <Label htmlFor="message"><strong>Ghi chú</strong></Label>
-                                        <Textarea value={note}
-                                            onChange={(e) => setNote(e.target.value)} rows={3}
-                                            className="resize-none" id="message" placeholder="Nhập ghi chú cho đơn hàng" />
-                                    </div>
-                                </p>
+                                <div className="grid w-full gap-3">
+                                    <Label htmlFor="message"><strong>Ghi chú</strong></Label>
+                                    <Textarea value={note}
+                                        onChange={(e) => setNote(e.target.value)} rows={3}
+                                        className="resize-none" id="message" placeholder="Nhập ghi chú cho đơn hàng" />
+                                </div>
                             </div>
                         </CardContent>
                     </Card>
