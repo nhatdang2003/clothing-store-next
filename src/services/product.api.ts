@@ -1,5 +1,4 @@
 import httpClient from "./axios-config";
-import http from "./http";
 
 export const productApi = {
     getProducts: async (

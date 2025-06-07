@@ -5,6 +5,7 @@ import { toast, useToast } from "./use-toast";
 import type { LoginCredentials, RegisterCredentials } from "@/types/auth";
 import { PROTECTED_PATHS } from "@/constants/routes";
 import { useUserStore } from "@/stores/useUserStore";
+import { useWebSocket } from "@/contexts/websocket.context";
 
 export const authKeys = {
     all: ["auth"] as const,
@@ -18,6 +19,7 @@ export function useLogin(redirect: string) {
     const { toast } = useToast();
     const setAuthenticated = useUserStore((state: any) => state.setAuthenticated)
     const queryClient = useQueryClient();
+    const { connect } = useWebSocket();
 
     return useMutation({
         mutationKey: authKeys.login(),
@@ -29,6 +31,7 @@ export function useLogin(redirect: string) {
             router.push(redirect ?? "/");
             router.refresh();
             queryClient.invalidateQueries({ queryKey: ["cart"] });
+            connect();
         },
         onError: (error: any) => {
             toast({
@@ -100,6 +103,7 @@ export function useLogout(redirect: string) {
     const router = useRouter();
     const queryClient = useQueryClient();
     const resetAuthenticated = useUserStore((state: any) => state.resetAuthenticated)
+    const { disconnect } = useWebSocket();
 
     return useMutation({
         mutationFn: async () => {
@@ -118,6 +122,7 @@ export function useLogout(redirect: string) {
                 router.push(redirect ?? "/");
             }
             router.refresh();
+            disconnect();
         },
     });
 }
@@ -171,6 +176,7 @@ export const useGoogleLogin = () => {
     const router = useRouter();
     const setAuthenticated = useUserStore((state: any) => state.setAuthenticated)
     const queryClient = useQueryClient();
+    const { connect } = useWebSocket();
 
     return useMutation({
         mutationFn: (code: string) => authApi.google(code),
@@ -181,6 +187,7 @@ export const useGoogleLogin = () => {
             router.push("/");
             router.refresh();
             queryClient.invalidateQueries({ queryKey: ["cart"] });
+            connect();
         },
         onError: (error: any) => {
             console.log(error.message);
@@ -193,6 +200,7 @@ export const useVerifyOtp = () => {
     const setAuthenticated = useUserStore((state: any) => state.setAuthenticated)
     const { toast } = useToast();
     const queryClient = useQueryClient();
+    const { connect } = useWebSocket();
 
     return useMutation({
         mutationFn: (data: { email: string, activationCode: string }) => authApi.verifyOtp(data),
@@ -208,6 +216,7 @@ export const useVerifyOtp = () => {
                 variant: "success",
             });
             queryClient.invalidateQueries({ queryKey: ["cart"] });
+            connect();
         },
         onError: (error: any) => {
             toast({

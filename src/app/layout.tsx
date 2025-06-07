@@ -3,7 +3,7 @@ import localFont from "next/font/local";
 import "@/styles/globals.css";
 import { Toaster } from "@/components/ui/toaster";
 import { QueryProvider } from "@/providers/query-provider";
-import { ClientWebSocketProvider } from "@/components/providers/client-websocket-provider";
+import { WebSocketProvider } from "@/contexts/websocket.context";
 
 const geistSans = localFont({
     src: "./fonts/GeistVF.woff",
@@ -32,9 +32,9 @@ export default function RootLayout({
                 className={`${geistSans.variable} ${geistMono.variable} antialiased`}
             >
                 <QueryProvider>
-                    <ClientWebSocketProvider>
+                    <WebSocketProvider>
                         {children}
-                    </ClientWebSocketProvider>
+                    </WebSocketProvider>
                 </QueryProvider>
                 <Toaster />
             </body>

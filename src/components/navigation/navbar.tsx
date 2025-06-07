@@ -9,7 +9,7 @@ import { CartIcon } from "@/components/cart/cart-icon";
 import { Search } from "@/components/search/search";
 import StoreLogo from "../ui/logo-store";
 import { useUserStore } from "@/stores/useUserStore";
-import { NotificationBell } from "@/components/notifications/notification-bell";
+import { NotificationBell } from "@/components/shared/notification-bell";
 
 export default function Navigation() {
     const [isVisible, setIsVisible] = useState(true);

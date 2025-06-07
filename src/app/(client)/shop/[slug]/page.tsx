@@ -6,27 +6,27 @@ import InfoProduct from "@/components/detail/info-product";
 export const dynamic = "force-dynamic";
 
 export default async function DetailPage({
-  params,
+    params,
 }: {
-  params: Promise<{ slug: string }>;
+    params: Promise<{ slug: string }>;
 }) {
-  let product: any;
-  let relatedProducts: any;
-  const { slug } = await params;
-  try {
-    product = await productApi.getProductBySlug(slug);
-    relatedProducts = await productApi.getProductsByCategory(
-      product.categoryId
-    );
-  } catch (error) {
-    return <div>Product not found</div>;
-  }
+    let product: any;
+    let relatedProducts: any;
+    const { slug } = await params;
+    try {
+        product = await productApi.getProductBySlug(slug);
+        relatedProducts = await productApi.getProductsByCategory(
+            product.categoryId
+        );
+    } catch (error) {
+        return <div>Product not found</div>;
+    }
 
-  return (
-    <div className="container mx-auto px-4 py-8">
-      <InfoProduct product={product} />
-      <ReviewSection slug={slug} />
-      <RelatedProducts relatedProducts={relatedProducts.data} />
-    </div>
-  );
+    return (
+        <div className="container mx-auto px-4 py-8">
+            <InfoProduct product={product} />
+            <ReviewSection slug={slug} />
+            <RelatedProducts relatedProducts={relatedProducts.data} />
+        </div>
+    );
 }
