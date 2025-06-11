@@ -5,8 +5,8 @@ export const reviewApi = {
         const response = await httpClient.get("/api/v1/shipping-profiles");
         return response.data;
     },
-    getReviewByProduct: async (slug: string) => {
-        const response = await httpClient.get(`/api/v1/products/${slug}/reviews`);
+    getReviewByProduct: async (slug: string, page: number, size: number) => {
+        const response = await httpClient.get(`/api/v1/products/${slug}/reviews?page=${page - 1}&size=${size}`);
         return response.data;
     },
     getReviewByOrder: async (orderId: string) => {

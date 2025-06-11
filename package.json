@@ -3,13 +3,14 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev --turbopack",
+    "dev": "next dev --turbopack --port 3001",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.9.1",
+    "@pinecone-database/pinecone": "^6.1.0",
     "@radix-ui/react-alert-dialog": "^1.1.2",
     "@radix-ui/react-avatar": "^1.1.1",
     "@radix-ui/react-checkbox": "^1.1.2",
@@ -44,6 +45,7 @@
     "js-cookie": "^3.0.5",
     "lucide-react": "^0.453.0",
     "next": "^15.1.2",
+    "openai": "^5.1.1",
     "react": "^18",
     "react-day-picker": "^8.10.1",
     "react-dom": "^18",

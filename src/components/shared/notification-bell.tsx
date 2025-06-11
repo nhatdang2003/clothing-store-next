@@ -133,7 +133,7 @@ export const NotificationBell = () => {
         }
     };
 
-    const hasMoreNotifications = pagination.page < pagination.pages;
+    const hasMoreNotifications = pagination.page < pagination.pages - 1;
 
     return (
         <>
