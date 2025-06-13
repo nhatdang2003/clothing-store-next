@@ -22,7 +22,7 @@ export const STATUS_ORDER = [
     { value: "CANCELLED", label: "Đã hủy", color: "bg-red-100 text-red-800" },
     {
         value: "RETURNED",
-        label: "Đã hoàn trả",
+        label: "Hoàn trả",
         color: "bg-gray-100 text-gray-800",
     },
 ] as const;

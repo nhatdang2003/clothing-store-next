@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { useState } from "react";
-import { Eye, Printer, Truck, CreditCard, MessageSquare, ImageIcon } from "lucide-react";
+import { Eye, Printer, Truck, CreditCard, MessageSquare, ImageIcon, MapPin, Package } from "lucide-react";
 import { ImageViewer } from "@/components/ui/image-viewer";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -22,6 +22,7 @@ import {
     getPaymentStatusText,
     getColorText,
     formatPrice,
+    getShippingMethodText,
 } from "@/lib/utils";
 import { useGetReturnedOrderById } from "@/hooks/use-order-query";
 import {
@@ -156,8 +157,11 @@ export function ReturnedOrderDialog({
                             <div className="flex flex-col sm:flex-row justify-between items-start gap-4">
                                 <div>
                                     <div className="font-semibold text-lg">Yêu cầu hoàn trả #{order.orderCode}</div>
-                                    <div className="text-sm text-muted-foreground">
-                                        Ngày tạo: {formatDate(order.createdAt)}
+                                    <div className="text-sm text-muted-foreground space-y-1">
+                                        <div>Ngày tạo yêu cầu: {formatDate(order.createdAt)}</div>
+                                        {order.orderDetails && (
+                                            <div>Ngày đặt hàng: {formatDate(order.orderDetails.orderDate)}</div>
+                                        )}
                                     </div>
                                 </div>
                                 <div className="flex flex-col gap-2">
@@ -170,6 +174,14 @@ export function ReturnedOrderDialog({
                                             order.cashBackStatus === "REJECTED" ? "Từ chối hoàn tiền" :
                                                 "Chờ duyệt hoàn tiền"}
                                     </Badge>
+                                    {order.orderDetails && (
+                                        <Badge
+                                            variant="outline"
+                                            className="rounded-full justify-center"
+                                        >
+                                            {getStatusText(order.orderDetails.status)}
+                                        </Badge>
+                                    )}
                                 </div>
                             </div>
 
@@ -183,14 +195,10 @@ export function ReturnedOrderDialog({
                                     <div className="space-y-2 text-sm">
                                         <div>
                                             <span className="font-medium">Lý do hoàn trả:</span>
-                                            <p className="mt-1 text-muted-foreground bg-white p-2 rounded border">
+                                            <div className="mt-1 text-muted-foreground bg-white p-2 rounded border">
                                                 {order.reason}
-                                            </p>
+                                            </div>
                                         </div>
-                                        <p>
-                                            <span className="font-medium">Phương thức thanh toán gốc:</span>{" "}
-                                            {getPaymentMethodText(order.originalPaymentMethod)}
-                                        </p>
                                     </div>
                                 </div>
                                 <div>
@@ -199,14 +207,48 @@ export function ReturnedOrderDialog({
                                         Thông tin hoàn tiền
                                     </h3>
                                     <div className="space-y-1 text-sm">
-                                        <p>
+                                        <div>
                                             <span className="font-medium">Ngân hàng:</span> {order.bankName}
-                                        </p>
-                                        <p>
+                                        </div>
+                                        <div>
                                             <span className="font-medium">Số tài khoản:</span> {order.accountNumber}
+                                        </div>
+                                        <div>
+                                            <span className="font-medium">Chủ tài khoản:</span> {order.accountHolderName}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* Order Details Grid */}
+                            <div className="grid sm:grid-cols-2 gap-6 p-4 bg-muted/50 rounded-lg">
+                                <div>
+                                    <h3 className="font-semibold mb-2">Thông tin đơn hàng</h3>
+                                    <div className="space-y-1 text-sm">
+                                        <p>
+                                            Phương thức thanh toán:{" "}
+                                            {getPaymentMethodText(order.orderDetails.paymentMethod)}
                                         </p>
                                         <p>
-                                            <span className="font-medium">Chủ tài khoản:</span> {order.accountHolderName}
+                                            Trạng thái thanh toán:{" "}
+                                            {getPaymentStatusText(order.orderDetails.paymentStatus)}
+                                        </p>
+                                        {order.orderDetails.paymentDate && (
+                                            <p>Ngày thanh toán: {formatDate(order.orderDetails.paymentDate)}</p>
+                                        )}
+                                    </div>
+                                </div>
+                                <div>
+                                    <h3 className="font-semibold mb-2">Thông tin giao hàng</h3>
+                                    <div className="space-y-1 text-sm">
+                                        <p className="font-medium">
+                                            {order.orderDetails.shippingProfile.lastName}{" "}
+                                            {order.orderDetails.shippingProfile.firstName}
+                                        </p>
+                                        <p>Số điện thoại: {order.orderDetails.shippingProfile.phoneNumber}</p>
+                                        <p>
+                                            Địa chỉ:{" "}
+                                            {`${order.orderDetails.shippingProfile.address}, ${order.orderDetails.shippingProfile.ward}, ${order.orderDetails.shippingProfile.district}, ${order.orderDetails.shippingProfile.province}`}
                                         </p>
                                     </div>
                                 </div>
@@ -216,7 +258,7 @@ export function ReturnedOrderDialog({
                             {order.adminComment && (
                                 <div className="p-4 bg-blue-50 border border-blue-200 rounded-lg">
                                     <h3 className="font-semibold mb-2 text-blue-800">Ghi chú từ admin</h3>
-                                    <p className="text-sm text-blue-700">{order.adminComment}</p>
+                                    <div className="text-sm text-blue-700">{order.adminComment}</div>
                                 </div>
                             )}
 
@@ -252,9 +294,8 @@ export function ReturnedOrderDialog({
 
                             {/* Order Items */}
                             <div>
-                                <h3 className="font-semibold mb-3">Sản phẩm hoàn trả</h3>
                                 <div className="space-y-4">
-                                    {order.orderItems.map((item: any) => (
+                                    {order.orderDetails?.lineItems?.map((item: any) => (
                                         <div
                                             key={item.id}
                                             className="flex flex-col sm:flex-row gap-4 py-4 border-t"
@@ -306,58 +347,32 @@ export function ReturnedOrderDialog({
                                 </div>
                             </div>
 
-                            {/* Return Summary */}
+                            {/* Order Summary */}
                             <div className="border-t pt-4">
                                 <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
                                     <div className="text-sm text-muted-foreground">
-                                        {order.orderItems.length} sản phẩm hoàn trả
+                                        {order.orderDetails.lineItems.length} sản phẩm
                                     </div>
                                     <div className="text-center sm:text-right">
                                         <div className="text-sm text-muted-foreground">
-                                            Tổng tiền hoàn trả: {formatPrice(
-                                                order.orderItems.reduce((total: number, item: any) =>
-                                                    total + (item.unitPrice - item.discount) * item.quantity, 0
-                                                )
-                                            )}
+                                            Tổng tiền hàng: {formatPrice(order.orderDetails.total)}
                                         </div>
-                                        <div className="text-lg font-medium mt-1 text-primary">
-                                            Số tiền hoàn lại: {formatPrice(
-                                                order.orderItems.reduce((total: number, item: any) =>
-                                                    total + (item.unitPrice - item.discount) * item.quantity, 0
-                                                )
-                                            )}
+                                        {order.orderDetails.discount > 0 && (
+                                            <div className="text-sm text-green-600">
+                                                Tiết kiệm: -{formatPrice(order.orderDetails.discount)}
+                                            </div>
+                                        )}
+                                        {order.orderDetails.shippingFee > 0 && (
+                                            <div className="text-sm text-muted-foreground">
+                                                Phí vận chuyển: {formatPrice(order.orderDetails.shippingFee)}
+                                            </div>
+                                        )}
+                                        <div className="text-lg font-medium mt-1">
+                                            Tổng tiền hoàn trả: {formatPrice(order.orderDetails.finalTotal)}
                                         </div>
                                     </div>
                                 </div>
                             </div>
-
-                            {/* Status Management for Admin
-                            {order && (
-                                <div className="border-t pt-4 mt-4">
-                                    <div className="flex flex-col sm:flex-row items-center justify-end gap-4">
-                                        <div className="text-sm text-muted-foreground">
-                                            Trạng thái hoàn trả: {getStatusText(order.status)}
-                                        </div>
-                                        <Select
-                                            value={order.status}
-                                            onValueChange={(value) => {
-                                                console.log(value);
-                                            }}
-                                        >
-                                            <SelectTrigger className="w-[200px]">
-                                                <SelectValue placeholder="Chọn trạng thái" />
-                                            </SelectTrigger>
-                                            <SelectContent>
-                                                {STATUS_ORDER.map((status) => (
-                                                    <SelectItem key={status.value} value={status.value}>
-                                                        {status.label}
-                                                    </SelectItem>
-                                                ))}
-                                            </SelectContent>
-                                        </Select>
-                                    </div>
-                                </div>
-                            )} */}
                         </div>
                     ) : (
                         <div className="p-4 text-center text-muted-foreground">
