@@ -1,11 +1,11 @@
 // src/app/api/ai-agent/route.ts
 import { NextRequest, NextResponse } from 'next/server';
 import { openai } from './sdk';
-import { productAdvisorFunction, checkInventoryFunction } from './schema-functions';
-import { recommend_product, check_inventory } from './functions';
+import { productAdvisorFunction, checkInventoryFunction, irrelevantQuestion } from './schema-functions';
+import { recommend_product, check_inventory, handleIrrelevantQuestion } from './functions';
 
 const FUNCTIONS_MAP: Record<string, any> = {
-    recommend_product, check_inventory,
+    recommend_product, check_inventory, handleIrrelevantQuestion
 };
 
 export async function POST(req: NextRequest) {
@@ -19,6 +19,7 @@ export async function POST(req: NextRequest) {
         tools: [
             { type: 'function', function: productAdvisorFunction },
             { type: 'function', function: checkInventoryFunction },
+            { type: 'function', function: irrelevantQuestion }
         ],
         tool_choice: 'auto',
     });

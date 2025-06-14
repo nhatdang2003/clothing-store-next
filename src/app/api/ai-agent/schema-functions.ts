@@ -24,3 +24,18 @@ export const checkInventoryFunction = {
         required: ['slug'],
     },
 };
+
+export const irrelevantQuestion = {
+    name: "handleIrrelevantQuestion",
+    description: "Được gọi khi người dùng hỏi một câu không liên quan đến chủ đề thời trang hoặc vượt ngoài phạm vi hỗ trợ của chatbot.",
+    parameters: {
+        type: "object",
+        properties: {
+            query: {
+                type: "string",
+                description: "Câu hỏi người dùng vừa đặt ra"
+            }
+        },
+        required: ["query"]
+    }
+}

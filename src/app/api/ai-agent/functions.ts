@@ -126,3 +126,17 @@ export async function check_inventory({ slug }: { slug: string }) {
     };
 }
 
+export async function handleIrrelevantQuestion({ query }: { query: string }) {
+
+    return {
+        answer: `Xin lỗi, tôi là một trợ lý thời trang và không thể trả lời câu hỏi: "${query}". 
+  Vui lòng đặt câu hỏi liên quan đến thời trang, phối đồ, tư vấn sản phẩm hoặc các chủ đề tương tự.`,
+        suggested_topics: [
+            "Gợi ý phối đồ theo mùa",
+            "Chọn trang phục theo dáng người",
+            "Tư vấn thời trang công sở",
+            "Xu hướng thời trang năm nay",
+            "Phân biệt các loại chất liệu vải"
+        ]
+    };
+}
