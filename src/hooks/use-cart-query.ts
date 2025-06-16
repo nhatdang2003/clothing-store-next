@@ -10,13 +10,8 @@ export function useUpdateCartItem() {
 
     return useMutation({
         mutationFn: async (newItem: CartItem) => {
-            try {
-                const response = await cartApi.updateCartItem(newItem);
-                return response;
-            } catch (error) {
-                console.error("Update cart error:", error);
-                throw error;
-            }
+            const response = await cartApi.updateCartItem(newItem);
+            return response;
         },
         onMutate: async (newItem: CartItem) => {
             // Cancel any outgoing refetches
@@ -37,12 +32,12 @@ export function useUpdateCartItem() {
             // Return a context object with the snapshotted value
             return { previousCart };
         },
-        onError: (err, newItem, context) => {
+        onError: (err: any, newItem, context) => {
             queryClient.setQueryData(["cart"], context?.previousCart);
             toast({
                 variant: "destructive",
                 title: "Lỗi",
-                description: "Không thể cập nhật số lượng sản phẩm",
+                description: err.response?.data?.message ? err.response?.data?.message : "Không thể cập nhật số lượng sản phẩm",
             });
         },
         onSettled: async () => {
@@ -152,7 +147,7 @@ export function useAddToCartMutation() {
             toast({
                 variant: "destructive",
                 title: "Lỗi",
-                description: error?.message || "Không thể thêm sản phẩm vào giỏ hàng",
+                description: error?.response?.data?.message || "Không thể thêm sản phẩm vào giỏ hàng",
             });
         },
         onSettled: async () => {

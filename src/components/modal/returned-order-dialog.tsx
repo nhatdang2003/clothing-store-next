@@ -23,6 +23,10 @@ import {
     getColorText,
     formatPrice,
     getShippingMethodText,
+    getStatusCashBackText,
+    getStatusReturnText,
+    getStatusCashBackColor,
+    getStatusReturnColor,
 } from "@/lib/utils";
 import { useGetReturnedOrderById } from "@/hooks/use-order-query";
 import {
@@ -166,22 +170,49 @@ export function ReturnedOrderDialog({
                                 </div>
                                 <div className="flex flex-col gap-2">
                                     <Badge
-                                        variant={order.cashBackStatus === "ACCEPTED" ? "default" :
-                                            order.cashBackStatus === "REJECTED" ? "destructive" : "secondary"}
-                                        className="rounded-full justify-center"
+                                        variant="secondary"
+                                        className={`rounded-full justify-center ${order.status === "APPROVED"
+                                            ? getStatusCashBackColor(order.cashBackStatus)
+                                            : getStatusReturnColor(order.status)}`}
                                     >
-                                        {order.cashBackStatus === "ACCEPTED" ? "Đã duyệt hoàn tiền" :
-                                            order.cashBackStatus === "REJECTED" ? "Từ chối hoàn tiền" :
-                                                "Chờ duyệt hoàn tiền"}
+                                        {order.status === "APPROVED"
+                                            ? getStatusCashBackText(order.cashBackStatus)
+                                            : getStatusReturnText(order.status)}
                                     </Badge>
-                                    {order.orderDetails && (
-                                        <Badge
-                                            variant="outline"
-                                            className="rounded-full justify-center"
-                                        >
-                                            {getStatusText(order.orderDetails.status)}
-                                        </Badge>
-                                    )}
+                                </div>
+                            </div>
+
+                            {/* Order Details Grid */}
+                            <div className="grid sm:grid-cols-2 gap-6 p-4 bg-muted/50 rounded-lg">
+                                <div>
+                                    <h3 className="font-semibold mb-2">Thông tin đơn hàng</h3>
+                                    <div className="space-y-1 text-sm">
+                                        <p>
+                                            Phương thức thanh toán:{" "}
+                                            {getPaymentMethodText(order.orderDetails.paymentMethod)}
+                                        </p>
+                                        <p>
+                                            Trạng thái thanh toán:{" "}
+                                            {getPaymentStatusText(order.orderDetails.paymentStatus)}
+                                        </p>
+                                        {order.orderDetails.paymentDate && (
+                                            <p>Ngày thanh toán: {formatDate(order.orderDetails.paymentDate)}</p>
+                                        )}
+                                    </div>
+                                </div>
+                                <div>
+                                    <h3 className="font-semibold mb-2">Thông tin giao hàng</h3>
+                                    <div className="space-y-1 text-sm">
+                                        <p className="font-medium">
+                                            {order.orderDetails.shippingProfile.lastName}{" "}
+                                            {order.orderDetails.shippingProfile.firstName}
+                                        </p>
+                                        <p>Số điện thoại: {order.orderDetails.shippingProfile.phoneNumber}</p>
+                                        <p>
+                                            Địa chỉ:{" "}
+                                            {`${order.orderDetails.shippingProfile.address}, ${order.orderDetails.shippingProfile.ward}, ${order.orderDetails.shippingProfile.district}, ${order.orderDetails.shippingProfile.province}`}
+                                        </p>
+                                    </div>
                                 </div>
                             </div>
 
@@ -220,44 +251,10 @@ export function ReturnedOrderDialog({
                                 </div>
                             </div>
 
-                            {/* Order Details Grid */}
-                            <div className="grid sm:grid-cols-2 gap-6 p-4 bg-muted/50 rounded-lg">
-                                <div>
-                                    <h3 className="font-semibold mb-2">Thông tin đơn hàng</h3>
-                                    <div className="space-y-1 text-sm">
-                                        <p>
-                                            Phương thức thanh toán:{" "}
-                                            {getPaymentMethodText(order.orderDetails.paymentMethod)}
-                                        </p>
-                                        <p>
-                                            Trạng thái thanh toán:{" "}
-                                            {getPaymentStatusText(order.orderDetails.paymentStatus)}
-                                        </p>
-                                        {order.orderDetails.paymentDate && (
-                                            <p>Ngày thanh toán: {formatDate(order.orderDetails.paymentDate)}</p>
-                                        )}
-                                    </div>
-                                </div>
-                                <div>
-                                    <h3 className="font-semibold mb-2">Thông tin giao hàng</h3>
-                                    <div className="space-y-1 text-sm">
-                                        <p className="font-medium">
-                                            {order.orderDetails.shippingProfile.lastName}{" "}
-                                            {order.orderDetails.shippingProfile.firstName}
-                                        </p>
-                                        <p>Số điện thoại: {order.orderDetails.shippingProfile.phoneNumber}</p>
-                                        <p>
-                                            Địa chỉ:{" "}
-                                            {`${order.orderDetails.shippingProfile.address}, ${order.orderDetails.shippingProfile.ward}, ${order.orderDetails.shippingProfile.district}, ${order.orderDetails.shippingProfile.province}`}
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-
                             {/* Admin Comment */}
                             {order.adminComment && (
                                 <div className="p-4 bg-blue-50 border border-blue-200 rounded-lg">
-                                    <h3 className="font-semibold mb-2 text-blue-800">Ghi chú từ admin</h3>
+                                    <h3 className="font-semibold mb-2 text-blue-800">Phản hồi của cửa hàng</h3>
                                     <div className="text-sm text-blue-700">{order.adminComment}</div>
                                 </div>
                             )}

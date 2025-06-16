@@ -10,6 +10,7 @@ import {
     Home,
     User,
     LogOut,
+    MessageCircle,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -82,12 +83,12 @@ export default function NavigationMobile() {
                         Cửa hàng
                     </Link>
                     <Link
-                        href="/theo-doi-don-hang"
+                        href="/contact"
                         className="text-foreground hover:text-primary"
                         onClick={() => setIsOpen(false)}
                     >
-                        <Package className="h-5 w-5 inline-block mr-2" />
-                        Theo dõi đơn hàng
+                        <MessageCircle className="h-5 w-5 inline-block mr-2" />
+                        Liên hệ
                     </Link>
 
                     {isAuthenticated ? (

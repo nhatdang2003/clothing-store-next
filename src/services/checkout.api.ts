@@ -19,4 +19,10 @@ export const checkoutApi = {
         const response = await httpClient.get(`/api/v1/payment/vnpay_return?${queryString}`);
         return response;
     },
+    checkCheckout: async (body: {
+        cartItemIds: number[];
+    }) => {
+        const response = await httpClient.post("/api/v1/orders/check-quantity", body);
+        return response.data;
+    },
 };

@@ -14,8 +14,10 @@ import Link from "next/link";
 import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
 import { tokenManager } from "@/services/axios-config";
+import { productApi } from "@/services/product.api";
 
 const InfoProduct = ({ product }: { product: any }) => {
+    console.log(product);
     const [quantity, setQuantity] = useState<number>(1);
     const [selectedSize, setSelectedSize] = useState<string | null>(null);
     const [selectedColor, setSelectedColor] = useState<string | null>(null);
@@ -27,6 +29,10 @@ const InfoProduct = ({ product }: { product: any }) => {
     const router = useRouter();
     const { toast } = useToast();
     const addToCartMutation = useAddToCartMutation();
+
+    useEffect(() => {
+        productApi.logViewProduct(product.id);
+    }, [product.id]);
 
     const handleColorChange = (color: string | null) => {
         setSelectedColor(color);
@@ -116,6 +122,7 @@ const InfoProduct = ({ product }: { product: any }) => {
             }
         );
     };
+    console.log(selectedVariant);
 
     return (
         <div className="grid md:grid-cols-2 gap-x-16 gap-y-8">
@@ -235,18 +242,33 @@ const InfoProduct = ({ product }: { product: any }) => {
                     0 ? (
                     <div>
                         <p className="text-sm font-medium mb-2">Số lượng:</p>
-                        <QuantitySelector
-                            key={`${selectedVariant?.id}-${selectedVariant?.quantity}`}
-                            initialQuantity={1}
-                            min={1}
-                            max={
-                                selectedVariant?.quantity -
-                                selectedVariant?.currentUserCartQuantity
-                            }
-                            value={quantity}
-                            onChange={(value: number) => setQuantity(value)}
-                        />
+                        <div className="flex justify-between items-center gap-2">
+                            <QuantitySelector
+                                key={`${selectedVariant?.id}-${selectedVariant?.quantity}`}
+                                initialQuantity={1}
+                                min={1}
+                                max={
+                                    selectedVariant?.quantity -
+                                    selectedVariant?.currentUserCartQuantity
+                                }
+                                value={quantity}
+                                onChange={(value: number) => setQuantity(value)}
+                            />
+                            {selectedVariant?.quantity > 20 && (
+                                <p className="text-green-600 text-sm">Còn {selectedVariant?.quantity} sản phẩm</p>
+                            )}
+                            {selectedVariant?.quantity > 0 && selectedVariant?.quantity <= 5 && (
+                                <p className="text-red-600 text-sm font-medium">🔥 Chỉ còn {selectedVariant?.quantity} sản phẩm, nhanh tay mua ngay!</p>
+                            )}
+                            {selectedVariant?.quantity === 0 && (
+                                <p className="text-red-600 text-sm font-semibold">❌ Sản phẩm đã hết hàng</p>
+                            )}
+                        </div>
                     </div>
+                ) : selectedVariant?.quantity === 0 ? (
+                    <p className="text-sm font-medium mb-2 text-red-500">
+                        Sản phẩm tạm thời hết hàng
+                    </p>
                 ) : (
                     <p className="text-sm font-medium mb-2">
                         Bạn đã thêm hết số lượng sản phẩm này vào giỏ hàng

@@ -83,7 +83,12 @@ export function CheckoutForm() {
                 if (response.shippingProfile?.id !== currentAddress?.id) {
                     setCurrentAddress(response.shippingProfile);
                 }
-            } catch (error) {
+            } catch (error: any) {
+                toast({
+                    title: "Lỗi",
+                    description: error.response?.data?.message ? error.response?.data?.message : "Lỗi khi lấy dữ liệu thanh toán",
+                    variant: "destructive",
+                });
                 console.error("Error fetching checkout data:", error);
             }
         };
@@ -266,8 +271,9 @@ export function CheckoutForm() {
                             onValueChange={setShippingMethod}
                             className="space-y-2"
                         >
-                            {SHIPPING_METHODS.map((method) => (
-                                <div
+                            {SHIPPING_METHODS.map((method) => {
+                                if (method.value === "EXPRESS" && checkoutData.shippingProfile.provinceId !== 202) return null;
+                                return <div
                                     key={method.value}
                                     className="flex items-center space-x-2 border border-black rounded-md p-3"
                                 >
@@ -275,8 +281,9 @@ export function CheckoutForm() {
                                     <Label htmlFor={method.value} className="flex-grow">
                                         {method.label}
                                     </Label>
+                                    <p className="text-sm text-gray-600">{method.description}</p>
                                 </div>
-                            ))}
+                            })}
                         </RadioGroup>
                     </CardContent>
                 </Card>
@@ -388,7 +395,10 @@ export function CheckoutForm() {
                 onOpenChange={setShowAddressDialog}
                 profiles={profiles || []}
                 selectedProfileId={currentAddress?.id}
-                onSelect={(profile) => setCurrentAddress(profile)}
+                onSelect={(profile) => {
+                    console.log(profile);
+                    setCurrentAddress(profile)
+                }}
             />
 
             <ShippingProfileDialog

@@ -66,10 +66,10 @@ export default function Navigation() {
                             Cửa hàng
                         </Link>
                         <Link
-                            href="/theo-doi-don-hang"
+                            href="/contact"
                             className="text-foreground hover:underline"
                         >
-                            Theo dõi đơn hàng
+                            Liên hệ
                         </Link>
                     </div>
 

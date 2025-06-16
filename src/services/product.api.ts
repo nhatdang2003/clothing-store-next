@@ -1,4 +1,5 @@
-import httpClient from "./axios-config";
+import axios from "axios";
+import httpClient, { tokenManager } from "./axios-config";
 
 export const productApi = {
     getProducts: async (
@@ -94,4 +95,36 @@ export const productApi = {
     deleteProduct: (id: number) => {
         return httpClient.delete(`/api/v1/products/${id}`);
     },
+    getRecommendProducts: async () => {
+        const access_token = tokenManager.getAccessToken();
+        let config = {};
+        if (!tokenManager.isTokenExpired(access_token || "")) {
+            config = {
+                headers: {
+                    Authorization: `Bearer ${access_token}`,
+                },
+            };
+        }
+        const response = await axios.get(
+            `${process.env.NEXT_PUBLIC_API_BACKEND}/api/v1/products/recommendations/for-you`,
+            config
+        );
+        return response.data.data;
+    },
+    logViewProduct: async (productId: string) => {
+        const access_token = tokenManager.getAccessToken();
+        let config = {};
+        if (!tokenManager.isTokenExpired(access_token || "")) {
+            config = {
+                headers: {
+                    Authorization: `Bearer ${access_token}`,
+                },
+            };
+        }
+        await axios.post(
+            `${process.env.NEXT_PUBLIC_API_BACKEND}/api/v1/products/${productId}/log-view`,
+            {},
+            config
+        );
+    }
 };

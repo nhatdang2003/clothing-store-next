@@ -22,7 +22,11 @@ import { Input } from "@/components/ui/input";
 import {
     formatPrice,
     getColorText,
+    getStatusCashBackColor,
+    getStatusCashBackText,
     getStatusColor,
+    getStatusReturnColor,
+    getStatusReturnText,
     getStatusText,
 } from "@/lib/utils";
 import { orderApi } from "@/services/order.api";
@@ -33,6 +37,7 @@ import { ProductReviewModal } from "../modal/product-review-modal";
 import { useOrders, useCancelOrder, useReturnOrder } from "@/hooks/use-order-query";
 import { ReturnedOrderDialog } from "../modal/returned-order-dialog";
 import { OrderDetailModal } from "../modal/detail-order-dialog";
+import { format, addDays, isAfter, isBefore } from "date-fns";
 
 interface LineItem {
     id: number;
@@ -59,6 +64,9 @@ interface Order {
     finalTotal: number;
     canReview: boolean;
     isReviewed: boolean;
+    statusUpdateTimestamp: Date;
+    returnRequestStatus: string;
+    cashBackStatus: string;
 }
 
 interface ApiResponse {
@@ -326,9 +334,17 @@ export default function OrderList() {
                         </div>
                         <Badge
                             variant="secondary"
-                            className={`rounded-full ${getStatusColor(order.status)}`}
+                            className={`rounded-full ${order.status === "RETURNED" && order.returnRequestStatus !== "APPROVED"
+                                ? getStatusReturnColor(order.returnRequestStatus)
+                                : order.returnRequestStatus === "APPROVED"
+                                    ? getStatusCashBackColor(order.cashBackStatus)
+                                    : getStatusColor(order.status)}`}
                         >
-                            {getStatusText(order.status)}
+                            {order.status === "RETURNED" && order.returnRequestStatus !== "APPROVED"
+                                ? getStatusReturnText(order.returnRequestStatus)
+                                : order.returnRequestStatus === "APPROVED"
+                                    ? getStatusCashBackText(order.cashBackStatus)
+                                    : getStatusText(order.status)}
                         </Badge>
                     </div>
                     {(() => {
@@ -453,16 +469,17 @@ export default function OrderList() {
                                         Hủy đơn hàng
                                     </Button>
                                 )}
-                                {order.status === "DELIVERED" && (
-                                    <Button
-                                        variant="outline"
-                                        className="w-full sm:w-auto"
-                                        onClick={() => handleOpenReturnDialog(order.id.toString())}
-                                    >
-                                        <RotateCcw className="h-6 w-6 mr-2" />
-                                        Hoàn trả
-                                    </Button>
-                                )}
+                                {order.status === "DELIVERED" &&
+                                    isBefore(new Date(), addDays(order.statusUpdateTimestamp, 29)) && (
+                                        <Button
+                                            variant="outline"
+                                            className="w-full sm:w-auto"
+                                            onClick={() => handleOpenReturnDialog(order.id.toString())}
+                                        >
+                                            <RotateCcw className="h-6 w-6 mr-2" />
+                                            Hoàn trả
+                                        </Button>
+                                    )}
                                 {order.status === "RETURNED"
                                     ? (
                                         <ReturnedOrderDialog orderId={order.id.toString()} />

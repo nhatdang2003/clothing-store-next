@@ -22,4 +22,8 @@ export const promotionApi = {
     deletePromotion: (id: number) => {
         return httpClient.delete(`/api/v1/promotions/${id}`);
     },
+    getImagePromotion: async () => {
+        const response = await httpClient.get("/api/v1/promotions/images");
+        return response.data;
+    }
 };

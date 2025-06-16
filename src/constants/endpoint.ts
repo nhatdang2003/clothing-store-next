@@ -7,5 +7,6 @@ export const PUBLIC_ENDPOINTS = [
     '/api/v1/auth/google',
     '/api/v1/auth/activate-code',
     '/api/v1/categories',
-    `/api/v1/products`
+    `/api/v1/products`,
+    `/api/v1/promotions/images`
 ];

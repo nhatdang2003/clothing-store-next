@@ -4,6 +4,6 @@ export const PAYMENT_METHODS = [
 ];
 
 export const SHIPPING_METHODS = [
-    { label: "Giao hàng hỏa tốc", value: "EXPRESS" },
-    { label: "Giao hàng nhanh", value: "GHN" },
+    { label: "Giao hàng hỏa tốc", value: "EXPRESS", description: "Giao hàng nội thành trong vòng 2-4h" },
+    { label: "Giao hàng nhanh", value: "GHN", description: "Giao hàng toàn quốc trong vòng 3-5 ngày" },
 ];
