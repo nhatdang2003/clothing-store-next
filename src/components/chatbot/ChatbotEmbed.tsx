@@ -30,7 +30,7 @@ export default function ChatbotEmbed() {
             "tooltip": {
         "showTooltip": true,
         "tooltipMessage": "Nhận tư vấn ngay!",
-        "tooltipBackgroundColor": "#fff9f6",
+        "tooltipBackgroundColor": "#fafafa",
         "tooltipTextColor": "#1c1c1c",
         "tooltipFontSize": 15
       },
@@ -61,7 +61,7 @@ export default function ChatbotEmbed() {
           "avatarSrc": "https://www.svgrepo.com/show/333724/bot.svg"
         },
         "userMessage": {
-          "backgroundColor": "#fff6f3",
+          "backgroundColor": "#fafafa",
           "textColor": "#050505",
           "showAvatar": true,
           "avatarSrc": "https://www.svgrepo.com/show/524199/user-circle.svg"

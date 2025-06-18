@@ -127,13 +127,8 @@ export default function SizeGuidePage() {
                         <h2 className="text-2xl font-semibold">Không chắc chọn size nào?</h2>
                     </div>
                     <p>
-                        Ez Store luôn sẵn sàng hỗ trợ bạn qua:
+                        Ez Store cung cấp Ez Bot, một trợ lý ảo thông minh có thể giúp bạn chọn size phù hợp dựa trên số đo hoặc dáng người.
                     </p>
-                    <ul className="list-disc list-inside space-y-2">
-                        <li>Zalo / Hotline: <a href="tel:0901234567" className="text-blue-600 underline">0901 234 567</a></li>
-                        <li>Inbox Facebook: <a href="https://facebook.com/ezstore" target="_blank" className="text-blue-600 underline">facebook.com/ezstore</a></li>
-                        <li>Live chat ngay góc dưới màn hình!</li>
-                    </ul>
                 </section>
             </div>
         </div>

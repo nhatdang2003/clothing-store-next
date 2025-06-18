@@ -36,10 +36,9 @@ export default function ReturnPolicyPage() {
                         <h2 className="text-2xl font-semibold">1. Điều kiện hoàn trả</h2>
                     </div>
                     <ul className="list-disc list-inside space-y-2">
-                        <li>Yêu cầu hoàn trả trong vòng <strong>7 ngày</strong> kể từ khi nhận hàng.</li>
+                        <li>Yêu cầu hoàn trả trong vòng <strong>30 ngày</strong> kể từ khi nhận hàng.</li>
                         <li>Sản phẩm còn nguyên tem, nhãn, chưa qua sử dụng hoặc giặt.</li>
                         <li>Hộp/bao bì gốc và hóa đơn (nếu có) phải được giữ nguyên.</li>
-                        <li>Không áp dụng cho sản phẩm giảm giá trên 50% hoặc có ghi rõ "không hoàn trả".</li>
                     </ul>
                 </section>
 
