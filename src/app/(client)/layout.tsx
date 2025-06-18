@@ -1,7 +1,7 @@
 import Navigation from "@/components/navigation/navbar";
 import { Footer } from "@/components/footer/footer";
-import ChatbotWidget from "@/components/chatbot/ChatbotWidget";
 import { Metadata } from "next";
+import ChatbotEmbed from "@/components/chatbot/ChatbotEmbed";
 
 export const metadata: Metadata = {
     title: "Ez Store",
@@ -14,7 +14,7 @@ export default function LayoutShop({ children }: { children: React.ReactNode }) 
             <Navigation />
             <div className="pt-[64px]">{children}</div>
             <Footer />
-            <ChatbotWidget />
+            <ChatbotEmbed />
         </div>
     );
 }

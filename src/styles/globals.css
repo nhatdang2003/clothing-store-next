@@ -6,6 +6,12 @@ body {
   font-family: Arial, Helvetica, sans-serif;
 }
 
+#lite-badge,
+.lite-badge,
+span:has(#lite-badge) {
+  display: none !important;
+}
+
 @layer utilities {
   .text-balance {
     text-wrap: balance;

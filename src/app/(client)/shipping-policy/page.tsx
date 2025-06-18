@@ -1,89 +1,103 @@
-import { Card, CardContent } from "@/components/ui/card";
-import { Separator } from "@/components/ui/separator";
+'use client';
+
+import ScalableStoreLogo from '@/components/ui/logo-store';
+import { Truck, Timer, Wallet, Info, Phone } from 'lucide-react';
+import Image from 'next/image';
 
 export default function ShippingPolicyPage() {
     return (
-        <div className="max-w-3xl mx-auto p-6 space-y-6">
-            <h1 className="text-3xl font-bold text-center">Chính Sách Vận Chuyển</h1>
+        <div className="text-gray-800">
+            {/* Banner Section */}
+            <div className="relative h-72 w-full">
+                <Image
+                    src="/bg.png" // Thay bằng ảnh phù hợp (ảnh vận chuyển, đóng gói, xe giao hàng)
+                    alt="Chính sách vận chuyển Ez Store"
+                    fill
+                    className="object-cover"
+                />
+                <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+                    <h1 className="text-4xl md:text-5xl font-bold text-white text-center px-4">
+                        Chính sách vận chuyển<br />
+                        <div className="w-[200px] inline-block bg-white rounded-sm p-2 mt-2"><ScalableStoreLogo /></div>
+                    </h1>
+                </div>
+            </div>
 
-            <Card>
-                <CardContent className="space-y-4 p-6">
-                    <section>
-                        <h2 className="text-xl font-semibold">1. Hình thức giao hàng</h2>
-                        <ul className="list-disc list-inside mt-2 space-y-2">
-                            <li>
-                                <strong>Giao hàng tiêu chuẩn:</strong> Áp dụng toàn quốc qua các đối tác như
-                                GHN, GHTK, J&T...<br />
-                                - Nội thành: 1–2 ngày làm việc<br />
-                                - Tỉnh thành khác: 2–5 ngày làm việc
-                            </li>
-                            <li>
-                                <strong>Giao hàng hỏa tốc (Giả lập Grab Express):</strong> Áp dụng nội thành
-                                TP.HCM & Hà Nội, giao trong 2 giờ kể từ khi xác nhận đơn (trong khung giờ
-                                8:00–18:00). Phí vận chuyển tính theo biểu phí thời điểm.
-                            </li>
-                        </ul>
-                    </section>
+            {/* Main Content */}
+            <div className="max-w-4xl mx-auto px-6 py-12 space-y-12">
+                <p className="text-lg text-gray-700">
+                    Với EZ Store, giao hàng không chỉ là việc chuyển sản phẩm – đó là một phần của trải nghiệm mua sắm trọn vẹn. Dưới đây là những thông tin bạn cần biết để yên tâm đặt hàng và nhận hàng nhanh chóng, an toàn nhất.
+                </p>
 
-                    <Separator />
+                {/* Hình thức giao hàng */}
+                <section className="space-y-4">
+                    <div className="flex items-center gap-3">
+                        <Truck className="w-6 h-6" />
+                        <h2 className="text-2xl font-semibold">1. Hình thức giao hàng</h2>
+                    </div>
+                    <ul className="list-disc list-inside space-y-2 text-gray-700">
+                        <li>
+                            <strong>Giao hàng nhanh:</strong> Giao toàn quốc thông qua đơn vị vận chuyển giao hàng nhanh, thời gian từ 2–3 ngày làm việc. Khách nhận được mã vận đơn để theo dõi tiến trình.
+                        </li>
+                        <li>
+                            <strong>Giao hàng hỏa tốc:</strong> Áp dụng tại nội thành TP.HCM (Quận 1–12, Bình Thạnh, Phú Nhuận,...). Giao trong vòng 2–4 giờ kể từ khi xác nhận đơn.
+                        </li>
+                    </ul>
+                </section>
 
-                    <section>
-                        <h2 className="text-xl font-semibold">2. Thời gian xử lý đơn hàng</h2>
-                        <ul className="list-disc list-inside mt-2">
-                            <li>Đơn xác nhận trước 15h: xử lý trong ngày.</li>
-                            <li>Đơn sau 15h: xử lý vào ngày làm việc kế tiếp.</li>
-                            <li>Không xử lý đơn vào Chủ Nhật và ngày lễ/Tết.</li>
-                        </ul>
-                    </section>
+                {/* Thời gian xử lý đơn */}
+                <section className="space-y-4">
+                    <div className="flex items-center gap-3">
+                        <Timer className="w-6 h-6" />
+                        <h2 className="text-2xl font-semibold">2. Thời gian xử lý đơn hàng</h2>
+                    </div>
+                    <p>
+                        Đơn hàng sẽ được đóng gói trong vòng <strong>24 giờ</strong> sau khi xác nhận. Đơn đặt sau 17h hoặc vào cuối tuần/ lễ sẽ được xử lý vào ngày làm việc kế tiếp.
+                    </p>
+                    <p className="text-gray-600 italic">Ví dụ: Đơn đặt tối Chủ Nhật sẽ được xử lý vào sáng Thứ Hai.</p>
+                </section>
 
-                    <Separator />
+                {/* Phí vận chuyển */}
+                <section className="space-y-4">
+                    <div className="flex items-center gap-3">
+                        <Wallet className="w-6 h-6" />
+                        <h2 className="text-2xl font-semibold">3. Phí vận chuyển</h2>
+                    </div>
+                    <ul className="list-disc list-inside space-y-2 text-gray-700">
+                        <li>
+                            <strong>Giao hàng nhanh:</strong> Theo biểu phí của đơn vị vận chuyển Giao hàng nhanh, hệ thống sẽ tự động tính dựa trên địa chỉ nhận hàng và trọng lượng.
+                        </li>
+                        <li>
+                            <strong>Giao hàng hỏa tốc:</strong> Theo biểu phí của Grab Express.
+                        </li>
+                        <li>
+                            <strong>Miễn phí vận chuyển:</strong> Với đơn hàng từ <strong>1.000.000đ</strong> trở lên – áp dụng cho cả tiêu chuẩn và hỏa tốc.
+                        </li>
+                    </ul>
+                </section>
 
-                    <section>
-                        <h2 className="text-xl font-semibold">3. Phí vận chuyển</h2>
-                        <ul className="list-disc list-inside mt-2">
-                            <li>Miễn phí với đơn hàng từ <strong>[X]₫</strong> trở lên (chỉ áp dụng cho giao hàng tiêu chuẩn).</li>
-                            <li>Giao hàng hỏa tốc: phí được hiển thị trước khi thanh toán.</li>
-                        </ul>
-                    </section>
-
-                    <Separator />
-
-                    <section>
-                        <h2 className="text-xl font-semibold">4. Lưu ý khi nhận hàng</h2>
-                        <ul className="list-disc list-inside mt-2">
-                            <li>Quý khách vui lòng kiểm tra kỹ sản phẩm khi nhận hàng.</li>
-                            <li>Nếu không liên hệ được hoặc không có người nhận, đơn sẽ hoàn lại và phí vận chuyển không hoàn.</li>
-                        </ul>
-                    </section>
-
-                    <Separator />
-
-                    <section>
-                        <h2 className="text-xl font-semibold">5. Câu hỏi thường gặp</h2>
-                        <div className="space-y-2 mt-2">
-                            <div>
-                                <strong>Q:</strong> Tôi muốn đổi sang giao hàng hỏa tốc sau khi đã đặt hàng tiêu chuẩn, được không?<br />
-                                <strong>A:</strong> Được, nếu đơn hàng chưa được giao cho đơn vị vận chuyển. Vui lòng liên hệ CSKH.
-                            </div>
-                            <div>
-                                <strong>Q:</strong> Giao hàng hỏa tốc có hỗ trợ thanh toán khi nhận không?<br />
-                                <strong>A:</strong> Có. Quý khách nên chuẩn bị tiền mặt để thuận tiện.
-                            </div>
-                        </div>
-                    </section>
-
-                    <Separator />
-
-                    <section>
-                        <h2 className="text-xl font-semibold">6. Liên hệ hỗ trợ</h2>
-                        <ul className="list-disc list-inside mt-2">
-                            <li>📞 Hotline: [Số điện thoại]</li>
-                            <li>💬 Zalo/Live Chat: [Link/Zalo]</li>
-                            <li>📧 Email: [Email hỗ trợ]</li>
-                        </ul>
-                    </section>
-                </CardContent>
-            </Card>
+                {/* Cam kết & lưu ý */}
+                <section className="space-y-4">
+                    <div className="flex items-center gap-3">
+                        <Info className="w-6 h-6" />
+                        <h2 className="text-2xl font-semibold">4. Lưu ý và cam kết</h2>
+                    </div>
+                    <ul className="list-disc list-inside space-y-2 text-gray-700">
+                        <li>
+                            Đơn hàng có thể bị chậm vì lý do khách quan (thời tiết, cấm đường,...). Chúng tôi sẽ chủ động báo nếu có thay đổi.
+                        </li>
+                        <li>
+                            Vui lòng cung cấp đầy đủ địa chỉ và số điện thoại liên hệ. Trường hợp giao không thành công sẽ được gọi lại 2 lần trước khi hoàn về kho.
+                        </li>
+                        <li>
+                            Bạn có thể <strong>kiểm tra sản phẩm trước khi thanh toán</strong> với hình thức COD.
+                        </li>
+                        <li>
+                            Ez Store luôn xử lý phản hồi liên quan đến vận chuyển <strong>trong vòng 24 giờ</strong>.
+                        </li>
+                    </ul>
+                </section>
+            </div>
         </div>
     );
 }

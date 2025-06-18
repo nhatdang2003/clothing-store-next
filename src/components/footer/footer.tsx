@@ -55,13 +55,13 @@ export function Footer() {
                                 </Link>
                             </li>
                             <li>
-                                <Link href="/shipping" className="text-sm hover:underline">
+                                <Link href="/shipping-policy" className="text-sm hover:underline">
                                     CHÍNH SÁCH VẬN CHUYỂN
                                 </Link>
                             </li>
                             <li>
-                                <Link href="/refund" className="text-sm hover:underline">
-                                    CHÍNH SÁCH ĐỔI TRẢ
+                                <Link href="/refund-policy" className="text-sm hover:underline">
+                                    CHÍNH SÁCH HOÀN TRẢ
                                 </Link>
                             </li>
                             <li>

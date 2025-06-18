@@ -83,5 +83,6 @@ export const useRecommendProductsQuery = () => {
     return useQuery({
         queryKey: ["recommend-products"],
         queryFn: () => productApi.getRecommendProducts(),
+        staleTime: 0,
     });
 };
